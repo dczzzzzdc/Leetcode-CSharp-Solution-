@@ -235,5 +235,38 @@ namespace Linked_List
             return nodemap[0];
         }
         #endregion
+        #region Leetcode 21  Merge Two Sorted Lists
+        public ListNode MergeTwoLists(ListNode l1, ListNode l2)
+        {
+            ListNode head = new ListNode(0);
+            ListNode prev = head;
+            while (l1 != null && l2 != null)
+            {
+                if (l2.val > l1.val)
+                {
+                    prev.next = l1; // Connect
+                    l1 = l1.next; // Keep the traverse
+                }
+                else
+                {
+                    prev.next = l2;
+                    l2 = l2.next;
+                }
+                // Move the prev pointer forward
+                prev = prev.next;
+            }
+            // If any of them is not used up
+            // then we put them behind the already sorted array
+            if (l1 != null) 
+            {
+                prev.next = l1;
+            }
+            else if(l2 != null)
+            {
+                prev.next = l2; 
+            }
+            return head.next;
+        }
+        #endregion
     }
 }
