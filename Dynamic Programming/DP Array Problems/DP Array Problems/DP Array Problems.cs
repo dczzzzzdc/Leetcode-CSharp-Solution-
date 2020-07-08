@@ -169,5 +169,32 @@ namespace DP_Array_Problems
             return ans;
         }
         #endregion
+        #region Leetcode 1143  Longest Common Subsequence
+        public int LongestCommonSubsequence(string text1, string text2)
+        {
+            int n = text1.Length;
+            int m = text2.Length;
+            int[][] dp = new int[n + 1][];
+            for (int i = 0; i <= n; ++i)
+            {
+                dp[i] = new int[m + 1];
+                //dp[i][j] stores the LCS using text1[0-i] and text2[0-j]
+            }
+            for (int i = 1; i <= n; ++i)
+            {
+                for (int j = 1; j <= m; ++j)
+                {
+                    if (text2[j - 1] == text1[i - 1])// Note that the index must minue one
+                    // If we are able to use this char
+                    { 
+                        dp[i][j] = dp[i - 1][j - 1] + 1;
+                        // We expand one tile
+                    }
+                    else { dp[i][j] = Math.Max(dp[i - 1][j], dp[i][j - 1]); }// Then the answer should be come the previous text1 or text2
+                }
+            }
+            return dp[n][m];
+        }
+        #endregion
     }
 }

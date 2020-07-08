@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Dongchen Zou\\Desktop\\CsharpSolutions\\Leetcode-CSharp-Solution-\\Dynamic Programming\\DP Array Problems\\DP Array Problems\\DP Array Problems.csproj",
+      "projectUniqueName": "C:\\Users\\Dongchen Zou\\Desktop\\Leetcode-CSharp-Solution-\\Dynamic Programming\\DP Array Problems\\DP Array Problems\\DP Array Problems.csproj",
       "projectName": "DP Array Problems",
-      "projectPath": "C:\\Users\\Dongchen Zou\\Desktop\\CsharpSolutions\\Leetcode-CSharp-Solution-\\Dynamic Programming\\DP Array Problems\\DP Array Problems\\DP Array Problems.csproj",
+      "projectPath": "C:\\Users\\Dongchen Zou\\Desktop\\Leetcode-CSharp-Solution-\\Dynamic Programming\\DP Array Problems\\DP Array Problems\\DP Array Problems.csproj",
       "packagesPath": "C:\\Users\\Dongchen Zou\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Dongchen Zou\\Desktop\\CsharpSolutions\\Leetcode-CSharp-Solution-\\Dynamic Programming\\DP Array Problems\\DP Array Problems\\obj\\",
+      "outputPath": "C:\\Users\\Dongchen Zou\\Desktop\\Leetcode-CSharp-Solution-\\Dynamic Programming\\DP Array Problems\\DP Array Problems\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Dongchen Zou\\AppData\\Roaming\\NuGet\\NuGet.Config",
