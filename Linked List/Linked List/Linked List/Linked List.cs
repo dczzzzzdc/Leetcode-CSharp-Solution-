@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Linked_List
 {
@@ -235,7 +236,30 @@ namespace Linked_List
             return nodemap[0];
         }
         #endregion
-        #region Leetcode 21  Merge Two Sorted Lists
+        #region Leetcode 23  Merge k Sorted List
+        // We can put all the node into a list and then sort it
+        // However, optimally, we can use divide and conquer
+        public ListNode MergeKLists(ListNode[] lists)
+        {
+            return Merge(lists, 0, lists.Length - 1);
+        }
+
+        public ListNode Merge(ListNode[] lists, int L, int R)
+        {
+            if (L == R) return lists[L];
+            if (L < R)
+            {
+                int M = (L + R) / 2;
+                ListNode l1 = Merge(lists, L, M);
+                ListNode l2 = Merge(lists, M + 1, R);
+                return MergeTwoLists(l1, l2);
+            }
+            else
+            {
+                return null;
+            }
+                
+        }
         public ListNode MergeTwoLists(ListNode l1, ListNode l2)
         {
             ListNode head = new ListNode(0);
@@ -256,14 +280,14 @@ namespace Linked_List
                 prev = prev.next;
             }
             // If any of them is not used up
-            // then we put them behind the already sorted array
-            if (l1 != null) 
+            // then we put them behind the already sorted array, since both of them are sorted
+            if (l1 != null)
             {
                 prev.next = l1;
             }
-            else if(l2 != null)
+            else if (l2 != null)
             {
-                prev.next = l2; 
+                prev.next = l2;
             }
             return head.next;
         }
