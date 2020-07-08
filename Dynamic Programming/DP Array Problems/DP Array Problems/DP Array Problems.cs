@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace DP_Array_Problems
@@ -126,6 +127,46 @@ namespace DP_Array_Problems
                 if (len > max) { max = len; }
             }
             return max;
+        }
+        #endregion
+        #region Leetcode 15  3 Sum
+        // O(n2) Time Complexity
+        // We use a double pointer to a 2 Sum
+        public IList<IList<int>> ThreeSum(int[] nums)
+        {
+            int n = nums.Length;
+            Array.Sort(nums);
+            IList<IList<int>> ans = new List<IList<int>>();
+            for (int i = 0; i < n-2; i++) // We need to at least space out two numbers
+            {
+                int cur = nums[i];
+                if (cur > 0) { break; }// There is no way that we are going to find two positive numbers that have the a negative sum
+                else if (i > 0 && cur == nums[i - 1]) { continue; }// Avoid same value
+                int target = -cur;
+                int l = i + 1;
+                int r = n - 1;
+                while (l < r)
+                {
+                    int sum = nums[l] + nums[r];
+                    if(sum== target)
+                    {
+                        ans.Add(new List<int>() { cur, nums[l], nums[r] });
+                        // The following steps must be done to avoid Adding the same combination twice
+                        // Note that there could be multiple combinations
+                        ++l;
+                        while(l<r&&nums[l] == nums[l - 1]) { ++l; }
+                        --r;
+                        while(l<r && nums[r] == nums[r + 1]) { --r; }
+                    }
+                    else if (sum < target) // We need to find a larger value
+                    {
+                        ++l;
+                    }
+                    else { --r; }
+                }
+                
+            }
+            return ans;
         }
         #endregion
     }
