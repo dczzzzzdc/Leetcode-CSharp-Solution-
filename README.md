@@ -1,3 +1,3 @@
 # Leetcode-CSharp-Solution-
-# Thank you for support!
+# Thank you for your support!
 # Enjoy Leetcoding!
