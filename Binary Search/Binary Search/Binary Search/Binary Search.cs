@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO.MemoryMappedFiles;
+using System.Linq;
 
 namespace Binary_Search
 {
@@ -80,6 +82,27 @@ namespace Binary_Search
 
             }
             return left;
+        }
+        #endregion
+        #region Leetcode 875 Koko Eating Banana
+        public int MinEatingSpeed(int[] piles, int H)
+        {
+            int l = 1;
+            int r = piles.Max() +1; // This is the fastest speed possible
+            while (l < r)
+            {
+                int m = l + (r - l) / 2;
+                int cur = 0;
+                foreach (int item in piles)
+                {
+                    cur += (item + m - 1) / m;
+                    // This is very important because it will give a Upperbound result
+                    // For example, it will give 4 for 7/2, which is the right time instead of 3
+                }
+                if(cur <= H) { r = m; }// Note that if the time is smaller, then our speed is too big
+                else { l = m + 1; }
+            }
+            return l;
         }
         #endregion
     }
