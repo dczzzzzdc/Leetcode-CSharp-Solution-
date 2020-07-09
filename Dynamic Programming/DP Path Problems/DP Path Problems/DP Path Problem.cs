@@ -67,5 +67,40 @@ namespace DP_Path_Problems
             return dp[y - 1][x - 1];
         }
         #endregion
+        #region Leetcode 1340  Jump Game V
+        public int MaxJumps(int[] arr, int d)
+        {
+            int n = arr.Length;
+            max = d;
+            // This represents the largest distance the figure can jump to
+            mjdp = new int[n];
+            int ans = 0;
+            for (int i = 0; i < n; i++) // We find every starting point and then call the dp function
+            {
+                ans = Math.Max(ans, MJFind(i, arr));
+            }
+            return ans;
+        }
+        int max;
+        int[] mjdp;
+        public int MJFind(int index, int[] nums)
+        {
+            if (mjdp[index] != 0) { return mjdp[index]; }// If already calculated
+            int ans = 1; // It is set to one because doing nothing is considered one step
+            for (int i = index + 1; i < Math.Min(nums.Length, index + max + 1) && nums[index] > nums[i]/*Making sure that the player can cross*/; i++)
+            // We first look at the right side of the index
+            // This loop must also make sure that the jumping range do not surpass index + max or index - max
+            {
+                ans = Math.Max(ans, MJFind(i, nums) + 1);
+                // Adding one meaning making a move
+            }
+            for (int i = index - 1; i >= Math.Max(0, index - max) && nums[index] > nums[i]; i--)
+            // We then search the left side of the index
+            {
+                ans = Math.Max(ans, MJFind(i, nums) + 1);
+            }
+            return mjdp[index] = ans;
+        }
+        #endregion 
     }
 }
