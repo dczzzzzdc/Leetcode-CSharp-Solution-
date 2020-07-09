@@ -101,6 +101,41 @@ namespace DP_Path_Problems
             }
             return mjdp[index] = ans;
         }
-        #endregion 
+        #endregion
+        #region Leetcode 576  Out of Boundary Paths
+        public static int[][][] OBdp;
+        public const int mod = 1000000007;
+        private int Find(int x, int y, int k, int m, int n)
+        {
+            if (x < 0 || y < 0 || y >= n || x >= m) { return 1; } // We successfully reached the boundary
+            else if (OBdp[x][y][k] != -1) { return OBdp[x][y][k] % mod; }// We already calculated it 
+            else if (k == 0) { return 0; } // We used all of our moves
+            // We extend to four ways
+            int tempVal = 0;
+            tempVal = (tempVal + Find(x, y - 1, k - 1, m, n)) % mod;
+            tempVal = (tempVal + Find(x - 1, y, k - 1, m, n)) % mod;
+            tempVal = (tempVal + Find(x + 1, y, k - 1, m, n)) % mod;
+            tempVal = (tempVal + Find(x, y + 1, k - 1, m, n)) % mod;
+            OBdp[x][y][k] = tempVal;
+            return tempVal % mod;
+        }
+        public int FindPaths(int m, int n, int N, int x, int y)
+        {
+            // Here m is the x boundary
+            // And n is the y boundary
+            // There is a little problem with the description of the second example
+            OBdp = new int[m][][];
+            for (int i = 0; i < m; ++i)
+            {
+                OBdp[i] = new int[n][];
+                for (int j = 0; j < n; ++j)
+                {
+                    OBdp[i][j] = new int[N + 1];
+                    Array.Fill(OBdp[i][j], -1);
+                }
+            }
+            return Find(x, y, N, m, n);
+        }
+        #endregion
     }
 }
