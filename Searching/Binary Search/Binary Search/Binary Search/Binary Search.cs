@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
+using System.Xml.Schema;
 
 namespace Binary_Search
 {
@@ -8,11 +9,13 @@ namespace Binary_Search
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            int[] test =  { 1, 2, 3, 4, 5, 6,7};
+            Console.WriteLine(FindPeakElement(test));
         }
         #region Binary Search Template
+
         // The l is inclusive while the r is exclusive
-        public int Binary_search(int []nums,int target) // Return the index of the target in a sorted array
+        public static int Binary_search(int []nums,int target) // Return the index of the target in a sorted array
         // If not found, return -1;
         {
             int l = 0;
@@ -21,8 +24,8 @@ namespace Binary_Search
             {
                 int m = l + (r - l) / 2; // The middle of the range (l,r)
                 int cur = nums[m];
-                if(nums[m] == target) { return m; }
-                else if(nums[m] >= target) { r = m; } // New range(l,m)
+                if(cur == target) { return m; }
+                else if(cur >= target) { r = m; } // New range(l,m)
                 else { l = m + 1; } // New Range(m+1,r)
             }
             return -1;
@@ -105,5 +108,51 @@ namespace Binary_Search
             return l;
         }
         #endregion
+        #region Leetcode 162/852  Mountain Peek Series
+        public int PeakIndexInMountainArray(int[] nums)
+        {
+            int left = 0;
+            int right = nums.Length - 1;
+            // The right bound is set to an exclusive nums.Length - 1 and the left is set to an inclusive 1
+            // because we can take the first of the last element
+            while (left < right)
+            {
+                int m = left + (right - left) / 2;
+                if (nums[m] > nums[m - 1] && nums[m] > nums[m + 1])// We have found the answer
+                {
+                    return m;
+                }
+                else if (nums[m] < nums[m + 1])// We are in an ascending order
+                {
+                    left = m + 1;
+                }
+                else // We are in an ascending order
+                {
+                    right = m;
+                }
+            }
+            return left;
+        }
+        public int FindPeakElement(int[] nums)
+        {
+            int left = 0;
+            int right = nums.Length - 1; 
+            // 就是这里，按照理论来说，应该是nums.Length，因为最后一个值是可以取的
+            while (left < right)
+            {
+                int m = left + (right - left) / 2;
+                if (nums[m] < nums[m + 1])
+                {
+                    left = m + 1;
+                }
+                else
+                {
+                    right = m;
+                }
+            }
+            return left;
+        }
+        #endregion
     }
+
 }
