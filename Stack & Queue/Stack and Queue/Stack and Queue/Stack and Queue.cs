@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Data;
 
 namespace Stack_and_Queue
 {
@@ -72,6 +74,39 @@ namespace Stack_and_Queue
             public bool Empty()
             {
                 return data.Count == 0;
+            }
+        }
+        #endregion
+        #region Leetcode 155  Min Stack
+        public class MinStack
+        {
+            Stack<int> data = new Stack<int>();
+            Stack<int> min = new Stack<int>();
+            // We use another stack to record the min value at every moment
+            public void Push(int x)
+            {
+                data.Push(x);
+                if (min.Count ==0) { min.Push(x); }
+                else
+                {
+                    if (x > min.Peek()) { x = min.Peek(); }// We set x to the value of smallest element in the stack
+                    // which means that the current min is still the original min
+                    min.Push(x);
+                }
+            }
+
+            public void Pop()
+            {
+                min.Pop();
+                data.Pop();
+            }
+            public int Top()
+            {
+                return data.Peek();
+            }
+            public int GetMin()
+            {
+                return min.Peek();
             }
         }
         #endregion
