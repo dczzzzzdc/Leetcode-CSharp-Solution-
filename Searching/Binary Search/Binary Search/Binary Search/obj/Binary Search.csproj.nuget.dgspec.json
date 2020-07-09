@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Dongchen Zou\\Desktop\\CsharpSolutions\\Leetcode-CSharp-Solution-\\Binary Search\\Binary Search\\Binary Search\\Binary Search.csproj": {}
+    "C:\\Users\\Dongchen Zou\\Desktop\\Leetcode-CSharp-Solution-\\Searching\\Binary Search\\Binary Search\\Binary Search\\Binary Search.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Dongchen Zou\\Desktop\\CsharpSolutions\\Leetcode-CSharp-Solution-\\Binary Search\\Binary Search\\Binary Search\\Binary Search.csproj": {
+    "C:\\Users\\Dongchen Zou\\Desktop\\Leetcode-CSharp-Solution-\\Searching\\Binary Search\\Binary Search\\Binary Search\\Binary Search.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Dongchen Zou\\Desktop\\CsharpSolutions\\Leetcode-CSharp-Solution-\\Binary Search\\Binary Search\\Binary Search\\Binary Search.csproj",
+        "projectUniqueName": "C:\\Users\\Dongchen Zou\\Desktop\\Leetcode-CSharp-Solution-\\Searching\\Binary Search\\Binary Search\\Binary Search\\Binary Search.csproj",
         "projectName": "Binary Search",
-        "projectPath": "C:\\Users\\Dongchen Zou\\Desktop\\CsharpSolutions\\Leetcode-CSharp-Solution-\\Binary Search\\Binary Search\\Binary Search\\Binary Search.csproj",
+        "projectPath": "C:\\Users\\Dongchen Zou\\Desktop\\Leetcode-CSharp-Solution-\\Searching\\Binary Search\\Binary Search\\Binary Search\\Binary Search.csproj",
         "packagesPath": "C:\\Users\\Dongchen Zou\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Dongchen Zou\\Desktop\\CsharpSolutions\\Leetcode-CSharp-Solution-\\Binary Search\\Binary Search\\Binary Search\\obj\\",
+        "outputPath": "C:\\Users\\Dongchen Zou\\Desktop\\Leetcode-CSharp-Solution-\\Searching\\Binary Search\\Binary Search\\Binary Search\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Dongchen Zou\\AppData\\Roaming\\NuGet\\NuGet.Config",
