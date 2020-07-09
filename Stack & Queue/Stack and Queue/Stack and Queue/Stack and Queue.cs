@@ -110,5 +110,25 @@ namespace Stack_and_Queue
             }
         }
         #endregion
+        #region Leetcode 946  Valid Stack Sequence
+        public bool ValidateStackSequences(int[] pushed, int[] popped)
+        {
+            Stack<int> s = new Stack<int>();
+            // This is a simulation stack
+            int n = pushed.Length;
+            int pop = 0;
+            for (int i = 0; i < n; i++)
+            {
+                s.Push(pushed[i]);
+                while(s.Count!= 0 && s.Peek() == popped[pop])
+                {
+                    ++pop;
+                    s.Pop();
+                }
+            }
+            return s.Count == 0;
+            // If the count is 0, then it means that we are able to finish all the tasks
+        }
+        #endregion
     }
 }
