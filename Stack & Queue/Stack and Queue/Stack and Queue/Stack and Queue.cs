@@ -165,6 +165,7 @@ namespace Stack_and_Queue
                 else
                 // It is an operator so we should start calculating with the previous operator the value
                 // Therefore, we need a empty placeholder to make sure that we can calculate with the last operator
+                // Note that placeholder will also enter this branch
                 {
                     switch (prevop)
                     {
