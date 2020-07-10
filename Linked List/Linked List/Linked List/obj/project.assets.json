@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Dongchen Zou\\Desktop\\CsharpSolutions\\Leetcode-CSharp-Solution-\\Linked List\\Linked List\\Linked List\\Linked List.csproj",
+      "projectUniqueName": "C:\\Users\\Dongchen Zou\\Desktop\\Leetcode-CSharp-Solution-\\Linked List\\Linked List\\Linked List\\Linked List.csproj",
       "projectName": "Linked List",
-      "projectPath": "C:\\Users\\Dongchen Zou\\Desktop\\CsharpSolutions\\Leetcode-CSharp-Solution-\\Linked List\\Linked List\\Linked List\\Linked List.csproj",
+      "projectPath": "C:\\Users\\Dongchen Zou\\Desktop\\Leetcode-CSharp-Solution-\\Linked List\\Linked List\\Linked List\\Linked List.csproj",
       "packagesPath": "C:\\Users\\Dongchen Zou\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Dongchen Zou\\Desktop\\CsharpSolutions\\Leetcode-CSharp-Solution-\\Linked List\\Linked List\\Linked List\\obj\\",
+      "outputPath": "C:\\Users\\Dongchen Zou\\Desktop\\Leetcode-CSharp-Solution-\\Linked List\\Linked List\\Linked List\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Dongchen Zou\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -18,15 +18,17 @@ namespace Linked_List
     public class Node
     {
         public int val;
+        public Node prev;
         public Node next;
+        public Node child;
         public Node random;
-
         public Node(int _val)
         {
             val = _val;
             next = null;
-            random = null;
+
         }
+       
     }
     #endregion
     class Program
@@ -290,6 +292,52 @@ namespace Linked_List
                 prev.next = l2;
             }
             return head.next;
+        }
+        #endregion
+        #region Leetcode 430  Flatten a Multilevel Doubly Linked List
+        public Node Flatten(Node head)
+        {
+            if (head == null) { return head; }
+            Stack<Node> nodes = new Stack<Node>();
+            Node cur = head; // Setup the pointer
+            while (cur != null)
+            {
+                if (cur.child != null)
+                {
+                    if (cur.next != null)
+                    {
+                        nodes.Push(cur.next);
+                    }
+                    cur.next = cur.child;
+                    cur.next.prev = cur;
+                    cur.child = null;
+                }
+                else if (cur.next == null && nodes.Count > 0)
+                // We have reached an end here but we still has to put all the stuff in the stack to tail of the linked list
+                {
+                    cur.next = nodes.Pop();
+                    cur.next.prev = cur;
+                }
+                cur = cur.next;
+            }
+            return head;
+            #region Explanation for Leetcode 430
+            /*
+             * Very Very Useful Literal Explanation
+             * 1---2---3---4---5---6--NULL
+                       |
+                        7---8---9---10--NULL
+                            |
+                            11--12--NULL
+             * The pointer keeps traversing until it meets 3, which has a child
+             * Therefore, we put the rest of the nodes on the first level in the stack [4---5---6--NULL]
+             * And now our pointer is on 7 because we set cur.next to be its child
+             * The pointer keeps traversing until it meets 8
+             * We the rest of the node on the second level in the stack [4---5---6--NULL] + [9---10--NULL]
+             * The pointer is one 11 and it keeps traversing until it meets null
+             * Therefore, we put all the things in the stack at the tail of the linked list
+             */
+            #endregion
         }
         #endregion
     }
