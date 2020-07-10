@@ -137,7 +137,9 @@ namespace Binary_Search
         {
             int left = 0;
             int right = nums.Length - 1; 
-            // 就是这里，按照理论来说，应该是nums.Length，因为最后一个值是可以取的
+            // This is a little tricky here
+            // Although we are in an inclusive-exclusive structure here, we still cannot take nums.Length
+            // because calling m+1 might lead to an index out of range
             while (left < right)
             {
                 int m = left + (right - left) / 2;
