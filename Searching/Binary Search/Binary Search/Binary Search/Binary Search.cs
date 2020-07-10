@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Xml.Schema;
@@ -9,8 +10,6 @@ namespace Binary_Search
     {
         static void Main(string[] args)
         {
-            int[] test =  { 1, 2, 3, 4, 5, 6,7};
-            Console.WriteLine(FindPeakElement(test));
         }
         #region Binary Search Template
 
@@ -153,6 +152,34 @@ namespace Binary_Search
                 }
             }
             return left;
+        }
+        #endregion
+        #region Leetcode 658  Find k Closest Element
+        // We can transfer this question to delete arr.Length - k elements or simply use Binary Search
+        public IList<int> FindClosestElements(int[] arr, int k, int x)
+        {
+            IList<int> ans = new List<int>();
+            int left = 0;
+            int right = arr.Length - k; // Note that we at least have to leave k space
+            // Left and right represents the range of starting
+            while (left < right)
+            {
+                int mid = left + (right - left) / 2;
+                if (x - arr[mid] /*The distance to the start*/ > arr[mid + k] - x /*The distance to the ending*/)
+                // This means that we are too far off on the left
+                {
+                    left = mid + 1;
+                }
+                else
+                {
+                    right = mid;
+                }
+            }
+            for (int i = left; i < left + k; i++) // We get k elements starting from left
+            {
+                ans.Add(arr[i]);
+            }
+            return ans;
         }
         #endregion
     }
