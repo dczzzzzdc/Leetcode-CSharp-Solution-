@@ -207,6 +207,45 @@ namespace Binary_Search
             return start;
         }
         #endregion
+        #region Leetcode 436  Find Right Interval
+        public int[] FindRightInterval(int[][] intervals)
+        {
+            int n = intervals.Length;
+            if (n == 0) { return null; }
+            int[] ans = new int[n];
+            (int, int)[] start = new (int, int)[n];
+            for (int i = 0; i < n; i++)
+            {
+                start[i] = (intervals[i][0], i);
+            }
+            Array.Sort(start);
+            for (int i = 0; i < n; i++)
+            {
+                ans[i] = FRIBinary_Search(start, intervals[i][1]); 
+            }
+            return ans;
+
+        }
+        public int FRIBinary_Search((int,int)[]nums,int target)
+        {
+            int l = 0;
+            int r = nums.Length;
+            while (l < r)
+            {
+                int m = l + (r - l) / 2;
+                if(nums[m].Item1 >= target)
+                {
+                    r = m;
+                }
+                else
+                {
+                     l= m+1;
+                }
+            }
+            return l == nums.Length /*This means that we have search through the whole array*/ ? -1 : nums[l].Item2; // Note that we are returning the index
+            //We are returning the index here
+        }
+        #endregion
     }
 
 }
