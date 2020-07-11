@@ -182,6 +182,31 @@ namespace Binary_Search
             return ans;
         }
         #endregion
+        #region Leetcode 287  Finding Duplicate Numbers
+        // This is not really a Binary Search Questions
+        // It uses slow and fast pointer which is very very similar to Linked List II
+        public int FindDuplicate(int[] nums)
+        {
+            int slow = nums[0];
+            int fast = nums[0];
+            //Setting two pointers
+
+            while (true) // We loop until we meet
+            {
+                slow = nums[slow];
+                fast = nums[nums[fast]];
+                // Moving the fast pointer two tiles
+                if (slow == fast) { break; }
+            }
+            int start = nums[0];
+            while (start != fast)
+            {
+                fast = nums[fast];
+                start = nums[start];
+            }
+            return start;
+        }
+        #endregion
     }
 
 }
