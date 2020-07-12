@@ -10,6 +10,7 @@ namespace Binary_Search
     {
         static void Main(string[] args)
         {
+
         }
         #region Binary Search Template
 

@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v3.1",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "DP Path Problems/1.0.0": {
+        "runtime": {
+          "DP Path Problems.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "DP Path Problems/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

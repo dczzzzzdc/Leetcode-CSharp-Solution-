@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Security.Cryptography;
 
 namespace DP_Path_Problems
 {
@@ -135,6 +136,58 @@ namespace DP_Path_Problems
                 }
             }
             return Find(x, y, N, m, n);
+        }
+        #endregion
+        #region Leetcode 72  Edit Distance
+        // Our goal is edit both words until one of their length is zero
+        public int MinDistance(string w1, string w2)
+        {
+            word1 = w1;
+            word2 = w2;
+            int l1 = w1.Length;
+            int l2 = w2.Length;
+            MEDdp = new int[l1 + 1][];
+            // d[i][j] stores the Minimum Edit Distance from word1[0-i] to word2[0-j]
+            for (int i = 0; i < l1+1; i++)
+            {
+                MEDdp[i] = new int[l2 + 1];
+                Array.Fill(MEDdp[i], -1);
+            }
+            return MEDfind(l1, l2);
+
+        }
+        int[][] MEDdp;
+        string word1;
+        string word2;
+        public int MEDfind(int i1, int i2) // These two params indicates the length of the remaining word
+        {
+            if(i1 == 0) 
+            {
+                return i2;
+            }
+            else if (i2 == 0)
+            {
+                return i1;
+            }
+            // We only need the (remaining length of another word) steps by deleting
+            else if (MEDdp[i1][i2]!= -1)
+            {
+                return MEDdp[i1][i2];
+            }
+            int result = 0;
+            if(word1[i1-1] == word2[i2 - 1])// If the next character is the same, then we can skip it
+            {
+                result = MEDfind(i1 - 1, i2 - 1);
+            }
+            else
+            {
+                result = Math.Min(Math.Min(MEDfind(i1 - 1, i2 - 1), MEDfind(i1 - 1, i2)), MEDfind(i1, i2 - 1));
+                // Replace: If we replace a character, the next character is the same. Then we can skip it
+                // Delete : If we delete a character in word1, then  we can skip a character in word1
+                // Insert：If we insert a character into word1, then we can skip a character in word2
+                // while the length of word1 remains the same(skip one insert one)
+            }
+            return MEDdp[i1][i2] = result;
         }
         #endregion
     }
