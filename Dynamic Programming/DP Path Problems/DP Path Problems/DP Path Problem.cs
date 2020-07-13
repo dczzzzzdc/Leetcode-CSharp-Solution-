@@ -7,7 +7,9 @@ namespace DP_Path_Problems
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            int n = -10;
+            n = Math.Abs(n);
+            Console.WriteLine(n);
         }
         #region Leetcode 62/62  Unique Path Series
         public int UniquePathsWithObstacles(int[][] obstacleGrid)

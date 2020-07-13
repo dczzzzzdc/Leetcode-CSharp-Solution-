@@ -247,6 +247,29 @@ namespace Binary_Search
             //We are returning the index here
         }
         #endregion
+        #region Leetcode 50  Pow(x,n)
+        // Basic Theory: Pow(x,n) * Pow(x,n) = Pow(x,2n)
+        public double MyPow(double x, int t)
+        {
+            double result = 1.0;
+            long n = t;
+            if (n < 0)
+            {
+                n = -n;
+                x = 1 / x;
+            }
+            double cur = x;
+            for (long i = n; i > 0; i /= 2) 
+            {
+                if (i % 2 == 1)
+                {
+                    result *= cur;
+                }
+                cur *= cur;
+            }
+            return result;
+        }
+        #endregion
     }
 
 }
