@@ -10,7 +10,6 @@ namespace Binary_Search
     {
         static void Main(string[] args)
         {
-
         }
         #region Binary Search Template
 
@@ -268,6 +267,44 @@ namespace Binary_Search
                 cur *= cur;
             }
             return result;
+        }
+        #endregion
+        #region Leetcode 668  Kth Smallest Number in Multiplication Table
+        public int FindKthNumber(int m, int n, int k)
+        {
+            int l = 1; // The first element in the table is 1
+            int r = m * n + 1; // The last element in the table is m*n
+            while (l < r)
+            {
+                int mid = l + (r - l) / 2;
+                if(LEX(m,n,mid) >= k)
+                {
+                    r = mid;
+                }
+                else
+                {
+                    l = mid + 1;
+                }
+            }
+            // Since we are trying to find the first element that has k element smaller or equal to it
+            // Then the number is guranteed to in the table
+            return l;
+        }
+        /// <param name="m">The height of the table</param>
+        /// <param name="n">The length of the table</param>
+        /// <param name="x">Our target</param>
+        /// <returns>The amount of number that is smaller or equal to x in a multiplication table</returns>
+        public int LEX(int m, int n,int x)
+
+        {
+            int count = 0;
+            for (int i = 1; i < m+1; i++)
+            {
+                count += Math.Min(n, x / i);
+                // We want to see how many number that are smaller or equal to x in 1*i,2*i,3*i....i*n
+                // Which is converted into x/i : 1,2,3....n
+            }
+            return count;
         }
         #endregion
     }
