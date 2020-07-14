@@ -1,0 +1,13 @@
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Heap\Heap\Heap\bin\Debug\netcoreapp3.1\Heap.exe
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Heap\Heap\Heap\bin\Debug\netcoreapp3.1\Heap.deps.json
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Heap\Heap\Heap\bin\Debug\netcoreapp3.1\Heap.runtimeconfig.json
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Heap\Heap\Heap\bin\Debug\netcoreapp3.1\Heap.runtimeconfig.dev.json
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Heap\Heap\Heap\bin\Debug\netcoreapp3.1\Heap.dll
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Heap\Heap\Heap\bin\Debug\netcoreapp3.1\Heap.pdb
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Heap\Heap\Heap\obj\Debug\netcoreapp3.1\Heap.csprojAssemblyReference.cache
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Heap\Heap\Heap\obj\Debug\netcoreapp3.1\Heap.AssemblyInfoInputs.cache
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Heap\Heap\Heap\obj\Debug\netcoreapp3.1\Heap.AssemblyInfo.cs
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Heap\Heap\Heap\obj\Debug\netcoreapp3.1\Heap.csproj.CoreCompileInputs.cache
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Heap\Heap\Heap\obj\Debug\netcoreapp3.1\Heap.dll
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Heap\Heap\Heap\obj\Debug\netcoreapp3.1\Heap.pdb
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Heap\Heap\Heap\obj\Debug\netcoreapp3.1\Heap.genruntimeconfig.cache
