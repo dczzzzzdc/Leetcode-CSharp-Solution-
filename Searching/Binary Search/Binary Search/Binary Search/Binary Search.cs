@@ -1,15 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Xml.Schema;
 
 namespace Binary_Search
 {
+    class FenwickTree
+    {
+        private int[] _nums;
+        public FenwickTree(int n)
+        {
+            _nums = new int[n + 1];
+        }
+        private int lowbit(int x)
+        {
+            return x & (-x);
+        }
+        public void Update(int i,int delta)
+        {
+            while (i < _nums.Length)
+            {
+                _nums[i] += delta;
+                i += lowbit(i);
+            }
+        }
+        public int Query(int i)
+        {
+            int sum = 0;
+            while (i > 0)
+            {
+                sum += _nums[i];
+                i -= lowbit(i);
+            }
+            return sum;
+        }
+    }
     class Program
     {
         static void Main(string[] args)
         {
+
         }
         #region Binary Search Template
 
@@ -307,6 +340,59 @@ namespace Binary_Search
             return count;
         }
         #endregion
+        #region Leetcode 786 K-th Smallest Prime Fraction
+        public int[] KthSmallestPrimeFraction(int[] A, int k)
+        {
+            // Property: Matrix[i][j] = A[i] / A[j]
+            // where 0<=i<=n-1 and 1<=j<=n
+            // i cannot take the last element and j cannot take the first element
+            // The value decreases from left to right because denominator is increasing
+            // The value increase from top to down because numerator is increasing
+            int n = A.Length;
+            double l = 0.0;
+            double r = 1.0;
+            while (l < r)
+            {
+                double m = l + (r - l) / 2;
+                double max = 0.0;
+                int total = 0;
+                int p = 0;
+                int q = 0;
+                for (int i = 0; i < n - 1; i++) // Searching in a virtual 2D matrix
+                {
+                    int j = 1;
+                    while (j < n && A[i] > m * A[j]) // We want to find the first j that makes A[i]/A[j] > m
+                    // Note that the value of the fraction decrease when j increases
+                    {
+                        ++j;
+                    }
+                    if (n == j) { break; } // The j does not exist
+                    total += n - j; // There are n-j amount of fractions that are smaller than m
+                    double cur = Convert.ToDouble(A[i]) / A[j];
+                    if (cur > max)
+                    {
+                        max = cur;
+                        q = j;
+                        p = i;
+                    }
+
+                }
+                if (total == k) // We found the answer
+                {
+                    return new int[2] { A[p], A[q] };
+                }
+                else if (total > k)
+                {
+                    r = m;
+                }
+                else
+                {
+                    l = m;
+                }
+            }
+            return new int[2];
+        }
+        #endregion 
     }
 
 }
