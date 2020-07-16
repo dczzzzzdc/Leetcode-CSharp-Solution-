@@ -422,14 +422,18 @@ namespace Binary_Search
             {
                 for (int n = 1; n <= N ; n++)
                 {
+                    // We are using Binary Search to find the valley
                     int l = 1;
                     int r = n;
                     int m = 0;
+                    // Why can we use Binary Search?
+                    // When there are more levels left, we definitely need more attempts
+                    // When dp[k-1][m-1] == dp[k][n-m], we are able to find the minimum amount of attempts
                     while (l <= r)
                     {
                         m = (r - l) / 2 + l;
-                        int x = dp[k - 1][m - 1];
-                        int y = dp[k][n - m];
+                        int x = dp[k - 1][m - 1]; // It is broken
+                        int y = dp[k][n - m]; // Not Broken
                         if (x > y)
                         {
                             r = m - 1;
