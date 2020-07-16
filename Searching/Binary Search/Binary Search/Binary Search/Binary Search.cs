@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
+using System.Text;
 using System.Xml.Schema;
 
 namespace Binary_Search
@@ -42,7 +43,6 @@ namespace Binary_Search
     {
         static void Main(string[] args)
         {
-
         }
         #region Binary Search Template
 
@@ -79,46 +79,7 @@ namespace Binary_Search
             return l;
         }
         #endregion
-        #region Leetcode 378  Kth Smallest Element in a Sorted Matrix
         
-        public int UpperBound(int[] row, int max)
-        {
-            int left = 0;
-            int right = row.Length;
-            while (left < right)
-            {
-                int m = left + (right - left) / 2;
-                // Equal or Smaller
-                if (row[m] <= max) { left = m + 1; }
-                else { right = m; }
-            }
-            return left;
-        }
-        public int KthSmallest(int[][] matrix, int k)
-        // If we are trying to find the kth element, then we can just find a number that has k numbers that are equal or smaller than it
-        {
-            int left = matrix[0][0];
-            int right = matrix[matrix.Length - 1][matrix[0].Length - 1];
-            while (left < right)
-            {
-                int m = left + (right - left) / 2;
-                int total = 0; // The amount of element smaller than m
-                foreach (int[] item in matrix)
-                {
-                    int cur = UpperBound(item, m);
-                    if (cur == 0) { break; } // This a prunning
-                    // There is no more because the matrix is in an ascending order
-                    total += cur;
-                }
-                // Note that it is smaller here because left is inclusive
-                // If total == k but we set it to m+1, then we will permanently lose it
-                if (total < k) { left = m + 1; }
-                else { right = m; }
-
-            }
-            return left;
-        }
-        #endregion
         #region Leetcode 875 Koko Eating Banana
         public int MinEatingSpeed(int[] piles, int H)
         {
@@ -302,6 +263,46 @@ namespace Binary_Search
             return result;
         }
         #endregion
+        #region Leetcode 378  Kth Smallest Element in a Sorted Matrix
+
+        public int UpperBound(int[] row, int max)
+        {
+            int left = 0;
+            int right = row.Length;
+            while (left < right)
+            {
+                int m = left + (right - left) / 2;
+                // Equal or Smaller
+                if (row[m] <= max) { left = m + 1; }
+                else { right = m; }
+            }
+            return left;
+        }
+        public int KthSmallest(int[][] matrix, int k)
+        // If we are trying to find the kth element, then we can just find a number that has k numbers that are equal or smaller than it
+        {
+            int left = matrix[0][0];
+            int right = matrix[matrix.Length - 1][matrix[0].Length - 1];
+            while (left < right)
+            {
+                int m = left + (right - left) / 2;
+                int total = 0; // The amount of element smaller than m
+                foreach (int[] item in matrix)
+                {
+                    int cur = UpperBound(item, m);
+                    if (cur == 0) { break; } // This a prunning
+                    // There is no more because the matrix is in an ascending order
+                    total += cur;
+                }
+                // Note that it is smaller here because left is inclusive
+                // If total == k but we set it to m+1, then we will permanently lose it
+                if (total < k) { left = m + 1; }
+                else { right = m; }
+
+            }
+            return left;
+        }
+        #endregion
         #region Leetcode 668  Kth Smallest Number in Multiplication Table
         public int FindKthNumber(int m, int n, int k)
         {
@@ -343,7 +344,7 @@ namespace Binary_Search
         #region Leetcode 786 K-th Smallest Prime Fraction
         public int[] KthSmallestPrimeFraction(int[] A, int k)
         {
-            // Property: Matrix[i][j] = A[i] / A[j]
+            // Theory: Matrix[i][j] = A[i] / A[j]
             // where 0<=i<=n-1 and 1<=j<=n
             // i cannot take the last element and j cannot take the first element
             // The value decreases from left to right because denominator is increasing
@@ -359,16 +360,18 @@ namespace Binary_Search
                 int p = 0;
                 int q = 0;
                 for (int i = 0; i < n - 1; i++) // Searching in a virtual 2D matrix
+                // During this process, we are find how many factions that are smaller than m 
                 {
                     int j = 1;
-                    while (j < n && A[i] > m * A[j]) // We want to find the first j that makes A[i]/A[j] > m
+                    while (j < n && A[i] > m * A[j]) // We want to find the first j that makes A[i]/A[j] < m
                     // Note that the value of the fraction decrease when j increases
                     {
                         ++j;
                     }
                     if (n == j) { break; } // The j does not exist
-                    total += n - j; // There are n-j amount of fractions that are smaller than m
+                    total += n - j; 
                     double cur = Convert.ToDouble(A[i]) / A[j];
+                    // We have to keep track of the
                     if (cur > max)
                     {
                         max = cur;
@@ -392,7 +395,61 @@ namespace Binary_Search
             }
             return new int[2];
         }
-        #endregion 
+        #endregion
+        #region Leetcode 887  Super Egg Drop
+        // This a DYnamic Programming + Binary Search question
+        public int SuperEggDrop(int K, int N)
+        {
+            int[][] dp = new int[K + 1][];
+            // dp[i][j] represent the minimum attempt need when j levels is left to explore with i eggs
+            for (int i = 0; i < K + 1; ++i)
+            {
+                dp[i] = new int[N + 1];
+                Array.Fill(dp[i], int.MaxValue);
+            }
+            for (int i = 0; i <= N; ++i)
+            { // When are no eggs left, then we can stop trying
+                dp[0][i] = 0;
+                // When we only have one egg, then we need i attempts in the worst case
+                dp[1][i] = i;
+            }
+            for (int i = 0; i <= K; ++i)
+            {
+                // When we are on the first floor
+                dp[i][0] = 0;
+            }
+            for (int k = 2; k <= K; k++)
+            {
+                for (int n = 1; n <= N ; n++)
+                {
+                    int l = 1;
+                    int r = n;
+                    int m = 0;
+                    while (l <= r)
+                    {
+                        m = (r - l) / 2 + l;
+                        int x = dp[k - 1][m - 1];
+                        int y = dp[k][n - m];
+                        if (x > y)
+                        {
+                            r = m - 1;
+                        }
+                        else
+                        {
+                            l = m + 1;
+                        }
+                    }
+                    // Brute Force that reached Time Limit O(N3)
+                    // for (int f = 0; f <= n; f++)  We can choose to throw from floor 1 to n
+                    // {
+                    //  dp[k][n] = Math.Min(dp[k][n], Math.Max(dp[k - 1][f - 1], dp[k][n - f]) + 1);
+                    // }
+                    
+                }
+            }
+            return dp[K][N];
+        }
+        #endregion
     }
 
 }
