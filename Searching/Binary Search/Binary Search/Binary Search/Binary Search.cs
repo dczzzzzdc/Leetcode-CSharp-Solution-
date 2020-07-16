@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Xml.Schema;
 
@@ -79,7 +80,6 @@ namespace Binary_Search
             return l;
         }
         #endregion
-        
         #region Leetcode 875 Koko Eating Banana
         public int MinEatingSpeed(int[] piles, int H)
         {
@@ -397,11 +397,12 @@ namespace Binary_Search
         }
         #endregion
         #region Leetcode 887  Super Egg Drop
-        // This a DYnamic Programming + Binary Search question
+        // This a Dynamic Programming + Binary Search question, which is pretty hard
         public int SuperEggDrop(int K, int N)
         {
             int[][] dp = new int[K + 1][];
             // dp[i][j] represent the minimum attempt need when j levels is left to explore with i eggs
+            // Note that means the level that is going to explored instead of the current level we are on
             for (int i = 0; i < K + 1; ++i)
             {
                 dp[i] = new int[N + 1];
@@ -425,13 +426,12 @@ namespace Binary_Search
                     // We are using Binary Search to find the valley
                     int l = 1;
                     int r = n;
-                    int m = 0;
                     // Why can we use Binary Search?
                     // When there are more levels left, we definitely need more attempts
                     // When dp[k-1][m-1] == dp[k][n-m], we are able to find the minimum amount of attempts
                     while (l <= r)
                     {
-                        m = (r - l) / 2 + l;
+                        int m = (r - l) / 2 + l;
                         int x = dp[k - 1][m - 1]; // It is broken
                         int y = dp[k][n - m]; // Not Broken
                         if (x > y)
@@ -448,10 +448,92 @@ namespace Binary_Search
                     // {
                     //  dp[k][n] = Math.Min(dp[k][n], Math.Max(dp[k - 1][f - 1], dp[k][n - f]) + 1);
                     // }
-                    
                 }
             }
             return dp[K][N];
+        }
+        #endregion
+        #region Leetcode 1337  The K Weakest Row in a Matrix
+        public int[] KWeakestRows(int[][] mat, int k)
+        {
+            (int, int)[] rank = new (int, int)[mat.Length];
+            for (int i = 0; i < mat.Length; ++i)
+            {
+                rank[i] = (Search(mat[i]), i);
+            }
+            Array.Sort(rank);
+            int[] ans = new int[k];
+            for (int i = 0; i < k; ++i)
+            {
+                ans[i] = rank[i].Item2;
+            }
+            return ans;
+        }
+        public int Search(int[] row)
+        {
+            int l = 0;
+            int r = row.Length;
+            while (l < r)
+            {
+                int m = l + (r - l) / 2;
+                if (row[m] == 1)
+                {
+                    l = m + 1;
+                }
+                else
+                {
+                    r = m;
+                }
+            }
+            return l + 1;
+        }
+        #endregion
+        #region Leetcode 74 Search a 2D Matrix
+        public bool SearchMatrix(int[][] matrix, int target)
+        {
+            if (matrix.Length == 0 || matrix == null) { return false; }
+            int n = matrix[0].Length;
+            if (n == 0)
+            {
+                return false;
+            }
+            for (int i = 0; i < matrix.Length; ++i)
+            {
+                if (matrix[i][0] <= target && matrix[i][n - 1] >= target)
+                {
+                    if (SMsearch(matrix[i], target))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            return false;
+        }
+        public bool SMsearch(int[] nums, int target)
+        {
+            int l = 0;
+            int r = nums.Length;
+            while (l < r)
+            {
+                int m = l + (r - l) / 2;
+                if (nums[m] == target)
+                {
+                    return true;
+                }
+                else if (nums[m] > target)
+                {
+                    r = m;
+                }
+                else
+                {
+                    l = m + 1;
+                }
+            }
+            return false;
         }
         #endregion
     }
