@@ -46,22 +46,40 @@ namespace Binary_Search
         {
         }
         #region Binary Search Template
-
+        // This function searches for the first occurence of the target
         // The l is inclusive while the r is exclusive
-        public static int Binary_search(int []nums,int target) // Return the index of the target in a sorted array
+        public int Binary_search_first(int []nums,int target) // Return the index of the target in a sorted array
         // If not found, return -1;
         {
             int l = 0;
             int r = nums.Length;
+            int index = -1;
             while (l < r)
             {
-                int m = l + (r - l) / 2; // The middle of the range (l,r)
+                int m = l + (r - l) / 2; 
                 int cur = nums[m];
-                if(cur == target) { return m; }
-                else if(cur >= target) { r = m; } // New range(l,m)
+                if(cur >= target) { r = m; } // New range(l,m)
                 else { l = m + 1; } // New Range(m+1,r)
+                if(cur == target) { index = m; }
             }
-            return -1;
+            return index;
+        }
+        
+        // This function searches for the last occurence of the target
+        public int Binary_search_last(int []nums,int target)
+        {
+            int l = 0;
+            int r = nums.Length;
+            int index = -1;
+            while (l < r)
+            {
+                int m = l + (r - l) / 2;
+                int cur = nums[m];
+                if (cur <= target) {l = m+1; } // New range(l,m)
+                else { r = m ; } // New Range(m+1,r)
+                if (cur == target) { index = m; }
+            }
+            return index;
         }
         #endregion
         #region Leetcode 35  Search Input Position
