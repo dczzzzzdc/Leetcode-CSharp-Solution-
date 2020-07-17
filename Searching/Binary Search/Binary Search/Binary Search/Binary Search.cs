@@ -536,6 +536,57 @@ namespace Binary_Search
             return false;
         }
         #endregion
+        #region Leetcode 34  Find First and Last Position of Element in Sorted Array
+        public int[] SearchRange(int[] nums, int target)
+        {
+            int[] ans = new int[2];
+            ans[0] = FindFirst(nums, target);
+            ans[1] = FindLast(nums, target);
+            return ans;
+        }
+        public int FindFirst(int [] nums,int target)
+        {
+            int index = -1;
+            int l = 0;
+            int r = nums.Length;
+            while (l < r)
+            {
+                int m = l + (r - l) / 2;
+                int cur = nums[m];
+                if(cur >= target)
+                {
+                    r = m;
+                }
+                else
+                {
+                    l = m + 1;
+                }
+                if(cur == target) { index = m; }
+            }
+            return index;
+        }
+        public int FindLast(int []nums, int target)
+        {
+            int index = -1;
+            int l = 0;
+            int r = nums.Length;
+            while (l < r)
+            {
+                int m = l + (r - l) / 2;
+                int cur = nums[m];
+                if (cur <= target)
+                {
+                    l = m+1;
+                }
+                else
+                {
+                    r = m;
+                }
+                if (cur == target) { index = m; }
+            }
+            return index;
+        }
+        #endregion
     }
 
 }
