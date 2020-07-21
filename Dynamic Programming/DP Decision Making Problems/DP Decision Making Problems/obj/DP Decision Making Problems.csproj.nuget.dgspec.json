@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Dongchen Zou\\Desktop\\CsharpSolutions\\Leetcode-CSharp-Solution-\\Dynamic Programming\\DP Decision Making Problems\\DP Decision Making Problems\\DP Decision Making Problems.csproj": {}
+    "C:\\Users\\Dongchen Zou\\Desktop\\Leetcode-CSharp-Solution-\\Dynamic Programming\\DP Decision Making Problems\\DP Decision Making Problems\\DP Decision Making Problems.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Dongchen Zou\\Desktop\\CsharpSolutions\\Leetcode-CSharp-Solution-\\Dynamic Programming\\DP Decision Making Problems\\DP Decision Making Problems\\DP Decision Making Problems.csproj": {
+    "C:\\Users\\Dongchen Zou\\Desktop\\Leetcode-CSharp-Solution-\\Dynamic Programming\\DP Decision Making Problems\\DP Decision Making Problems\\DP Decision Making Problems.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Dongchen Zou\\Desktop\\CsharpSolutions\\Leetcode-CSharp-Solution-\\Dynamic Programming\\DP Decision Making Problems\\DP Decision Making Problems\\DP Decision Making Problems.csproj",
+        "projectUniqueName": "C:\\Users\\Dongchen Zou\\Desktop\\Leetcode-CSharp-Solution-\\Dynamic Programming\\DP Decision Making Problems\\DP Decision Making Problems\\DP Decision Making Problems.csproj",
         "projectName": "DP Decision Making Problems",
-        "projectPath": "C:\\Users\\Dongchen Zou\\Desktop\\CsharpSolutions\\Leetcode-CSharp-Solution-\\Dynamic Programming\\DP Decision Making Problems\\DP Decision Making Problems\\DP Decision Making Problems.csproj",
+        "projectPath": "C:\\Users\\Dongchen Zou\\Desktop\\Leetcode-CSharp-Solution-\\Dynamic Programming\\DP Decision Making Problems\\DP Decision Making Problems\\DP Decision Making Problems.csproj",
         "packagesPath": "C:\\Users\\Dongchen Zou\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Dongchen Zou\\Desktop\\CsharpSolutions\\Leetcode-CSharp-Solution-\\Dynamic Programming\\DP Decision Making Problems\\DP Decision Making Problems\\obj\\",
+        "outputPath": "C:\\Users\\Dongchen Zou\\Desktop\\Leetcode-CSharp-Solution-\\Dynamic Programming\\DP Decision Making Problems\\DP Decision Making Problems\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Dongchen Zou\\AppData\\Roaming\\NuGet\\NuGet.Config",

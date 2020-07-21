@@ -531,6 +531,51 @@ namespace Binary_Search
             }
             return false;
         }
+        public bool SearchMatrix(int[,] matrix, int target)
+        {
+            int n = matrix.Length;
+            int m = matrix.GetLength(0);
+            for (int i = 0; i < n; i++)
+            {
+                int l = 0; int r = m;
+                while (l < r)
+                {
+                    int mid = l + (r - l) / 2;
+                    if(matrix[i,mid]> target) { r = mid; }
+                    else if (matrix[i,mid] < target) { l = mid + 1; }
+                    else { return true; }
+                }
+            }
+            return false;
+        }
+        public bool SearchMatrix_LinearScan(int[,] matrix, int target)
+        {
+            // Starting Searching from top right corner because we will only move left or down
+            int i = 0;
+            int j = matrix.GetLength(1) - 1;
+
+            while (i < matrix.GetLength(0) && j >= 0)
+            {
+                if (target > matrix[i, j])
+                // We do not have to search matrix[i][1-j] because all the numbers on the left is smaller
+                // Therefore, we can move down by one row while keeping j the same
+                {
+                    i++;
+                }
+                // We keep moving down until we meet a larger numbers
+                else if (target < matrix[i, j])
+                {
+                    j--;
+                }
+                else
+                {
+                    return true;
+                }
+                    
+            }
+
+            return false;
+        }
         public bool SMsearch(int[] nums, int target)
         {
             int l = 0;
@@ -603,6 +648,56 @@ namespace Binary_Search
                 if (cur == target) { index = m; }
             }
             return index;
+        }
+        #endregion
+        #region Leetcode 1482  Minimum Number of Days to Make m Bouquets
+        public int MinDays(int[] bloomDay, int n, int k)
+        {
+            if(bloomDay.Length < n * k) { return -1; }
+            int l = int.MaxValue; int r = 0;
+            foreach (var item in bloomDay)
+            {
+                l = Math.Min(l, item);
+                r = Math.Max(r, item);
+            }
+            while (l < r)
+            {
+                int m = (r - l) / 2 + l;
+                if (CollectFlower(m, bloomDay, k)>=n)
+                {
+                    r = m;
+                }
+                else
+                {
+                    l = m + 1;
+                }
+            }
+            return l;
+        }
+        /// <summary>
+        /// This finds how many bouquets that can be made in given days
+        /// </summary>
+        /// <param name="givenDays"></param>
+        /// <param name="bloomDay">The Array containing the blooming days</param>
+        /// <param name="k">The amount of flowers </param>
+        /// <returns>Returns the amount of bouquets</returns>
+        public int CollectFlower(int givenDays,int[]bloomDay,int k)
+        {
+            int count = 0; int flower = 0;
+            foreach (int day in bloomDay)
+            {
+                if(day > givenDays) // This flower has not bloomed yet
+                {
+                    flower = 0; // Since we have to use adjacent flower, we have to clear the flower count
+                    continue;
+                }
+                else if(++flower == k) // We successfully made a bouquet
+                {
+                    flower = 0;
+                    count++;
+                }
+            }
+            return count;
         }
         #endregion
     }

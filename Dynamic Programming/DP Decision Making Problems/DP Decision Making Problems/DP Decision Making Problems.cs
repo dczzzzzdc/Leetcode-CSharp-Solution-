@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace DP_Decision_Making_Problems
 {
@@ -137,6 +138,72 @@ namespace DP_Decision_Making_Problems
             else if (maxsat[index][time] != -1) { return maxsat[index][time]; }
             return maxsat[index][time] = Math.Max(satFind(index + 1, time, sat),
                 satFind(index + 1, time + 1, sat) + time * sat[index]);
+        }
+        #endregion
+        #region Leetcode 1105  Filling Bookcase shelves
+        public int MinHeightShelves(int[][] books, int shelf_width)
+        {
+            int n = books.Length;
+            FBSdp = new int[n+1][];
+            for (int i = 0; i <= n; i++)
+            {
+                FBSdp[i] = new int[shelf_width + 1];
+                Array.Fill(FBSdp[i], -1);
+            }
+            return FBSfind(0, books, shelf_width, 0,0);
+
+        }
+        int[][] FBSdp;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="index">The index of the book we are trying to position</param>
+        /// <param name="books">The Array containing the information of all the books</param>
+        /// <param name="limit">The width of the shelf</param>
+        /// <param name="height">The current height</param>
+        /// <param name="cur">The current length</param>
+        /// <returns>The minimum height after positioning all the books</returns>
+        public int FBSfind(int index, int[][] books, int limit, int height, int cur)
+        {
+            if (FBSdp[index][cur] != -1) { return FBSdp[index][cur]; } // We have calculated this circumstance
+            if (index == books.Length) { return 0; } // We have finished positioning all the books
+            int length = books[index][0];
+            int width = books[index][1];
+            int same_level = int.MaxValue; int diff_level = int.MaxValue;
+            if(cur + length <= limit) // If we are able to put the current book on the same level as the last one
+            {
+                int new_height = Math.Max(height, width);
+                int dif = new_height - height;
+                // This checks if the current book is higher than the previous books on the shelf
+                // If so, we need to add this additional part because the height of the layer is determined by the highest book
+                same_level = dif + FBSfind(index + 1, books, limit,new_height, cur + length);
+            }
+            diff_level = width + FBSfind(index + 1, books, limit, width, length);
+            // The current length is now the length of the book because a new level is created
+            // The current height is now 
+            return FBSdp[index][cur] = Math.Min(same_level, diff_level);
+        }
+        #endregion
+        #region Leetcode 714  Best Time to Buy and Sell Stock with Transaction Fee
+        public int MaxProfit(int[] prices, int fee)
+        {
+            int n = prices.Length;
+            if (n <= 1) { return 0; }
+            int[][] dp = new int[n][];
+            for (int i = 0; i < n; i++)
+            {
+                dp[i] = new int[2];
+            }
+            // dp [i][0] means having no stock in hand on the ith day while i means
+            // having a stock
+            dp[0][0] = 0;
+            dp[0][1] = -prices[0];
+            for (int i = 1; i < n; i++)
+            {
+                dp[i][0] = Math.Max(dp[i - 1][0], dp[i - 1][1] + prices[i] - fee);
+                dp[i][1] = Math.Max(dp[i - 1][1], dp[i - 1][0] - prices[i]);
+            }
+            return Math.Max(dp[n - 1][0], dp[n - 1][1]);
         }
         #endregion
     }

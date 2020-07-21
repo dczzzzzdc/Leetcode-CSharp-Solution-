@@ -190,10 +190,30 @@ namespace DP_Array_Problems
                         dp[i][j] = dp[i - 1][j - 1] + 1;
                         // We expand one tile
                     }
-                    else { dp[i][j] = Math.Max(dp[i - 1][j], dp[i][j - 1]); }// Then the answer should be come the previous text1 or text2
+                    else { dp[i][j] = Math.Max(dp[i - 1][j], dp[i][j - 1]); }// Then the answer should come fromthe previous text1 or text2
                 }
             }
             return dp[n][m];
+        }
+        public int FindLength(int[] A, int[] B)
+        {
+            int l1 = A.Length;
+            int l2 = B.Length;
+            int[,] dp = new int[l1 + 1, l2 + 1];
+            int max = 0;
+            for (int i = 1; i <= l1; ++i)
+            {
+                for (int j = 1; j <= l2; ++j)
+                {
+                    if (A[i - 1] == B[j - 1])
+                    {
+                        dp[i, j] = Math.Max(dp[i, j], dp[i - 1, j - 1] + 1);
+                        max = Math.Max(dp[i, j], max);
+                    }
+
+                }
+            }
+            return max;
         }
         #endregion
     }
