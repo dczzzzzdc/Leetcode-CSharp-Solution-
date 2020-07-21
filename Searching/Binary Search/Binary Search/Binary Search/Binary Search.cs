@@ -700,6 +700,59 @@ namespace Binary_Search
             return count;
         }
         #endregion
+        #region Leetcode 1300  Sum of Mutated Array Closest to Target
+        public int FindBestValue(int[] arr, int target)
+        {
+            int min_diff = int.MaxValue;
+            int ans = 0;
+            int l = 0; int r = 0; // Note that the left range must start from 0
+            foreach (var item in arr)
+            {
+                r = Math.Max(r, item);
+            }
+            while (l < r)
+            {
+                int m = l + (r - l) / 2;
+                int cur_sum = CountSum(m, arr);
+                int diff = Math.Abs(cur_sum - target); // Our final goal is to calculate the minimum distance from the target
+                if (diff < min_diff)
+                {
+                    min_diff = diff;
+                    ans = m;
+                }
+                else if(diff == min_diff) // In case of a tie, return the minimum of such number
+                {
+                    ans = Math.Min(ans, m);
+                }
+                if(cur_sum >= target)
+                {
+                    r = m;
+                }
+                else
+                {
+                    l = m + 1;
+                }
+
+            }
+            return ans;
+        }
+        public int CountSum(int value, int[] nums)
+        {
+            int sum = 0;
+            foreach (var item in nums)
+            {
+                if(item> value)
+                {
+                    sum += value;
+                }
+                else
+                {
+                    sum += item;
+                }
+            }
+            return sum;
+        }
+        #endregion
     }
 
 }
