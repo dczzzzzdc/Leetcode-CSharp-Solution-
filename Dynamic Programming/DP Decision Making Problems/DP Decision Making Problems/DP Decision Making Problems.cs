@@ -206,5 +206,33 @@ namespace DP_Decision_Making_Problems
             return Math.Max(dp[n - 1][0], dp[n - 1][1]);
         }
         #endregion
+        #region 375  Guess Number Higher or Lower II
+        public int GetMoneyAmount(int n)
+        {
+            guessNumberdp = new int[n + 1][];
+            for (int i = 0; i < n+1; i++)
+            {
+                guessNumberdp[i] = new int[n + 1];
+            }
+            return GuessNumberII(n, 1);
+        }
+        int[][] guessNumberdp;
+        public int GuessNumberII(int high, int low)
+        {
+            if(low >= high) { return 0; }
+            if(guessNumberdp[high][low]!= 0) { return guessNumberdp[high][low]; }
+            int ans = int.MaxValue;
+            // Try every combination
+            for (int i = low; i <= high; i++)
+            {
+                int cur = i + Math.Max(GuessNumberII(i - 1, low) /*The number is too big*/, GuessNumberII(high, i + 1) /* The number is too small*/);
+                // We are using max here because we must take the worst situation into account
+                // Also, the new range can no longer contain i
+                ans = Math.Min(ans, cur);
+                // Select the best decision
+            }
+            return guessNumberdp[high][low] = ans;
+        }
+        #endregion
     }
 }
