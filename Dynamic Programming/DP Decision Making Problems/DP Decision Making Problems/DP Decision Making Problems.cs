@@ -207,6 +207,7 @@ namespace DP_Decision_Making_Problems
         }
         #endregion
         #region 375  Guess Number Higher or Lower II
+        // This solution actually resembles Binary Search
         public int GetMoneyAmount(int n)
         {
             guessNumberdp = new int[n + 1][];

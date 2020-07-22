@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.Cryptography;
 
 namespace DP_Path_Problems
@@ -188,6 +189,48 @@ namespace DP_Path_Problems
                 // while the length of word1 remains the same(skip one insert one)
             }
             return MEDdp[i1][i2] = result;
+        }
+        #endregion
+        #region Leetcode 79  Word Seach
+        public bool Exist(char[][] board, string word)
+        {
+            int n = board.Length;
+            if (n == 0) { return false; }
+            int m = board[0].Length;
+            char[] search = word.ToCharArray();
+            for (int i = 0; i < n; ++i)
+            {
+                for (int j = 0; j < m; ++j)
+                {
+                    if (board[i][j] == search[0])
+                    {
+                        if (Search(j, i, 0, search, ref board))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+        public bool Search(int x, int y, int index, char[] search, ref char[][] board)
+        {
+            if (y < 0 || y >= board.Length || x < 0 || x >= board[0].Length || board[y][x] != search[index])
+            {
+                return false;
+            }
+            else if (index == search.Length - 1) { return true; } // We successfully searched through the entire word
+            else
+            {
+                char cur = board[y][x];
+                board[y][x] = '$'; // Mark as visited
+                bool result = Search(x + 1, y, index + 1, search, ref board) || 
+                    Search(x - 1, y, index + 1, search, ref board) || 
+                    Search(x, y - 1, index + 1, search, ref board) || 
+                    Search(x, y + 1, index + 1, search, ref board);
+                board[y][x] = cur; // Reset to default;
+                return result;
+            }
         }
         #endregion
     }
