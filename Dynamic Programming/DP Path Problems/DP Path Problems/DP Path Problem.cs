@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO.Pipes;
 using System.Security.Cryptography;
 using System.Threading.Tasks.Dataflow;
@@ -290,6 +291,54 @@ namespace DP_Path_Problems
             }
             return CPdp[x1][y1][x2] = res;
         }
+        #endregion
+        #region Leetcode 1463  Cherry Pickup Two
+        public int CherryPickupII(int[][] grid)
+        {
+            int n = grid.Length;
+            if(n== 0 || grid == null) { return 0; }
+            int m = grid[0].Length;
+            CPdpII = new int[m][][];
+            for (int i = 0; i < m; i++)
+            {
+                CPdpII[i] = new int[m][];
+                for (int j = 0; j < m; j++)
+                {
+                    CPdpII[i][j] = new int[n];
+                    Array.Fill(CPdpII[i][j], -1);
+                }
+            }
+            return CPfindII(0, m - 1, 0, grid);
+
+        }
+        int[][][] CPdpII;
+        public int CPfindII(int x1,int x2,int y, int[][] grid)
+        {
+            if(y<0 || y>=grid.Length || x1 <0 || x1 >= grid[0].Length||x2 < 0 || x2>= grid[0].Length)
+            {
+                return 0;
+            }
+            else if (CPdpII[x1][x2][y]!= -1)
+            {
+                return CPdpII[x1][x2][y];
+            }
+            int future = int.MinValue;
+            for (int i = -1; i <= 1; i++)
+            {
+                for (int j = -1; j <= 1; j++)
+                {
+                    future = Math.Max(future, CPfindII(x1 + i, x2 + j, y + 1,grid));
+                }
+            }
+            int cur = grid[y][x1];
+            if(x1 != x2)
+            {
+                cur += grid[y][x2];
+            }
+            return CPdpII[x1][x2][y] = future + cur;
+
+        }
+
         #endregion
     }
 }
