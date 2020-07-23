@@ -216,5 +216,30 @@ namespace DP_Array_Problems
             return max;
         }
         #endregion
+        #region Leetcode 84  Largest Rectangle in a Histogram
+        // Our Ultimate goal for this question is to maintain a monetone increasing stack
+        public int LargestRectangleArea(int[] heights)
+        {
+            int max = 0;
+            Stack<int> s = new Stack<int>();
+            // The index of the numbers are stored instead of the values
+            s.Push(-1);
+            // We put a buffer value;
+            int n = heights.Length;
+            for (int i = 0; i < n; i++) // Try to put every element in the stack
+            {
+                while(s.Peek()!=-1 && heights[s.Peek()] >= heights[i])
+                {
+                    max = Math.Max(max, heights[s.Pop()] * (i - s.Peek()/*Exclusive*/- 1));
+                }
+                s.Push(i);
+            }
+            while (s.Peek() != -1)
+            {
+                max = Math.Max(max, heights[s.Pop()] * (n - s.Peek() - 1));
+            }
+            return max;
+        }
+        #endregion
     }
 }

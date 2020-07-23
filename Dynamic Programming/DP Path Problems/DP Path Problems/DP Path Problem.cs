@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Pipes;
 using System.Security.Cryptography;
+using System.Threading.Tasks.Dataflow;
 
 namespace DP_Path_Problems
 {
@@ -231,6 +233,62 @@ namespace DP_Path_Problems
                 board[y][x] = cur; // Reset to default;
                 return result;
             }
+        }
+        #endregion
+        #region Leetcode 741  Cherry Pickup
+        public int CherryPickup(int[][] grid)
+        {
+            int n = grid.Length;
+            CPdp = new int[n][][];
+            for (int i = 0; i < n; i++)
+            {
+                CPdp[i] = new int[n][];
+                for (int j = 0; j < n; j++)
+                {
+                    CPdp[i][j] = new int[n];
+                    Array.Fill(CPdp[i][j], int.MinValue);
+                }
+            }
+            return Math.Max(0, CPfind(n - 1, n - 1, n - 1, grid));
+        }
+        int[][][] CPdp;
+        public int CPfind(int x1, int y1, int x2, int[][] grid)
+        {
+            int y2 = x1 + y1 - x2;
+            // They started at the same pointer and move same steps
+            if (y2 < 0 || y1 < 0 || x1 < 0 || x2 < 0)
+            // These two figures started from bottom right and they can only move up or left
+            {
+                return -1;
+            }
+            else if (grid[y1][x1] == -1 || grid[y2][x2] == -1)
+            // They all met an obstacle
+            {
+                return -1;
+            }
+            else if (x1 == 0 && y1 == 0) // They reached an end
+            {
+                return grid[0][0];
+                // Return the value itself because the end might be an obstacle,cherry or nothing
+            }
+            else if (CPdp[x1][y1][x2] != int.MinValue)
+            {
+                return CPdp[x1][y1][x2];
+            }
+            int res = Math.Max(Math.Max(CPfind(x1 - 1, y1, x2 - 1, grid), CPfind(x1 - 1, y1, x2, grid)),
+                Math.Max(CPfind(x1, y1 - 1, x2 - 1, grid), CPfind(x1, y1 - 1, x2, grid)));
+            if (res < 0)
+            // All paths have been blocked
+            {
+                return CPdp[x1][y1][x2] = -1;
+            }
+            res += grid[y1][x1];
+            if (x1 != x2)
+            // Note that the same cherry cannot be picked up twice
+            {
+                res += grid[y2][x2];
+            }
+            return CPdp[x1][y1][x2] = res;
         }
         #endregion
     }
