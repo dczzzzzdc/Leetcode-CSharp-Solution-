@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 namespace DP_Array_Problems
 {
@@ -8,7 +9,7 @@ namespace DP_Array_Problems
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            NumDecodings("12");
         }
         #region Leetcode 698  Partition to K Equal Sum Subsets
         public bool CanPartitionKSubsets(int[] nums, int k)
@@ -239,6 +240,45 @@ namespace DP_Array_Problems
                 max = Math.Max(max, heights[s.Pop()] * (n - s.Peek() - 1));
             }
             return max;
+        }
+        #endregion
+        #region Leetcode 91  Decode ways
+        public int NumDecodings(string s)
+        {
+            int n = s.Length;
+            if (n == 0 || s == null || s[0] == '0') { return 0; }
+            else if (n == 1) { return 1; }
+            // The number that starts with an zero is illegal
+            int[] dp = new int[n];
+            dp[0] = 1; // When there is only one character and it is not '0', there is one decode way
+            for (int i = 1; i < n; i++)
+            {
+                bool r1 = Valid(s[i]);
+                bool r2 = Valid(s[i - 1], s[i]);
+                if (!r1 && !r2)
+                {
+                    return 0;
+                    // We cannot decode the string
+                }
+                if (r1)
+                {
+                    dp[i] += dp[i - 1];
+                }
+                if (r2)
+                {
+                    dp[i] += (i >= 2) ? dp[i - 2] : 1;
+                }
+            }
+            return dp[n - 1];
+        }
+        public bool Valid(char a)
+        {
+            return a != '0';
+        }
+        public bool Valid(char a, char b)
+        {
+            int value = Convert.ToInt32(a - '0') * 10 + Convert.ToInt32(b - '0');
+            return value >= 10 && value <= 26;
         }
         #endregion
     }
