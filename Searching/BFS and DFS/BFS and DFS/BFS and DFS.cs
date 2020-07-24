@@ -54,5 +54,28 @@ namespace BFS_and_DFS
         }
 
         #endregion
+        #region Leetcode 797  All Paths From Source to Target
+        public IList<IList<int>> AllPathsSourceTarget(int[][] graph)
+        {
+            APTfind(0, graph, new List<int>());
+            return APTans;
+        }
+        IList<IList<int>> APTans = new List<IList<int>>();
+        public void APTfind(int cur, int[][] graph, List<int> path)
+        {
+            path.Add(cur);
+            if (cur == graph.Length - 1)
+            {
+                APTans.Add(new List<int>(path));
+            }
+
+            foreach (int next in graph[cur])
+            {
+                APTfind(next, graph, path);
+            }
+            path.RemoveAt(path.Count - 1);
+        }
+
+        #endregion
     }
 }
