@@ -753,6 +753,44 @@ namespace Binary_Search
             return sum;
         }
         #endregion
+        #region Leetcode 153  Find Minimum in Rotated Sorted Array
+        public int FindMin(int[] nums)
+        {
+            int n = nums.Length;
+            if (n == 1) { return nums[0]; }
+            int l = 0;
+            int r = n - 1; // We cannot set the right bound to n because calling m+1 migth risk going out of bound
+            if (nums[n - 1] > nums[0])
+            // This array is not rotated 
+            {
+                return nums[0];
+            }
+            int start = nums[0];
+            while (l < r)
+            {
+                int m = l + (r - l) / 2;
+                if (nums[m] > nums[m + 1])
+                // Then the next point is the reflection point
+                // For example, in [3,4,5,1,2], 5 is smaller than 1 so the reflection point is 1
+                {
+                    return nums[m + 1];
+                }
+                else if (nums[m - 1] > nums[m])
+                {
+                    return nums[m];
+                }
+                if (nums[m] > start)
+                {
+                    l = m + 1;
+                }
+                else
+                {
+                    r = m;
+                }
+            }
+            return -1;
+        }
+        #endregion
     }
 
 }
