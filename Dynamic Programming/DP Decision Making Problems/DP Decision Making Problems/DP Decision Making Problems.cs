@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 namespace DP_Decision_Making_Problems
 {
@@ -206,7 +207,7 @@ namespace DP_Decision_Making_Problems
             return Math.Max(dp[n - 1][0], dp[n - 1][1]);
         }
         #endregion
-        #region 375  Guess Number Higher or Lower II
+        #region Leetcode 375  Guess Number Higher or Lower II
         // This solution actually resembles Binary Search
         public int GetMoneyAmount(int n)
         {
@@ -235,5 +236,69 @@ namespace DP_Decision_Making_Problems
             return guessNumberdp[high][low] = ans;
         }
         #endregion
+        #region Leetcode 983  Minimum Cost For Tickets
+        public int MincostTickets(int[] days, int[] costs)
+        {
+            Array.Fill(MCTdp, -1);
+            return MCTfind(1, days, costs);
+        }
+        int[] MCTdp = new int[366];
+        public int MCTfind(int count, int[] days, int[] costs)
+        {
+            if(count > 365)
+            {
+                return 0;
+            }
+            else if (MCTdp[count] != -1)
+            {
+                return MCTdp[count];
+            }
+            if (!ArrayContains(days, count)) { return MCTdp[count] = MCTfind(count + 1,days,costs); }
+            return MCTdp[count] = Math.Min(Math.Min(MCTfind(count +1,days,costs)+costs[0],MCTfind(count+7,days,costs) + costs[1]), 
+                MCTfind(count + 30, days, costs)+costs[2]);
+
+        }
+        public bool ArrayContains(int[] nums,int target)
+        {
+            int l = 0;
+            int r = nums.Length;
+            while (l < r)
+            {
+                int m = l + (r - l) / 2;
+                int cur = nums[m];
+                if(cur== target) { return true; }
+                else if (cur > target) { r = m; }
+                else { l = m + 1; }
+            }
+            return false;
+        }
+        #endregion
+        #region 740  Delete and Earn
+        public int DeleteAndEarn(int[] nums)
+        {
+            // This question resembles the house robber because when you take the current number
+            // You cannot take the next one
+            if(nums.Length == 0) { return 0; }
+            int[] sum = new int[nums.Max() + 1];
+            foreach (var item in nums)
+            {
+                sum[item] += item;
+            }
+            return DAErob(sum);
+        }
+        public int DAErob(int[] nums)
+        {
+            int dp1 = 0;
+            int dp2 = 0;
+            for (int i = 0; i < nums.Length; i++)
+            {
+                int dp = Math.Max(dp2 + nums[i], dp1);
+                dp2 = dp1;
+                dp1 = dp;
+            }
+            return dp1;
+        }
+        #endregion
+
     }
 }

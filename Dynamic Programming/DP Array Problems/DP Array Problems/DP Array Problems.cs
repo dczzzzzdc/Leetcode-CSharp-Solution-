@@ -9,7 +9,6 @@ namespace DP_Array_Problems
     {
         static void Main(string[] args)
         {
-            NumDecodings("12");
         }
         #region Leetcode 698  Partition to K Equal Sum Subsets
         public bool CanPartitionKSubsets(int[] nums, int k)
@@ -279,6 +278,25 @@ namespace DP_Array_Problems
         {
             int value = Convert.ToInt32(a - '0') * 10 + Convert.ToInt32(b - '0');
             return value >= 10 && value <= 26;
+        }
+        #endregion
+        #region Leetcode 279  Perfect Squares 
+        public int NumSquares(int n)
+        {
+            int[] dp = new int[n + 1];
+            for (int i = 0; i < n+1; i++)
+            {
+                dp[i] = i;
+                // Foreach i, we can use i amount of one's
+            }
+            for (int i = 2; i <= n; i++)
+            {
+                for (int j = 0; j * j <= i; j++) // Enumerate every possibility
+                {
+                    dp[i] = Math.Min(dp[i], dp[i - j * j] + 1);
+                }
+            }
+            return dp[n];
         }
         #endregion
     }
