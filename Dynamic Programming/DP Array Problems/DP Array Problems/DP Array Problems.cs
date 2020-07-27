@@ -299,5 +299,37 @@ namespace DP_Array_Problems
             return dp[n];
         }
         #endregion
+        #region Leetcode 1320   Minimum Distance to Type a Word Using Two Fingers
+        // Once the best solution to type word[0-i] is found, we only care about the last position of two fingers 
+        // Moreover, we only need to record the position of the last finger because another finger is always on word[i-1]
+        public int MinimumDistance(string word)
+        {
+            int n = word.Length;
+            MDdp = new int[n][];
+            for (int i = 0; i < n; i++)
+            {
+                MDdp[i] = new int[27];
+                Array.Fill(MDdp[i], int.MinValue);
+            }
+            return MDfind(0, 26, word);
+        }
+        int[][] MDdp;
+        int kRest = 26;
+        public int MDfind(int index,int other,string word)
+        {
+            if(index == word.Length) { return 0; }// We have printed out the whole word
+            else if (MDdp[index][other] != int.MinValue) { return MDdp[index][other]; }
+            int prev = index == 0 ? kRest : word[index - 1] - 'A'; // Note that the another finger must be on word[i-1]
+            int cur = word[index] - 'A';
+            return MDdp[index][other] = Math.Min(MDfind(index + 1, other, word) + dist_cost(prev, cur)/*Using the same finger*/
+                ,MDfind(index + 1, prev, word) + dist_cost(other, cur)/*Using the other finger*/);
+        }
+        public int dist_cost(int p1,int p2)
+        {
+            if(p1 == kRest) { return 0; }// It is not on the keyboard yet
+            return Math.Abs(p1 / 6 - p2 / 6) + Math.Abs(p1 % 6 - p2 % 6);
+        }
+
+        #endregion
     }
 }
