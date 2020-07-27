@@ -331,5 +331,28 @@ namespace DP_Array_Problems
         }
 
         #endregion
+        #region Leetcode 1048  Longest String Chain
+        public int LongestStrChain(string[] words)
+        {
+            Dictionary<string, int> dp = new Dictionary<string, int>();
+            Array.Sort(words, (p1, p2) => { return p1.Length.CompareTo(p2.Length); });
+            int max = 0;
+            foreach (string word in words)
+            {
+                dp[word] = 1;
+                for (int i = 0; i < word.Length; i++) // We try to cut every char of the word
+                {
+                    string pred = word.Remove(i, 1);
+                    if(dp.ContainsKey(pred) && dp[word] < dp[pred] + 1) // Update the largest value
+                    {
+                        dp[word] = dp[pred] + 1;
+                    }
+
+                }
+                max = Math.Max(max, dp[word]);
+            }
+            return max;
+        }
+        #endregion
     }
 }
