@@ -4,12 +4,19 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO.MemoryMappedFiles;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Xml.Schema;
 
 namespace Binary_Search
 {
+    #region Additional Classes
+    public class MountainArray
+    {
+        public int Get(int index) { return -1; }
+        public int Length() { return -1; }
+    }
     class FenwickTree
     {
         private int[] _nums;
@@ -21,7 +28,7 @@ namespace Binary_Search
         {
             return x & (-x);
         }
-        public void Update(int i,int delta)
+        public void Update(int i, int delta)
         {
             while (i < _nums.Length)
             {
@@ -40,11 +47,14 @@ namespace Binary_Search
             return sum;
         }
     }
+    #endregion
+
     class Program
     {
         static void Main(string[] args)
         {
         }
+        
         #region Binary Search Template
         // This function searches for the first occurence of the target
         // The l is inclusive while the r is exclusive
@@ -786,6 +796,67 @@ namespace Binary_Search
                 else
                 {
                     r = m;
+                }
+            }
+            return -1;
+        }
+        #endregion
+        #region Leetcode 1095  Find in Mountain Array
+        public int FindInMountainArray(int target, MountainArray mountainArr)
+        {
+            int n = mountainArr.Length();
+            int l = 0;
+            int r = n - 1;
+            int peak = 0;
+            while (l < r) // Finding the peak value
+            {
+                int m = l + (r - l) / 2;
+                if (mountainArr.Get(m) < mountainArr.Get(m + 1))
+                {
+                    l = m + 1;
+                    peak = l;
+                }
+                else
+                {
+                    r = m;
+                }
+            }
+            l = 0;
+            r = peak + 1;
+            while (l < r) // Trying to find the target in the left side of the mountain which is ascending
+            {
+                int m = l + (r - l) / 2;
+                int cur = mountainArr.Get(m);
+                if (cur > target)
+                {
+                    r = m;
+                }
+                else if (cur < target)
+                {
+                    l = m + 1;
+                }
+                else
+                {
+                    return m;
+                }
+            }
+            l = peak;
+            r = n;
+            while (l < r) // Right side of the mountain which is descending
+            {
+                int m = l + (r - l) / 2;
+                int cur = mountainArr.Get(m);
+                if (cur > target)
+                {
+                    l = m + 1;
+                }
+                else if (cur < target)
+                {
+                    r = m;
+                }
+                else
+                {
+                    return m;
                 }
             }
             return -1;
