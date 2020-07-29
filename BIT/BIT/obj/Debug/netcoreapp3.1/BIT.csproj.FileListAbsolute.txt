@@ -1,0 +1,13 @@
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\BIT\BIT\bin\Debug\netcoreapp3.1\BIT.exe
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\BIT\BIT\bin\Debug\netcoreapp3.1\BIT.deps.json
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\BIT\BIT\bin\Debug\netcoreapp3.1\BIT.runtimeconfig.json
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\BIT\BIT\bin\Debug\netcoreapp3.1\BIT.runtimeconfig.dev.json
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\BIT\BIT\bin\Debug\netcoreapp3.1\BIT.dll
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\BIT\BIT\bin\Debug\netcoreapp3.1\BIT.pdb
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\BIT\BIT\obj\Debug\netcoreapp3.1\BIT.csprojAssemblyReference.cache
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\BIT\BIT\obj\Debug\netcoreapp3.1\BIT.AssemblyInfoInputs.cache
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\BIT\BIT\obj\Debug\netcoreapp3.1\BIT.AssemblyInfo.cs
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\BIT\BIT\obj\Debug\netcoreapp3.1\BIT.csproj.CoreCompileInputs.cache
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\BIT\BIT\obj\Debug\netcoreapp3.1\BIT.dll
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\BIT\BIT\obj\Debug\netcoreapp3.1\BIT.pdb
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\BIT\BIT\obj\Debug\netcoreapp3.1\BIT.genruntimeconfig.cache

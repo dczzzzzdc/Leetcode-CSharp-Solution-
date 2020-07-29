@@ -35,7 +35,6 @@ namespace Linked_List
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
         }
         #region Leetcode 206  Reverse Linked List
         public ListNode ReverseList(ListNode head)
@@ -43,15 +42,15 @@ namespace Linked_List
             ListNode nHead = null;
             while (head != null)
             {
-                // We have to store its value, because it is going to be changed
+                // For example, nHead = 1, head = 2->3
                 ListNode next = head.next;
-                // Reverse
-                // For example, in 2->3 and 1
-                // If we want to move 2 into the new list, we have to make its "next" 1
+                // next = 3
                 head.next = nHead;
-                // We shift nHead and head
+                // head = 2->1
                 nHead = head;
+                // nHead = 2->1
                 head = next;
+                // head = 3
             }
             return nHead;
         }
@@ -357,6 +356,60 @@ namespace Linked_List
                 sum /= 10;
             }
             return dummy.next;
+        }
+        #endregion
+        #region Leetcode 143  Reorder List
+        public void ReorderList(ListNode head)
+        {
+            if (head == null || head.next == null)
+            {
+                return;
+            }
+            // The splitting point of the linked list
+            ListNode mid = FindMiddleNode(head);
+            // The head of the second half linked list
+            ListNode l2 = mid.next;
+            mid.next = null;
+            l2 = ReverseLinkedList(l2);
+            // The head of the first half linked list 
+            ListNode l1 = head;
+
+            while (l1 != null && l2 != null)
+            {
+                // For example, l1 = 2->3->4 and l2 = 9->10
+                ListNode next = l1.next;
+                // next = 3->4
+                l1.next = l2;
+                // l1 = 2->9->10
+                l2 = l2.next;
+                // l2 = 10
+                l1.next.next = next;
+                // l1 = 2->9->3->4
+                l1 = next;
+            }
+        }
+        public ListNode FindMiddleNode(ListNode head)
+        {
+            ListNode fast = head;
+            ListNode slow = head;
+            while (fast != null && slow != null && fast.next != null)
+            {
+                fast = fast.next.next;
+                slow = slow.next;
+            }
+            return slow;
+        }
+        public ListNode ReverseLinkedList(ListNode head)
+        {
+            ListNode nHead = null;
+            while (head != null)
+            {
+                ListNode next = head.next;
+                head.next = nHead;
+                nHead = head;
+                head = next;
+            }
+            return nHead;
         }
         #endregion
     }
