@@ -85,5 +85,48 @@ namespace BIT
             return count;
         }
         #endregion
+        #region Leetcode 136  Single Number
+        public int SingleNumber(int[] nums)
+        {
+            /*Property of XOR
+             * N^N = 0
+             * N^0 = N
+             * Therefor if we XOR ans with every element, the two same number will be counted as zero
+             * Only the single number will be left
+             */
+            int ans = 0;
+            foreach (int num in nums)
+            {
+                ans ^= num;
+            }
+            return ans;
+        }
+        #endregion
+        #region Leetcode 137  Single Number II 
+        public int SingleNumberII(int[] nums)
+        {
+            int res = 0;
+            for (int i = 0; i < 32; i++)
+            {
+                int sum = 0; 
+                // Count of the amount of ones
+                for (int j = 0; j < nums.Length; j++)
+                {
+                    if(((nums[j]>> i)& 1 )== 1)
+                    {
+                        ++sum;
+                    }
+                }
+                sum %= 3;
+                // Since all other number occured three times, if the bit[i] of the single number is 1, the sum must be 3n+1
+                if(sum == 1)
+                {
+                    res += sum << i;
+                    // Push 1 to the ith bit
+                }
+            }
+            return res;
+        }
+        #endregion
     }
 }
