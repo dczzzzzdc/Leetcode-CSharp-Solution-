@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata.Ecma335;
 using System.Security.Cryptography;
 
 namespace BIT
@@ -126,6 +127,33 @@ namespace BIT
                 }
             }
             return res;
+        }
+        #endregion
+        #region Leetcode 268  Missing Number 
+        public int MissingNumber(int[] nums)
+        {
+            // nums.Length definitely replace one of the number from 0 ~ nums.Length -1
+            // We have to initiallize the missing number as nums.Length in order to offset the actual value
+            int missing = nums.Length;
+            for (int i = 0; i < nums.Length; i++)
+            {
+                missing ^= i ^ nums[i];
+            }
+            return missing;
+            /*Theory: 
+             * N^N = 0 
+             * Supposedly, nums[i] = i
+             * However, when there is a missing number, nums[i-1] = i
+             * Finally, nums[nums.Length-1] = nums.Length
+             */
+            /*Proof Walkthrough
+             * Number 2 is missing here
+             * Index	0	1	2	3
+             * Value	0	1	3	4
+             * 4 ^ (0^0) ^ (1^1）^(2^3) ^ (3^4)
+             * 0 ^ 0 ^ 2^ (3^3) ^ (4^4)
+             * The result is 2
+             */
         }
         #endregion
     }
