@@ -1,15 +1,55 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Reflection.Metadata.Ecma335;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace BIT
 {
+    public class ListNode
+    {
+        public int val;
+        public ListNode next;
+        public ListNode(int val = 0, ListNode next = null)
+        {
+            this.val = val;
+            this.next = next;
+        }
+    }
+    class SortByBitCountComparer : IComparer<int>
+    {
+        public int Compare(int x, int y)
+        {
+            int a = PopCount(x);
+            int b = PopCount(y);
+            if (a == b)
+            {
+                return x < y ? -1 : 1;
+                // The number that has smaller value should be put at the front
+            }
+            else
+            {
+                return a < b ? -1 : 1;
+            }
+        }
+        private int PopCount(int n)
+        {
+            int count = 0;
+            while (n != 0)
+            {
+                count += n & 1;
+                n >>= 1;
+            }
+            return count;
+        }
+    }
     class Program
     {
         static void Main(string[] args)
         {
+            #region Basic Bitwise Operator
             /* Bitwise operator
              *  And & (Both)
              *  If both two bits are 1, the result is 1
@@ -23,6 +63,7 @@ namespace BIT
              *  Not ~ (Invert)
              *  Revert all the bits
              */
+
             byte a = 25;
             byte b = 7;
             Console.WriteLine("a: " + Convert.ToString(a, 2).PadLeft(8,'0'));
@@ -41,7 +82,8 @@ namespace BIT
             Console.WriteLine(Convert.ToString((byte)~a,2));
             // maximum value = orginal value + reverted value
             Console.WriteLine();
-
+            #endregion
+            #region Bit Shifting
             byte c = 45;
             Console.WriteLine(Convert.ToString(c,2).PadLeft(8,'0'));
             byte left_shift_one = (byte)(c << 1); // Moving every bit to the left by one tile
@@ -51,6 +93,30 @@ namespace BIT
             Console.WriteLine("Right by one");
             Console.WriteLine(Convert.ToString(right_shift_one,2).PadLeft(8,'0'));
             // We lose the last digit
+            Console.WriteLine();
+            #endregion
+            #region Operations
+            Console.WriteLine("Set Union");
+            Console.WriteLine(Convert.ToString(a | b, 2).PadLeft(8, '0'));
+            Console.WriteLine();
+            Console.WriteLine("Set Subtraction");
+            Console.WriteLine(Convert.ToString(a&~b,2).PadLeft(8,'0'));
+            Console.WriteLine();
+            Console.WriteLine("Get all 1 bit");
+            Console.WriteLine(Convert.ToString(~0,2).PadLeft(8,'0'));
+            Console.WriteLine();
+            Console.WriteLine("Remove the last bit") ;
+            Console.WriteLine(Convert.ToString(a & (a - 1), 2).PadLeft(8,'0'));
+            Console.WriteLine();
+            Console.WriteLine("Extract the last bit");
+            Console.WriteLine(Convert.ToString(a & (-a), 2));
+            Console.WriteLine();
+            Console.WriteLine("Set Bit");
+            int n = a;
+            int val = 1;
+            n = n << 1 | val; // Put a 1 at the end of the number
+            Console.WriteLine(Convert.ToString(n, 2).PadLeft(8,'0'));
+            #endregion
         }
         #region Leetcode 190  Reverse Bits
         public uint reverseBits(uint n)
@@ -76,7 +142,7 @@ namespace BIT
             }
             return ans;
         }
-        private int CountBits(int n)
+        public int CountBits(int n)
         {
             int count = 0;
             while (n != 0)
@@ -222,9 +288,43 @@ namespace BIT
             while((mask & num) != 0)
             // This will delete the last 1 and make it 0
             { mask <<= 1; }
-            // Eventually, we will get the right amount of 1 in the mask to compensate with the leading zeros
+            // Eventually, we will get the right amount of 1 in the mask to offset the leading zeros
             return mask ^ ~num;
         }
         #endregion
+        #region Leetcode 371  Sum of two integars
+        public int GetSum(int a, int b)
+        {
+            if(a== 0) { return b; }
+            else if (b == 0) { return a; }
+            while (b != 0) // Iterate until there is no carry
+            {
+                int carry = a & b; // Carry Simulation
+                a ^= b; // Addition simulation
+                b = carry << 1; // We store the carry to use it next time
+            }
+            return a;
+        }
+        #endregion
+        #region Leetcode 1290  Convert Binary Number in a Linked List to Integer
+        public int GetDecimalValue(ListNode head)
+        {
+            int ans = 0;
+            while (head != null)
+            {
+                ans = ans << 1 | head.val;
+                head = head.next;
+            }
+            return ans;
+        }
+        #endregion
+        #region Leetcode 1356  Sort Integers by The Number of 1 Bits
+        public int[] SortByBits(int[] arr)
+        {
+            Array.Sort(arr, new SortByBitCountComparer());
+            return arr;
+        }
+        #endregion
     }
+    
 }
