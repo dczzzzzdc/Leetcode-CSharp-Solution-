@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Reflection.Metadata.Ecma335;
 using System.Security.Cryptography;
 
@@ -43,7 +44,7 @@ namespace BIT
 
             byte c = 45;
             Console.WriteLine(Convert.ToString(c,2).PadLeft(8,'0'));
-            byte left_shift_one = (byte)(c << 1); // Moving every to the left by one tile
+            byte left_shift_one = (byte)(c << 1); // Moving every bit to the left by one tile
             Console.WriteLine("Left by one");
             Console.WriteLine(Convert.ToString(left_shift_one,2).PadLeft(8,'0'));
             byte right_shift_one = (byte)(c >> 1);
@@ -154,6 +155,75 @@ namespace BIT
              * 0 ^ 0 ^ 2^ (3^3) ^ (4^4)
              * The result is 2
              */
+        }
+        #endregion
+        #region Leetcode 191  Number of 1 Bits
+        public int HammingWeight(uint n)
+        {
+            int count = 0;
+            for (int i = 0; i < 32; i++)
+            {
+                count += (int)(n & 1);
+                n >>= 1;
+            }
+            return count;
+        }
+        #endregion
+        #region Leetcode 343  Power of Four
+        public bool IsPowerOfFour(int num)
+        {
+            return (num > 0 && ((num & (num - 1)) == 0) && ((num & 0x55555555) !=0));
+            /* Explanation of ((num & (num - 1)) == 0)
+             * This checks whether this number is the power of 2
+             * For example, 2 => 0010, 4=> 0100
+             * The common point is that they all ends with a zero
+             */
+            /* Explanation of (num & 0x55555555) != 0)
+             * 0x55555555 => 0b1010101010101010101010101010101
+             * 4 => 0100, 16 => 0001 0000
+             * The common point is that the one is always on the odd postion(3,5)
+             * Therefore, after anding with 0x55555555, which only has 1 on odd digits
+             * The power of 4 should give 1
+             */
+        }
+        #endregion
+        #region Leetcode 389  Find the difference
+        public char FindTheDifference(string s, string t)
+        {
+            int n = s.Length;
+            char ans = t[n];
+            for (int i = 0; i < n; i++)
+            {
+                ans ^= s[i];
+                ans ^= t[i];
+            }
+            return ans;
+        }
+        #endregion
+        #region Leetcode 461  Hamming Distance
+        public int HammingDistance(int x, int y)
+        {
+            int length = 0;
+            int xor = x ^ y;
+            while (xor > 0)
+            {
+                length += xor & 1;
+                xor >>= 1;
+            }
+            return length;
+        }
+        #endregion
+        #region Leetcod 476  Number Complement
+        public int FindComplement(int num)
+        {
+            // We first invert the number and then XOR it with a Binary Mask to delete its leading zero
+            int mask = ~0;
+            // Set the mask to 1111 1111
+            while((mask & num) != 0)
+            // This will delete the last 1 and make it 0
+            { mask <<= 1; }
+            // Eventually, we will get the right amount of 1 in the mask to compensate with the leading zeros
+            return mask ^ ~num;
         }
         #endregion
     }
