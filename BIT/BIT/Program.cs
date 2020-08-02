@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.IO.Pipes;
 using System.Reflection.Metadata.Ecma335;
 using System.Security.Cryptography;
 using System.Text;
@@ -325,6 +326,41 @@ namespace BIT
             return arr;
         }
         #endregion
+        #region Leetcode 784  Letter Case Permutation
+        public IList<string> LetterCasePermutation(string S)
+        {
+            LCPdfs(0, new StringBuilder(""), S);
+            return LCPans;
+        }
+        IList<string> LCPans = new List<string>();
+        public void LCPdfs(int index, StringBuilder cur, string word)
+        {
+            if (index == word.Length)
+            {
+                LCPans.Add(cur.ToString());
+            }
+            cur.Append(word[index]);
+            if (Char.IsNumber(word[index]))
+            {
+                LCPdfs(index + 1, cur, word);
+            }
+            else
+            {
+                LCPdfs(index + 1, cur, word);
+                cur.Remove(cur.Length - 1, 1);
+                if (Char.IsUpper(word[index]))
+                {
+                    cur.Append(Char.ToLower(word[index]));
+                }
+                else
+                {
+                    cur.Append(Char.ToUpper(word[index]));
+                }
+                LCPdfs(index + 1, cur, word);
+            }
+            cur.Remove(index, 1);
+        }
+        #endregion
     }
-    
+
 }
