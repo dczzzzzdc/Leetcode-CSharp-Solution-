@@ -1,0 +1,13 @@
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Other Question\Other Question\bin\Debug\netcoreapp3.1\Other Question.exe
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Other Question\Other Question\bin\Debug\netcoreapp3.1\Other Question.deps.json
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Other Question\Other Question\bin\Debug\netcoreapp3.1\Other Question.runtimeconfig.json
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Other Question\Other Question\bin\Debug\netcoreapp3.1\Other Question.runtimeconfig.dev.json
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Other Question\Other Question\bin\Debug\netcoreapp3.1\Other Question.dll
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Other Question\Other Question\bin\Debug\netcoreapp3.1\Other Question.pdb
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Other Question\Other Question\obj\Debug\netcoreapp3.1\Other Question.csprojAssemblyReference.cache
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Other Question\Other Question\obj\Debug\netcoreapp3.1\Other Question.AssemblyInfoInputs.cache
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Other Question\Other Question\obj\Debug\netcoreapp3.1\Other Question.AssemblyInfo.cs
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Other Question\Other Question\obj\Debug\netcoreapp3.1\Other Question.csproj.CoreCompileInputs.cache
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Other Question\Other Question\obj\Debug\netcoreapp3.1\Other Question.dll
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Other Question\Other Question\obj\Debug\netcoreapp3.1\Other Question.pdb
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Other Question\Other Question\obj\Debug\netcoreapp3.1\Other Question.genruntimeconfig.cache

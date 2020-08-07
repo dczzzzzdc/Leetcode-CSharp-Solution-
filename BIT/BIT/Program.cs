@@ -361,6 +361,25 @@ namespace BIT
             cur.Remove(index, 1);
         }
         #endregion
+        #region Leetcode 1310  XOR Queries of a Subarray
+        public int[] XorQueries(int[] arr, int[][] queries)
+        {
+            int n = queries.Length;
+            int[] prefix_sum = new int[n+1];
+            for (int i = 0; i < n; i++)
+            {
+                prefix_sum[i + 1] = prefix_sum[i] ^ arr[i];
+            }
+            int [] ans = new int[n];
+            // If we know the xor query from 0~7 and we want to calculate 4~7
+            // We just need to xor 0~3 because it will offset with the 0~3 in 0~7 and then leave 4~7
+            for(int i = 0; i < n; ++i)
+            {
+                ans[i] = prefix_sum[queries[i][1] + 1] ^ prefix_sum[queries[i][0]/*The start of the range*/];
+            }
+            return ans;
+        }
+        #endregion
     }
 
 }

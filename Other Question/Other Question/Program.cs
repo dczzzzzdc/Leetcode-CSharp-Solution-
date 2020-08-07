@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Other_Question
 {
@@ -7,7 +8,6 @@ namespace Other_Question
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
         }
         #region Leetcode 169  Majority Element (Several Solutions)
         public int MajorityElementwithDictionary(int[] nums)
@@ -108,6 +108,173 @@ namespace Other_Question
             return true;
             // It passed all the test cases
 
+        }
+        #endregion
+        #region Leetcode 125 Valid Palindrome
+        public static bool IsPalindrome(string s)
+        {
+            StringBuilder temp = new StringBuilder("");
+            foreach (char c in s)
+            {
+                if (Char.IsLetter(c))
+                {
+                    temp.Append(Char.ToLower(c));
+                }
+            }
+            s = temp.ToString();
+            int n = s.Length;
+            int l; int r;
+            if (n % 2 == 1)
+            {
+                l = n / 2 + 1;
+                r = l;
+            }
+            else
+            {
+                l = n / 2;
+                r = n / 2 + 1;
+            }
+            while (l >= 0 && r < n && s[l] == s[r])
+            {
+                --l;
+                ++r;
+            }
+            return r - l == n;
+        }
+        #endregion
+        #region Leeetcode 211   Add and Search Word - Data structure design
+        public class WordDictionary
+        {
+            private class TrieNode
+            {
+                public TrieNode[] children;
+                public bool isWord;
+                public string word;
+
+                public TrieNode()
+                {
+                    children = new TrieNode[26];
+                    word = "";
+                    isWord = false;
+                }
+            }
+            private TrieNode root;
+            /** Initialize your data structure here. */
+            public WordDictionary()
+            {
+                root = new TrieNode();
+            }
+
+            /** Adds a word into the data structure. */
+            public void AddWord(string word)
+            {
+                TrieNode node = root; // We start adding words based on the root
+                for (int i = 0; i < word.Length; i++)
+                {
+                    int index = word[i] - 'a';
+                    if (node.children[index] == null)
+                    {
+                        node.children[index] = new TrieNode();
+                    }
+                    // We shift the pointer to the next level
+                    node = node.children[index];
+                }
+                node.isWord = true;
+                node.word = word;
+            }
+
+            /** Returns if the word is in the data structure. A word could contain the dot character '.' to represent any one letter. */
+            public bool Search(string word)
+            {
+                return dfs(root, 0, word);
+            }
+            private bool dfs(TrieNode cur, int index, string word)
+            {
+
+                if (cur == null)
+                // There is no way to go
+                {
+                    return false;
+                }
+                else if (index == word.Length)
+                // Successfully searched through the entire word
+                {
+                    return cur.isWord;
+                }
+                if (word[index] == '.')
+                {
+                    foreach (TrieNode child in cur.children)
+                    {
+                        if (dfs(child, index + 1, word))
+                        {
+                            return true;
+                        }
+                    }
+                }
+                else
+                // It is a character
+                {
+                    int cur_index = word[index] - 'a';
+                    TrieNode next = cur.children[cur_index];
+                    return dfs(next, index + 1, word);
+                }
+                return false;
+            }
+        }
+
+        #endregion
+        #region Leetcode 442  Find All Duplicates in an Array
+        public IList<int> FindDuplicates(int[] nums)
+        {
+            IList<int> ans = new List<int>();
+            for (int i = 0; i < nums.Length; i++)
+            {
+                if (nums[Math.Abs(nums[i]- 1)] < 0)
+                {
+                    ans.Add(Math.Abs(nums[i]));
+                }
+                else
+                {
+                    nums[Math.Abs(nums[i] - 1)] *= -1;
+                }
+            }
+            return ans;
+        }
+        #endregion
+        #region Leetcode 397  Integer Replacement
+        public int IntegerReplacement(int n)
+        {
+            if (n == int.MaxValue)
+            {
+                return 32;
+            }
+            int ans = 0;
+            while (n > 1)
+            {
+                if (n % 2 == 0)
+                {
+                    n /= 2;
+                }
+                else
+                {
+                    /* When n is odd, it could be written as 2k+1
+                     * In other word, n-1 becomes 2k and n+1 becomes 2k+2
+                     * Therefore, (n-1)/2 = k and (n+1)/2 = k+1 and one of them is even(ideal situation)
+                     * In conclusion, we are going to select based on whether n+1 could be divided by 4, because if so, we can do two division in a row
+                     * Special Case: when n == 3, we should make it 2 instead of 4
+                     */
+                    if ((n + 1) % 4 == 0 && n != 3)
+                    {
+                        ++n;
+                    }
+                    else
+                    {
+                        --n;
+                    }
+                }
+                ++ans;
+            }
+            return ans;
         }
         #endregion
     }

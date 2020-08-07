@@ -21,7 +21,6 @@ namespace BFS_and_DFS
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
         }
         #region Leetcode 662  Maximum Width of Binary Tree
 
@@ -76,6 +75,63 @@ namespace BFS_and_DFS
             path.RemoveAt(path.Count - 1);
         }
 
+        #endregion
+        #region Leetcode 78  Subsets
+        public IList<IList<int>> Subsets(int[] nums)
+        {
+            int n = nums.Length;
+            for (int i = 0; i <= n; ++i)
+            { //We try out every possible length of our subset
+                IList<int> cur = new List<int>();
+                Subset_dfs(0, ref cur, nums, i);
+            }
+            return Subset_ans;
+        }
+        IList<IList<int>> Subset_ans = new List<IList<int>>();
+        public void Subset_dfs(int index, ref IList<int> path, int[] nums, int k)
+        {
+            if (path.Count == k)
+            {
+                // We have reached our destination
+                Subset_ans.Add(new List<int>(path));
+                return;
+            }
+            for (int i = index; i < nums.Length; ++i)
+            {
+                // We try every combination by letting it add all the number that is before it 
+                path.Add(nums[i]);
+                Subset_dfs(i + 1, ref path, nums, k);
+                path.RemoveAt(path.Count - 1);
+                // We reverse the previous action
+            }
+
+        }
+        #region Extension: Find all the subarrays in an array
+        public IList<IList<int>> Subarrays(int[] nums)
+        {
+            int n = nums.Length;
+            for (int i = 1; i <= n; i++) // Enumerate every possible length
+            {
+                for (int index = 0; index <= n-i; index++) // Enumerate every possible starting point
+                {
+                    IList<int> cur = new List<int>();
+                    Subarray_dfs(i, nums, ref cur, index);
+                }
+            }
+            return Subarray_ans;
+        }
+        public IList<IList<int>> Subarray_ans = new List<IList<int>>();
+        public void Subarray_dfs(int k, int[]nums,ref IList<int> path,int index)
+        {
+            if(path.Count == k)
+            {
+                Subarray_ans.Add(path);
+                return;
+            }
+            path.Add(nums[index]);
+            Subarray_dfs(k, nums, ref path, index + 1);
+        }
+        #endregion
         #endregion
     }
 }
