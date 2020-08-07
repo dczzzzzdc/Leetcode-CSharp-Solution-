@@ -133,5 +133,46 @@ namespace BFS_and_DFS
         }
         #endregion
         #endregion
+        #region Leetcode 987  Vertical Order Traversal of a Binary Tree
+        public IList<IList<int>> VerticalTraversal(TreeNode root)
+        {
+            Queue<(int, int, TreeNode)> q = new Queue<(int, int, TreeNode)>();
+            List<(int, int, int)> info = new List<(int, int, int)>();
+            // (x, y, node value)
+            q.Enqueue((0, 0, root));
+            while (q.Count != 0)
+            {
+                var cur = q.Dequeue();
+                int x = cur.Item1;
+                int y = cur.Item2;
+                TreeNode node = cur.Item3;
+                info.Add((x, y, node.val));
+                if (node.left != null)
+                {
+                    q.Enqueue((x - 1, y + 1, node.left));
+                }
+                if (node.right != null)
+                {
+                    q.Enqueue((x + 1, y + 1, node.right));
+                }
+
+            }
+            info.Sort();
+            IList<IList<int>> ans = new List<IList<int>>();
+            int index = 0;
+            while (index < info.Count)
+            {
+                IList<int> level = new List<int>();
+                int cur_level = info[index].Item1;
+                while (index < info.Count && cur_level == info[index].Item1)
+                {
+                    level.Add(info[index++].Item3);
+                }
+                ans.Add(level);
+            }
+            return ans;
+        }
+
+        #endregion
     }
 }
