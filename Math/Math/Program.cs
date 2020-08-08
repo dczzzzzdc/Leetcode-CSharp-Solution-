@@ -47,5 +47,35 @@ namespace Math
             return res.ToString();
         }
         #endregion
+        #region Leetcode 13  Roman to Integer
+        public int RomanToInt(string s)
+        {
+            Dictionary<char, int> roman = new Dictionary<char, int>();
+            roman.Add('M', 1000);
+            roman.Add('D', 500);
+            roman.Add('C', 100);
+            roman.Add('L', 50);
+            roman.Add('X', 10);
+            roman.Add('V', 5);
+            roman.Add('I', 1);
+            int sum = 0;
+            for (int i = 0; i < s.Length - 1; i++)
+            {
+                // Normally, the current character should be bigger than the right character
+                if(roman[s[i]] < roman[s[i + 1]])
+                {
+                    sum -= roman[s[i]];
+                }
+                else
+                {
+                    sum += roman[s[i]];
+                }
+            }
+            // We are not able to calculate the value of the last character in the loop because s[i+1] would be out of bound
+            // However, it is guaranteed to be positive
+            return sum + roman[s[s.Length - 1]];
+
+        }
+        #endregion
     }
 }
