@@ -67,32 +67,32 @@ namespace BIT
 
             byte a = 25;
             byte b = 7;
-            Console.WriteLine("a: " + Convert.ToString(a, 2).PadLeft(8,'0'));
-            Console.WriteLine("b: " + Convert.ToString(b, 2).PadLeft(8,'0'));
+            Console.WriteLine("a: " + Convert.ToString(a, 2).PadLeft(8, '0'));
+            Console.WriteLine("b: " + Convert.ToString(b, 2).PadLeft(8, '0'));
             Console.WriteLine("--------");
             Console.WriteLine("And Operation");
-            Console.WriteLine(Convert.ToString(a & b, 2).PadLeft(8,'0'));
+            Console.WriteLine(Convert.ToString(a & b, 2).PadLeft(8, '0'));
             Console.WriteLine();
             Console.WriteLine("Or Operation");
-            Console.WriteLine(Convert.ToString(a|b,2).PadLeft(8,'0'));
+            Console.WriteLine(Convert.ToString(a | b, 2).PadLeft(8, '0'));
             Console.WriteLine();
             Console.WriteLine("Xor Operation");
-            Console.WriteLine(Convert.ToString(a ^ b,2).PadLeft(8,'0'));
+            Console.WriteLine(Convert.ToString(a ^ b, 2).PadLeft(8, '0'));
             Console.WriteLine();
             Console.WriteLine("A Not Operation");
-            Console.WriteLine(Convert.ToString((byte)~a,2));
+            Console.WriteLine(Convert.ToString((byte)~a, 2));
             // maximum value = orginal value + reverted value
             Console.WriteLine();
             #endregion
             #region Bit Shifting
             byte c = 45;
-            Console.WriteLine(Convert.ToString(c,2).PadLeft(8,'0'));
+            Console.WriteLine(Convert.ToString(c, 2).PadLeft(8, '0'));
             byte left_shift_one = (byte)(c << 1); // Moving every bit to the left by one tile
             Console.WriteLine("Left by one");
-            Console.WriteLine(Convert.ToString(left_shift_one,2).PadLeft(8,'0'));
+            Console.WriteLine(Convert.ToString(left_shift_one, 2).PadLeft(8, '0'));
             byte right_shift_one = (byte)(c >> 1);
             Console.WriteLine("Right by one");
-            Console.WriteLine(Convert.ToString(right_shift_one,2).PadLeft(8,'0'));
+            Console.WriteLine(Convert.ToString(right_shift_one, 2).PadLeft(8, '0'));
             // We lose the last digit
             Console.WriteLine();
             #endregion
@@ -101,13 +101,13 @@ namespace BIT
             Console.WriteLine(Convert.ToString(a | b, 2).PadLeft(8, '0'));
             Console.WriteLine();
             Console.WriteLine("Set Subtraction");
-            Console.WriteLine(Convert.ToString(a&~b,2).PadLeft(8,'0'));
+            Console.WriteLine(Convert.ToString(a & ~b, 2).PadLeft(8, '0'));
             Console.WriteLine();
             Console.WriteLine("Get all 1 bit");
-            Console.WriteLine(Convert.ToString(~0,2).PadLeft(8,'0'));
+            Console.WriteLine(Convert.ToString(~0, 2).PadLeft(8, '0'));
             Console.WriteLine();
-            Console.WriteLine("Remove the last bit") ;
-            Console.WriteLine(Convert.ToString(a & (a - 1), 2).PadLeft(8,'0'));
+            Console.WriteLine("Remove the last bit");
+            Console.WriteLine(Convert.ToString(a & (a - 1), 2).PadLeft(8, '0'));
             Console.WriteLine();
             Console.WriteLine("Extract the last bit");
             Console.WriteLine(Convert.ToString(a & (-a), 2));
@@ -116,7 +116,7 @@ namespace BIT
             int n = a;
             int val = 1;
             n = n << 1 | val; // Put a 1 at the end of the number
-            Console.WriteLine(Convert.ToString(n, 2).PadLeft(8,'0'));
+            Console.WriteLine(Convert.ToString(n, 2).PadLeft(8, '0'));
             #endregion
         }
         #region Leetcode 190  Reverse Bits
@@ -139,7 +139,7 @@ namespace BIT
             // 1010 0010 1000 1010 1100
             for (int i = L; i <= R; i++)
             {
-                if ((mask & (1 << CountBits(i))) !=0) { ++ans; }
+                if ((mask & (1 << CountBits(i))) != 0) { ++ans; }
             }
             return ans;
         }
@@ -177,18 +177,18 @@ namespace BIT
             int res = 0;
             for (int i = 0; i < 32; i++)
             {
-                int sum = 0; 
+                int sum = 0;
                 // Count of the amount of ones
                 for (int j = 0; j < nums.Length; j++)
                 {
-                    if(((nums[j]>> i)& 1 )== 1)
+                    if (((nums[j] >> i) & 1) == 1)
                     {
                         ++sum;
                     }
                 }
                 sum %= 3;
                 // Since all other number occured three times, if the bit[i] of the single number is 1, the sum must be 3n+1
-                if(sum == 1)
+                if (sum == 1)
                 {
                     res += sum << i;
                     // Push 1 to the ith bit
@@ -239,7 +239,7 @@ namespace BIT
         #region Leetcode 343  Power of Four
         public bool IsPowerOfFour(int num)
         {
-            return (num > 0 && ((num & (num - 1)) == 0) && ((num & 0x55555555) !=0));
+            return (num > 0 && ((num & (num - 1)) == 0) && ((num & 0x55555555) != 0));
             /* Explanation of ((num & (num - 1)) == 0)
              * This checks whether this number is the power of 2
              * For example, 2 => 0010, 4=> 0100
@@ -286,7 +286,7 @@ namespace BIT
             // We first invert the number and then XOR it with a Binary Mask to delete its leading zero
             int mask = ~0;
             // Set the mask to 1111 1111
-            while((mask & num) != 0)
+            while ((mask & num) != 0)
             // This will delete the last 1 and make it 0
             { mask <<= 1; }
             // Eventually, we will get the right amount of 1 in the mask to offset the leading zeros
@@ -296,7 +296,7 @@ namespace BIT
         #region Leetcode 371  Sum of two integars
         public int GetSum(int a, int b)
         {
-            if(a== 0) { return b; }
+            if (a == 0) { return b; }
             else if (b == 0) { return a; }
             while (b != 0) // Iterate until there is no carry
             {
@@ -365,21 +365,48 @@ namespace BIT
         public int[] XorQueries(int[] arr, int[][] queries)
         {
             int n = queries.Length;
-            int[] prefix_sum = new int[n+1];
+            int[] prefix_sum = new int[n + 1];
             for (int i = 0; i < n; i++)
             {
                 prefix_sum[i + 1] = prefix_sum[i] ^ arr[i];
             }
-            int [] ans = new int[n];
+            int[] ans = new int[n];
             // If we know the xor query from 0~7 and we want to calculate 4~7
             // We just need to xor 0~3 because it will offset with the 0~3 in 0~7 and then leave 4~7
-            for(int i = 0; i < n; ++i)
+            for (int i = 0; i < n; ++i)
             {
                 ans[i] = prefix_sum[queries[i][1] + 1] ^ prefix_sum[queries[i][0]/*The start of the range*/];
             }
             return ans;
         }
         #endregion
-    }
+        #region Leetcode 421  Maximum XOR of Two Numbers in an Array
+        public int FindMaximumXOR(int[] nums)
+        {
+            // If a ^ b = max then a ^ max = b
+            int max = 0;
+            int mask = 0;
+            for (int i = 30; i >= 0; --i) // We try to build the maximum number from the highest bit
+            {
+                int one = 1 << i;
+                mask |= one;
+                HashSet<int> set = new HashSet<int>();
+                foreach (int n in nums)
+                {
+                    set.Add(n & mask);
+                }
+                foreach (int value in set)
+                {
+                    if(set.Contains(value ^ (max | one)))
+                    {
+                        max |= one; // Adding an one on the current bit
+                        break;
+                    }
+                }
+            }
+            return max;
+        }
+        #endregion
 
+    }
 }

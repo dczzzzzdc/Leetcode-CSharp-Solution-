@@ -112,7 +112,7 @@ namespace BFS_and_DFS
             int n = nums.Length;
             for (int i = 1; i <= n; i++) // Enumerate every possible length
             {
-                for (int index = 0; index <= n-i; index++) // Enumerate every possible starting point
+                for (int index = 0; index <= n - i; index++) // Enumerate every possible starting point
                 {
                     IList<int> cur = new List<int>();
                     Subarray_dfs(i, nums, ref cur, index);
@@ -121,9 +121,9 @@ namespace BFS_and_DFS
             return Subarray_ans;
         }
         public IList<IList<int>> Subarray_ans = new List<IList<int>>();
-        public void Subarray_dfs(int k, int[]nums,ref IList<int> path,int index)
+        public void Subarray_dfs(int k, int[] nums, ref IList<int> path, int index)
         {
-            if(path.Count == k)
+            if (path.Count == k)
             {
                 Subarray_ans.Add(path);
                 return;
@@ -173,6 +173,40 @@ namespace BFS_and_DFS
             return ans;
         }
 
+        #endregion
+        #region Leetcode 437  Path Sum III
+        public int PathSum(TreeNode root, int sum)
+        {
+            pathsumiiimem[0] = 1;
+            pathsumiiidfs(root, sum, 0);
+            return pathsumiiians;
+        }
+        Dictionary<int, int> pathsumiiimem = new Dictionary<int, int>();
+        // Key: The prefix sum 
+        // Value: The amount of ways to get to this prefix sum
+        int pathsumiiians = 0;
+        public void pathsumiiidfs(TreeNode root, int target,int curSum)
+        {
+            if(root == null) { return; }
+            curSum += root.val;
+            int oldSum = curSum - target;
+            if (pathsumiiimem.ContainsKey(oldSum))
+            {
+                pathsumiiians += pathsumiiimem[oldSum];
+            }
+            if (!pathsumiiimem.ContainsKey(curSum)) // We now have a way to reach curSum
+            {
+                pathsumiiimem[curSum] = 1;
+            }
+            else
+            {
+                pathsumiiimem[curSum]++;
+            }
+            pathsumiiidfs(root.left, target, curSum);
+            pathsumiiidfs(root.right, target, curSum);
+            pathsumiiimem[curSum]--; // We no longer can accessed this path
+            return;
+        }
         #endregion
     }
 }
