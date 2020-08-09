@@ -208,5 +208,73 @@ namespace BFS_and_DFS
             return;
         }
         #endregion
+        #region Leetcode 994  Rotting Oranges
+        public int OrangesRotting(int[][] grid)
+        {
+            int fresh = 0;
+            int m = grid.Length;
+            if (m == 0 || grid == null) { return 0; }
+            int n = grid[0].Length;
+            Queue<(int, int)> q = new Queue<(int, int)>();
+            for (int i = 0; i < m; ++i)
+            {
+                for (int j = 0; j < n; ++j)
+                {
+                    if (grid[i][j] == 1)
+                    {
+                        ++fresh;
+                    }
+                    else if (grid[i][j] == 2)
+                    {
+                        q.Enqueue((j, i));
+                    }
+                }
+            }
+            if (fresh == 0)
+            {
+                return 0;
+            }
+            int steps = 0;
+            while (q.Count != 0)
+            {
+                int count= q.Count;
+                for (int i = 0; i < count; ++i)
+                {
+                    var cur = q.Dequeue();
+                    int x = cur.Item1;
+                    int y = cur.Item2;
+                    if (y + 1 < m && grid[y + 1][x] == 1)
+                    {
+                        q.Enqueue((x, y + 1));
+                        --fresh;
+                        grid[y + 1][x] = 2;
+                    }
+                    if (y - 1 >= 0 && grid[y - 1][x] == 1)
+                    {
+                        q.Enqueue((x, y - 1));
+                        --fresh;
+                        grid[y - 1][x] = 2;
+
+                    }
+                    if (x - 1 >= 0 && grid[y][x - 1] == 1)
+                    {
+                        q.Enqueue((x - 1, y));
+                        --fresh;
+                        grid[y][x - 1] = 2;
+
+                    }
+                    if (x + 1 < n && grid[y][x + 1] == 1)
+                    {
+                        q.Enqueue((x + 1, y));
+                        --fresh;
+                        grid[y][x + 1] = 2;
+                    }
+                }
+                ++steps;
+
+            }
+            return fresh == 0 ? steps - 1 : -1;
+        }
+        #endregion
     }
 }
