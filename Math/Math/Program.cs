@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Text;
 
 namespace Math
@@ -8,7 +10,6 @@ namespace Math
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
         }
         #region Leetcode 7  Reverse Integers
         public int Reverse(int x)
@@ -75,6 +76,39 @@ namespace Math
             // However, it is guaranteed to be positive
             return sum + roman[s[s.Length - 1]];
 
+        }
+        #endregion
+        #region Leetcode 67  Add Binary
+        public string AddBinary(string a, string b)
+        {
+            StringBuilder res = new StringBuilder("");
+            int i = a.Length - 1;
+            int j = b.Length - 1;
+            int carry = 0;
+            while(i>=0 || j >= 0)
+            {
+                int sum = carry;
+                if (i >= 0)
+                {
+                    sum += a[i--] - '0';
+                }
+                if(j>= 0)
+                {
+                    sum += b[j--] - '0';
+                }
+                // In base 10, if we have 14, our current sum is 14 % 10 = 4
+                // Our carry is 14 / 10
+                res.Append(sum % 2);
+                carry = sum / 2;
+
+            }
+            if(carry != 0)
+            {
+                res.Append(1);
+            }
+            // In our program, we do the addition from the largest digit while in real life we do it from the smallest one
+            // Therefore, we have to reverse our result
+            return new string(res.ToString().Reverse().ToArray());
         }
         #endregion
     }
