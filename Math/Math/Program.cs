@@ -111,5 +111,20 @@ namespace Math
             return new string(res.ToString().Reverse().ToArray());
         }
         #endregion
+        #region Leetcode 168  Excel Sheet Column Title
+        public string ConvertToTitle(int n)
+        {
+            StringBuilder res = new StringBuilder();
+            while (n > 0)
+            {
+                n--;
+                // Note that we are using 'A' + n % 26 but 'A' itself stands for one so we have to n--
+                res.Append((char)('A' + n % 26));
+                n /= 26;
+            }
+            
+            return new String(res.ToString().Reverse().ToArray());
+        }
+        #endregion
     }
 }
