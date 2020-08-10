@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 
-namespace Math
+namespace Math_Question
 {
     class Program
     {
@@ -158,6 +158,82 @@ namespace Math
             // In a n! operation, there is always more 2 than 5
             // Therefore, we just have to count the amount of 5
             return n == 0 ? 0 : n / 5 + TrailingZeroes(n / 5);
+        }
+        #endregion
+        #region Leetcode 258  Add Digits
+        public int AddDigits(int num)
+        {
+            while (num % 10 != 0)
+            {
+                num = SumDigits(num);
+            }
+            return num;
+        }
+        #endregion
+        #region Leetcode 313  Super Ugly Digits
+        public int NthSuperUglyNumber(int n, int[] primes)
+        {
+            int[] ugly = new int[n];
+            int[] index = new int[primes.Length];
+            ugly[0] = 1;
+            for (int i = 1; i < n; ++i)
+            {
+                ugly[i] = int.MaxValue;
+                for (int j = 0; j < primes.Length; ++j)
+                {
+                    ugly[i] = Math.Min(ugly[i], primes[j] * ugly[index[j]]);
+                }
+                for (int k = 0; k < primes.Length; ++k)
+                {
+                    if (ugly[i] >= primes[k] * ugly[index[k]])
+                    {
+                        ++index[k];
+                    }
+                }
+            }
+            return ugly[n - 1];
+        }
+        #endregion
+        #region Leetcode 326  Power of Three
+        public bool IsPowerOfThree(int n)
+        {
+            if (n < 1)
+            {
+                return false;
+            }
+            while (n % 3 == 0)
+            {
+                n /= 3;
+            }
+            return n == 1;
+        }
+        #endregion
+        #region Leetcode 202  Happy 
+        public bool IsHappy(int n)
+        {
+            // Using Floyd's Cycle Detection(Two Pointers)
+            if (n == 1) { return true; }
+            int fast = SumDigitSquare(n);
+            int slow = n;
+            while (slow != fast)
+            {
+                if (fast == 1 || slow == 1) { return true; }
+                slow = SumDigitSquare(slow);
+                fast = SumDigitSquare(SumDigitSquare(fast));
+
+            }
+            return false;
+        }
+        public int SumDigitSquare(int n)
+        {
+            int sum = 0;
+            while (n != 0)
+            {
+                int cur = n % 10;
+                sum += cur * cur;
+                n /= 10;
+            }
+            return sum;
         }
         #endregion
     }
