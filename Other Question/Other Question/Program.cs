@@ -278,6 +278,65 @@ namespace Other_Question
             return ans;
         }
         #endregion
-        
+        #region Leetcode 679  24 Game
+        public bool JudgePoint24(int[] n)
+        {
+            List<double> nums = new List<double>();
+            for (int i = 0; i < n.Length; i++)
+            {
+                nums.Add(n[i] * 1.0);
+            }
+            return helper24(nums);
+        }
+        public bool helper24(List<double> nums)
+        {
+            int n = nums.Count;
+            if(n == 1)
+            {
+                return Math.Abs(nums[0] - 24) <= 1e-6;
+            }
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    if(i == j)
+                    {
+                        continue;
+                    }
+                    List<double> next = new List<double>();
+                    for (int k = 0; k < n; k++)
+                    {
+                        if(k!= i && k != j)
+                        {
+                            next.Add(nums[i]);
+                        }
+                    }
+                    double a = nums[i];
+                    double b = nums[j];
+
+                    next.Add(a + b);
+                    if (helper24(next)) { return true; }
+                    next.RemoveAt(n);
+
+                    next.Add(a - b);
+                    if (helper24(next)) { return true; }
+                    next.RemoveAt(n);
+
+                    next.Add(a * b);
+                    if (helper24(next)) { return true; }
+                    next.RemoveAt(n);
+
+                    if (b != 0)
+                    {
+                        next.Add(a / b);
+                        if (helper24(next)) { return true; }
+                        next.RemoveAt(n);
+                    }
+                }
+            }
+            return false;
+        }
+        #endregion
+
     }
 }

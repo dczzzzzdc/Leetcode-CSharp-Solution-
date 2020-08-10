@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 
 namespace Math
@@ -11,6 +12,18 @@ namespace Math
         static void Main(string[] args)
         {
         }
+        #region Extension: Sum all the digits
+        public int SumDigits(int n)
+        {
+            int sum = 0;
+            while(n != 0)
+            {
+                sum += n % 10;
+                n /= 10;
+            }
+            return sum;
+        }
+        #endregion
         #region Leetcode 7  Reverse Integers
         public int Reverse(int x)
         {
@@ -124,6 +137,27 @@ namespace Math
             }
             
             return new String(res.ToString().Reverse().ToArray());
+        }
+        #endregion
+        #region Leetcode 171  Excel Sheet Column Number
+        public int TitleToNumber(string s)
+        {
+            int res = 0;
+            for (int i = 0; i < s.Length; ++i)
+            {
+                res *= 26;
+                res += (s[i] - 'A' + 1);
+            }
+            return res;
+        }
+        #endregion
+        #region Leetcode 172  Factorial Trailing Zero
+        public int TrailingZeroes(int n)
+        {
+            // A trailing zero can only be made 
+            // In a n! operation, there is always more 2 than 5
+            // Therefore, we just have to count the amount of 5
+            return n == 0 ? 0 : n / 5 + TrailingZeroes(n / 5);
         }
         #endregion
     }
