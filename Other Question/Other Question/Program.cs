@@ -337,6 +337,34 @@ namespace Other_Question
             return false;
         }
         #endregion
+        #region Leetcode 119  Pascal's Triangle II
+        public IList<int> GetRow(int rowIndex)
+        {
+            IList<int> level = new List<int>();
+            level.Add(1);
+            if (rowIndex == 0)
+            {
+                return level;
+            }
+            level.Add(1);
+            for (int i = 0; i < rowIndex - 1; ++i)
+            {
+                level = updateRow(level);
+            }
+            return level;
+        }
+        public IList<int> updateRow(IList<int> level)
+        {
+            IList<int> cur = new List<int>();
+            cur.Add(1);
+            for (int i = 0; i < level.Count - 1; ++i)
+            {
+                cur.Add(level[i] + level[i + 1]);
+            }
+            cur.Add(1);
+            return cur;
+        }
+        #endregion
 
     }
 }

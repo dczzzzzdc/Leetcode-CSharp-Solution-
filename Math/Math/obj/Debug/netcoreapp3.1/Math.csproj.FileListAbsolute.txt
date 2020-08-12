@@ -1,0 +1,13 @@
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Math\Math\bin\Debug\netcoreapp3.1\Math.exe
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Math\Math\bin\Debug\netcoreapp3.1\Math.deps.json
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Math\Math\bin\Debug\netcoreapp3.1\Math.runtimeconfig.json
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Math\Math\bin\Debug\netcoreapp3.1\Math.runtimeconfig.dev.json
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Math\Math\bin\Debug\netcoreapp3.1\Math.dll
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Math\Math\bin\Debug\netcoreapp3.1\Math.pdb
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Math\Math\obj\Debug\netcoreapp3.1\Math.csprojAssemblyReference.cache
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Math\Math\obj\Debug\netcoreapp3.1\Math.AssemblyInfoInputs.cache
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Math\Math\obj\Debug\netcoreapp3.1\Math.AssemblyInfo.cs
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Math\Math\obj\Debug\netcoreapp3.1\Math.csproj.CoreCompileInputs.cache
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Math\Math\obj\Debug\netcoreapp3.1\Math.dll
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Math\Math\obj\Debug\netcoreapp3.1\Math.pdb
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Math\Math\obj\Debug\netcoreapp3.1\Math.genruntimeconfig.cache

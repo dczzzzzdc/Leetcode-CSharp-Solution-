@@ -11,6 +11,7 @@ namespace Math_Question
     {
         static void Main(string[] args)
         {
+            Console.WriteLine(Math.Sqrt(14));
         }
         #region Extension: Sum all the digits
         public int SumDigits(int n)
@@ -208,7 +209,7 @@ namespace Math_Question
             return n == 1;
         }
         #endregion
-        #region Leetcode 202  Happy 
+        #region Leetcode 202  Happy Number
         public bool IsHappy(int n)
         {
             // Using Floyd's Cycle Detection(Two Pointers)
@@ -234,6 +235,19 @@ namespace Math_Question
                 n /= 10;
             }
             return sum;
+        }
+        #endregion
+        #region Leetcode 367  Valid Perfect Square
+        // 1 + 3 + 5 + ... + (2i - 1) = (2i - 1 + 1) * (i/2) = i * i
+        public bool IsPerfectSquare(int n)
+        {
+            int i = 1;
+            while (n > 0)
+            {
+                n -= i;
+                i += 2;
+            }
+            return n == 0;
         }
         #endregion
     }
