@@ -365,6 +365,58 @@ namespace Other_Question
             return cur;
         }
         #endregion
+        #region Leetcode 274  H-Index
+        public int HIndex_BruteForce(int[] citations)
+        {
+            int n = citations.Length;
+            Array.Sort(citations);
+            for (int i = 0; i < n; ++i)
+            {
+                if (citations[i] >= (n - i))
+                {
+                    return n - i;
+                }
+            }
+            return 0;
+        }
+        #endregion
+        #region Leetcode 1286  Iterator for Combination
+        public class CombinationIterator
+        {
+            List<string> combinations;
+            int index = 0;
+            public CombinationIterator(string characters, int n)
+            {
+                combinations = new List<string>();
+                dfs(characters, 0, n, new StringBuilder(""));
+            }
+
+            public string Next()
+            {
+                return combinations[index++];
+            }
+
+            public bool HasNext()
+            {
+                return index != combinations.Count;
+            }
+            private void dfs(string word, int index, int length, StringBuilder path)
+            {
+                if (path.Length == length)
+                {
+                    combinations.Add(path.ToString());
+                    return;
+                }
+                // Since the word given is sorted, then the substring we make must be in lexicographical order
+                for (int i = index; i < word.Length; ++i)
+                {
+                    path.Append(word[i]);
+                    dfs(word, i + 1, length, path);
+                    path.Remove(path.Length - 1, 1);
+                }
+            }
+        }
+        #endregion
 
     }
 }
