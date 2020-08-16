@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace DP
 {
-    class Program
+    class DP
     {
         static void Main(string[] args)
         {
@@ -989,6 +990,54 @@ namespace DP
 
         }
 
+        #endregion
+        #region Leetcode 368  Largest Divisible Subset
+        public IList<int> LargestDivisibleSubset(int[] nums)
+        {
+            Array.Sort(nums);
+
+            int n = nums.Length;
+            if (n == 0)
+            {
+                return new List<int>();
+            }
+            int[] dp = new int[n];
+            // dp[i] stores the largest divisible subset ending with nums[i]
+            int[] next = new int[n];
+
+            int len = 0;
+            int index = -1;
+
+            for (int i = 0; i < n; i++)
+            {
+                dp[i] = 1; next[i] = -1;
+                for (int j = 0; j < i; j++)
+                {
+                    if (nums[i] % nums[j] == 0)
+                    {
+                        dp[i] = Math.Max(dp[i], dp[j] + 1);
+                        if (dp[i] == dp[j] + 1)
+                        // If including j is the current best solution
+                        {
+                            next[i] = j;
+                            // ... then we mark the next number of i as j
+                        }
+                    }
+                }
+                if (dp[i] > len)
+                {
+                    len = dp[i];
+                    index = i;
+                }
+            }
+            IList<int> ans = new List<int>();
+            while (index != -1)
+            {
+                ans.Add(nums[index]);
+                index = next[index];
+            }
+            return ans;
+        }
         #endregion
     }
 }
