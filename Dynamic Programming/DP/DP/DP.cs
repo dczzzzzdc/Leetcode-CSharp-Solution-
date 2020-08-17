@@ -9,8 +9,149 @@ namespace DP
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+
         }
+        #region Leetcode 121/122/123/309/714  Best time to buy and sell stocks
+        // Thoughts : The ultimate goal is to find the lowest valley prior to the largest peak
+        public int MaxProfitI(int[] prices)
+        {
+            int minPrice = int.MaxValue; // Lowest valley
+            int maxProfit = 0; // Largest peak
+            int n = prices.Length;
+            if (n == 0 || n == 1) { return 0; }
+            for (int i = 0; i < n; ++i)
+            {
+                if (prices[i] < minPrice)
+                {
+                    minPrice = prices[i];
+                }
+                // Use else here because buying and selling on the same day returns no profit
+                else if (maxProfit < prices[i] - minPrice)
+                {
+                    maxProfit = prices[i] - minPrice;
+                }
+            }
+            return maxProfit;
+        }
+
+        // Thoughts : We should do as much as profitable transactions as possible 
+        // Solution : Greedy
+        public int MaxProfitII(int[] prices)
+        {
+            int n = prices.Length;
+            if (n <= 1) { return 0; }
+            int buy = 0; int sell = 0; int profit = 0;
+            while (buy < n && sell < n)
+            {
+                while (buy + 1 < n && prices[buy + 1] < prices[buy])
+                {
+                    ++buy;
+                }
+                sell = buy;
+                while (sell + 1 < n && prices[sell + 1] > prices[sell])
+                {
+                    ++sell;
+                }
+                profit += prices[sell] - prices[buy];
+                buy = sell + 1;
+            }
+            return profit;
+        }
+
+        #region Leetcode 123
+        public int MaxProfitIII_BruteForce(int[] prices)
+        {
+            int n = prices.Length;
+            if (n <= 1) { return 0; }
+            int k = 2;
+            int[,] dp = new int[k + 1, n];
+            for (int i = 0; i < n; i++)
+            {
+                dp[0, i] = 0;
+            }
+            for (int i = 0; i < k; i++)
+            {
+                dp[i, 0] = 0;
+            }
+            for (int i = 1; i <= k; i++)
+            {
+                for (int j = 1; j < n; j++)
+                {
+                    int max = 0;
+                    for (int m = 0; m < j; m++)
+                    {
+                        max = Math.Max(max, dp[i - 1, m] + prices[j] - prices[m]);
+                    }
+                    dp[i, j] = Math.Max(dp[i, j - 1], max);
+                }
+            }
+            return dp[k, n - 1];
+        }
+        /* Optimization Explanation
+         * dp[i,j] = max(dp[i,j-1], max(prices[j] - prices[m] + dp[i-1,m])) where m is 0...j-1
+         * 
+         * When i = 2 and j = 3
+         * m = 0   prices[3] - prices[0] + dp[1,0]
+         * m = 1   prices[3] - prices[1] + dp[1,1]
+         * m = 2   prices[3] - prices[2] + dp[1,2]
+         * 
+         * Since prices[j] is fixed, our goal is to find the maxDiff between dp[i-1,m] and prices[m]
+         * 
+         * When i = 2 and j = 4
+         * 
+         * m = 0   prices[4] - prices[0] + dp[1,0]
+         * m = 1   prices[4] - prices[1] + dp[1,1]
+         * m = 2   prices[4] - prices[2] + dp[1,2]
+         * 
+         * m = 3   prices[4] - prices[3] + dp[1,3]
+         * 
+         * If we know the maxDiff of (i = 2, j = 3), we just have to compare it with (- prices[3] + dp[1,3])
+         */
+        public int MaxProfit(int[] prices)
+        {
+            int n = prices.Length;
+            if (n == 0) { return 0; }
+            int k = 2;
+            int[,] dp = new int[k + 1, n];
+            for (int i = 0; i <= k; i++)
+            {
+                int maxdiff = -prices[0];
+                for (int j = 1; j < n; j++)
+                {
+                    dp[i, j] = Math.Max(dp[i, j - 1], maxdiff +prices[j]);
+                    maxdiff = Math.Max(maxdiff, dp[i - 1, j] - prices[j]);
+                }
+            }
+            return dp[k, n - 1];
+
+        }
+        #endregion
+        // Thoughts : States
+        // We have to "vacant" before "buy"
+        // We have to "buy" before "sell"
+        public int MaxProfitwithCooldown(int[] prices)
+        {
+            int n = prices.Length;
+            if (n <= 1) { return 0; }
+            int vacant = 0;
+            // Doing nothing
+            int buy = -prices[0];
+            // Holding a stock
+            int sell = 0;
+            // Selling a stock
+            for (int i = 1; i < n; ++i)
+            {
+                int cur_buy = Math.Max(vacant - prices[i]/* buy after sell*/, buy);
+                int cur_sell = buy + prices[i]; // sell after buy
+                int cur_vacant = Math.Max(sell, vacant);
+                vacant = cur_vacant;
+                buy = cur_buy;
+                sell = cur_sell;
+            }
+            return Math.Max(vacant, sell);
+            // Buying on the last day is not a wise solution
+        }
+        #endregion
         #region Leetcode 698  Partition to K Equal Sum Subsets
         public bool CanPartitionKSubsets(int[] nums, int k)
         {
@@ -550,28 +691,6 @@ namespace DP
             return FBSdp[index][cur] = Math.Min(same_level, diff_level);
         }
         #endregion
-        #region Leetcode 714  Best Time to Buy and Sell Stock with Transaction Fee
-        public int MaxProfit(int[] prices, int fee)
-        {
-            int n = prices.Length;
-            if (n <= 1) { return 0; }
-            int[][] dp = new int[n][];
-            for (int i = 0; i < n; i++)
-            {
-                dp[i] = new int[2];
-            }
-            // dp [i][0] means having no stock in hand on the ith day while i means
-            // having a stock
-            dp[0][0] = 0;
-            dp[0][1] = -prices[0];
-            for (int i = 1; i < n; i++)
-            {
-                dp[i][0] = Math.Max(dp[i - 1][0], dp[i - 1][1] + prices[i] - fee);
-                dp[i][1] = Math.Max(dp[i - 1][1], dp[i - 1][0] - prices[i]);
-            }
-            return Math.Max(dp[n - 1][0], dp[n - 1][1]);
-        }
-        #endregion
         #region Leetcode 375  Guess Number Higher or Lower II
         // This solution actually resembles Binary Search
         public int GetMoneyAmount(int n)
@@ -1039,5 +1158,6 @@ namespace DP
             return ans;
         }
         #endregion
+        
     }
 }
