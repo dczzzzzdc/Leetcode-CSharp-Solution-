@@ -417,6 +417,68 @@ namespace Other_Question
             }
         }
         #endregion
+        #region Leetcode 1103  Distribute Candies to People
+        public int[] DistributeCandies(int candies, int people)
+        {
+            int[] ans = new int[people];
+            int index = 0;
+            int cur = 1;
+            while (candies > cur)
+            {
+                ans[index] += cur;
+                candies -= cur;
+                ++cur;
 
+                if (++index >= people)
+                {
+                    index = 0;
+                }
+            }
+            ans[index] += candies;
+            return ans;
+        }
+        #endregion
+        #region Leetcode 967  Numbers With Same Consecutive Differences
+        public int[] NumsSameConsecDiff(int N, int K)
+        {
+            List<int> path = new List<int>();
+            for (int i = N == 1 ? 0 : 1; i <= 9; i++)
+            {
+                path.Add(i);
+                NSCDdfs(path, N, K);
+                path.RemoveAt(0);
+            }
+            return NSCDans.ToArray();
+        }
+        List<int> NSCDans = new List<int>();
+        public void NSCDdfs(List<int> path, int N, int K)
+        {
+            int n = path.Count;
+            if (n == N) { NSCDans.Add(DigitListTurnInteger(path)); return; }
+            int last = path[n - 1];
+            for (int next = 0; next <= 9; next++)
+            {
+                int diff = Math.Abs(last - next);
+                if (diff == K)
+                {
+                    path.Add(next);
+                    NSCDdfs(path, N, K);
+                    path.RemoveAt(n);
+                }
+
+            }
+        }
+        public int DigitListTurnInteger(List<int> digits)
+        {
+            int num = 0;
+            int place = 1;
+            for (int i = digits.Count - 1; i >= 0; --i)
+            {
+                num += place * digits[i];
+                place *= 10;
+            }
+            return num;
+        }
+        #endregion
     }
 }

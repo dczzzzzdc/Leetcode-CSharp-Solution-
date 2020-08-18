@@ -151,6 +151,26 @@ namespace DP
             return Math.Max(vacant, sell);
             // Buying on the last day is not a wise solution
         }
+
+        public int MaxProfitwithFee(int[] prices, int fee)
+        {
+            int n = prices.Length;
+            if (n <= 1) { return 0; }
+            int[][] dp = new int[n][];
+            for (int i = 0; i < n; i++)
+            {
+                dp[i] = new int[2];
+            }
+            // dp [i][0] means having no stock in hand on the ith day while 1 means having a stock
+            dp[0][0] = 0;
+            dp[0][1] = -prices[0];
+            for (int i = 1; i < n; i++)
+            {
+                dp[i][0] = Math.Max(dp[i - 1][0], dp[i - 1][1] + prices[i] - fee);
+                dp[i][1] = Math.Max(dp[i - 1][1], dp[i - 1][0] - prices[i]);
+            }
+            return Math.Max(dp[n - 1][0], dp[n - 1][1]);
+        }
         #endregion
         #region Leetcode 698  Partition to K Equal Sum Subsets
         public bool CanPartitionKSubsets(int[] nums, int k)
