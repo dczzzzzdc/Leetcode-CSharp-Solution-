@@ -36,7 +36,7 @@ namespace Other_Question
                 int count = 0;
                 foreach (int num in nums)
                 {
-                    if(num == target && ++ count > n / 2) { return target; }
+                    if (num == target && ++count > n / 2) { return target; }
                 }
             }
         }
@@ -51,9 +51,9 @@ namespace Other_Question
                 int mask = 1 << i;
                 foreach (int num in nums)
                 {
-                    if((mask & num) != 0) { ++count; }
+                    if ((mask & num) != 0) { ++count; }
                 }
-                if(count > n / 2)
+                if (count > n / 2)
                 {
                     majority |= mask;
                 }
@@ -68,7 +68,7 @@ namespace Other_Question
             foreach (int num in nums)
             {
                 if (num == majority) { ++count; }
-                else if(--count == 0)
+                else if (--count == 0)
                 {
                     count = 1;
                     majority = num;
@@ -230,7 +230,7 @@ namespace Other_Question
             IList<int> ans = new List<int>();
             for (int i = 0; i < nums.Length; i++)
             {
-                if (nums[Math.Abs(nums[i]- 1)] < 0)
+                if (nums[Math.Abs(nums[i] - 1)] < 0)
                 {
                     ans.Add(Math.Abs(nums[i]));
                 }
@@ -291,7 +291,7 @@ namespace Other_Question
         public bool helper24(List<double> nums)
         {
             int n = nums.Count;
-            if(n == 1)
+            if (n == 1)
             {
                 return Math.Abs(nums[0] - 24) <= 1e-6;
             }
@@ -299,14 +299,14 @@ namespace Other_Question
             {
                 for (int j = 0; j < n; j++)
                 {
-                    if(i == j)
+                    if (i == j)
                     {
                         continue;
                     }
                     List<double> next = new List<double>();
                     for (int k = 0; k < n; k++)
                     {
-                        if(k!= i && k != j)
+                        if (k != i && k != j)
                         {
                             next.Add(nums[i]);
                         }
@@ -478,6 +478,54 @@ namespace Other_Question
                 place *= 10;
             }
             return num;
+        }
+        #endregion
+        #region Leetcode 824  Goat Latin
+        public string ToGoatLatin(string S)
+        {
+            int cur_a = 1;
+            StringBuilder ans = new StringBuilder();
+            int index = 0;
+            int n = S.Length;
+            while (index < n)
+            {
+                int start = index; int length = 0;
+                while (index < n && S[index] != ' ')
+                {
+                    index++;
+                    length++;
+                }
+                ans.Append(GoatLatin_Operate(S.Substring(start, length)));
+                for (int i = 0; i < cur_a; ++i)
+                {
+                    ans.Append("a");
+                }
+                cur_a++;
+                index++;
+                ans.Append(" ");
+            }
+            ans.Remove(ans.Length - 1, 1);
+            return ans.ToString();
+        }
+        public string GoatLatin_Operate(string cur)
+        {
+            StringBuilder ret = new StringBuilder();
+            if (isVowel(cur[0]))
+            {
+                ret.Append(cur);
+            }
+            else
+            {
+                ret.Append(cur.Substring(1));
+                ret.Append(cur[0]);
+            }
+            ret.Append("ma");
+            return ret.ToString();
+        }
+        public bool isVowel(char c)
+        {
+            c = Char.ToLower(c);
+            return c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u';
         }
         #endregion
     }

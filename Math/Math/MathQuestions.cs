@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 
 namespace Math_Question
 {
-    class Program
+    class MathQuestions
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(Math.Sqrt(14));
+            Console.WriteLine(System.Math.Sqrt(14));
         }
         #region Extension: Sum all the digits
         public int SumDigits(int n)
@@ -182,7 +184,7 @@ namespace Math_Question
                 ugly[i] = int.MaxValue;
                 for (int j = 0; j < primes.Length; ++j)
                 {
-                    ugly[i] = Math.Min(ugly[i], primes[j] * ugly[index[j]]);
+                    ugly[i] = System.Math.Min(ugly[i], primes[j] * ugly[index[j]]);
                 }
                 for (int k = 0; k < primes.Length; ++k)
                 {
@@ -248,6 +250,47 @@ namespace Math_Question
                 i += 2;
             }
             return n == 0;
+        }
+        #endregion
+        #region Leetcode 396  Rotate Function
+        // Eg. A(k) = [1,2,3,4]
+        // Then A(k-1) = [4,1,2,3]
+        // In other words, A(k)[i] = A(k-1)[i+1]
+
+        // F(k) = 0 * A(k)[0] + 1 * A(k)[1] +...+ (n-1) * A(k)[n-1]
+        // F(k-1) = 0 * A(k-1)[0] + A(k-1)[1] +...+ (n-1) * A(k-1)[n-1]
+        //        = 0 * A(k)[1] + A(k)[2] +...+ (n-2) * A(k)[n-1] + (n-1) * A(k)[0]
+
+        // F(k) - F(k-1) = (A(k)[1] - 0 * A(k)[1]) + (2 * A(k)[2] - A(k)[2]) +...+ (0 * A(k)[0] - (n-1) * A(k)[0])
+        //               = A(k)[1] + A(k)[2] +...+ (1-n) * A(k)[0]
+        //               = (Sum of the array) - n * A(k)[0]
+        // Therefore, F(k) = F(k-1) + sum - n * A(k)[0] , F(k-1) = F(k) - sum + n * 
+
+        // Moreover, A(k)[0] = A(0)[n-k]
+        // A(0) = [1,2,3]
+        // When k = 2, then A(k) = [2,3,1], where A(2)[0] = A(0)[3-2 = 1]
+
+        public int MaxRotateFunction(int[] A)
+        {
+            int n = A.Length;
+            int sum = 0;
+            int F0 = 0;
+
+            for (int i = 0; i < n; i++)
+            {
+                sum += A[i];
+                F0 += i * A[i];
+            }
+            int max = F0;
+            for (int i = n - 1; i >= 1; i--) // Iterate through F(i)
+            {
+                // Re - entering this loop, F0 still store the value of F(i+1)
+                // Therefore, F(i) = F(i) + sum - 
+                F0 += sum - n * A[i];
+                max = Math.Max(F0, max);
+            }
+            return max;
+
         }
         #endregion
     }
