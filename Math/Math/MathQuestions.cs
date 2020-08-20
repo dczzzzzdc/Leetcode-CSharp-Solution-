@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 
 namespace Math_Question
@@ -13,7 +9,7 @@ namespace Math_Question
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(System.Math.Sqrt(14));
+            Console.WriteLine(2/3);
         }
         #region Extension: Sum all the digits
         public int SumDigits(int n)
@@ -291,6 +287,38 @@ namespace Math_Question
             }
             return max;
 
+        }
+        #endregion
+        #region Leetcode 400  Nth Digit
+        // From 1 ~ 9, there are 9 one digit numbers = 1 * 9 digits
+        // From 10 ~ 99, there are 90 two digits numbers = 2 * 90 digit
+
+        // After the while loop, we know that our target digit is the nth(after loop) digit in all (len) digit number
+
+        // Then, we do start += (n-1) / len to specify which number is it
+
+        // Finally, we mod(n-1) with len to find the actual index
+        public int FindNthDigit(int n)
+        {
+            long range = 9;
+            int len = 1;
+            int start = 1;
+            // The start of the range
+            while (n > len * range)
+            {
+                n -= (int)(len * range);
+                ++len;
+                range *= 10;
+                start *= 10;
+            }
+            // Since we are referring to the index, we should use n-1
+
+            // For example, we are trying to the third digit in the 3-digits numbers
+            // The start should be 100 instead of 101
+            // And the index of the third digit should be 2, which is obtained by (3-1) % 3
+
+            start += (n - 1) / len;
+            return (int)Char.GetNumericValue(Convert.ToString(start)[(n - 1) % len]);
         }
         #endregion
     }
