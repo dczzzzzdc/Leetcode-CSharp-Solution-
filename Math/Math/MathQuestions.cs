@@ -323,7 +323,79 @@ namespace Math_Question
                 }
             }
             return ans;
-            #endregion
         }
+        #endregion
+        #region Leetcode 423  Reconstruct Original Digits from English
+        public string OriginalDigits(string s)
+        {
+            int[] count = new int[10];
+            foreach(char c in s)
+            {
+                if(c == 'z')
+                {
+                    count[0]++;
+                }
+                if(c == 'w')
+                {
+                    count[2]++;
+                }
+                if(c == 'x')
+                {
+                    count[6]++;
+                }
+                if(c == 's')
+                {
+                    count[7]++;
+                    // six & seven
+                    // Therefore, actual seven count + count[6] = count[7]
+                }
+                if(c == 'g')
+                {
+                    count[8]++;
+                }
+                if(c == 'u')
+                {
+                    count[4] ++;
+                }
+                if(c == 'f')
+                {
+                    count[5]++;
+                    // five & four
+                }
+                if(c == 'h')
+                {
+                    count[3]++;
+                    // three & eight
+                }
+                if(c == 'o')
+                {
+                    count[1]++;
+                    // one & four & two & zero
+                }
+                if(c == 'i')
+                {
+                    count[9]++;
+                    // nine & eight & six & five
+                }
+            }
+            // Offset
+            count[7] -= count[6];
+            count[5] -= count[4];
+            count[3] -= count[8];
+            count[1] -= (count[4] + count[2] + count[0]);
+            count[9] -= (count[8] + count[6] + count[5]);
+
+            StringBuilder res = new StringBuilder();
+
+            for (int i = 0; i <= 9; i++)
+            {
+                for (int j = 0; j < count[i]; j++)
+                {
+                    res.Append(i);
+                }
+            }
+            return res.ToString();
+        }
+        #endregion
     }
 }

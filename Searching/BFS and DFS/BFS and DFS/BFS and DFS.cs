@@ -24,6 +24,10 @@ namespace BFS_and_DFS
         {
 
         }
+        public bool isLeave(TreeNode node)
+        {
+            return node.left != null && node.right != null;
+        }
         #region Leetcode 662  Maximum Width of Binary Tree
 
         public int WidthOfBinaryTree(TreeNode root)
@@ -276,6 +280,38 @@ namespace BFS_and_DFS
 
             }
             return fresh == 0 ? steps - 1 : -1;
+        }
+        #endregion
+        #region Leetcode 404  Sum of Left Leaves
+        public int SumOfLeftLeaves(TreeNode root)
+        {
+            if (root == null)
+            {
+                return 0;
+            }
+            Queue<TreeNode> q = new Queue<TreeNode>();
+            q.Enqueue(root);
+            int sum = 0;
+            while (q.Count != 0)
+            {
+                TreeNode cur = q.Dequeue();
+                TreeNode left = cur.left;
+                TreeNode right = cur.right;
+                if (right != null)
+                {
+                    q.Enqueue(right);
+                }
+                if (left != null)
+                {
+                    if (isLeave(left))
+                    {
+                        sum += left.val;
+                        continue;
+                    }
+                    q.Enqueue(left);
+                }
+            }
+            return sum;
         }
         #endregion
     }
