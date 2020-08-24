@@ -397,5 +397,27 @@ namespace Math_Question
             return res.ToString();
         }
         #endregion
+        #region Leetcode 453  Minimum Moves to Equal Array Elements
+        public int MinMoves(int[] nums)
+        {
+            // Adding 1 to n-1 elements is the same as reducing 1 from 1 element
+            // Therefore, the best way is to make all other element the same as the min elment
+            if (nums.Length == 0)
+            {
+                return 0;
+            }
+            int min = int.MaxValue;
+            foreach (int n in nums)
+            {
+                min = Math.Min(min, n);
+            }
+            int ans = 0;
+            foreach (int n in nums)
+            {
+                ans = ans + n - min;
+            }
+            return ans;
+        }
+        #endregion
     }
 }
