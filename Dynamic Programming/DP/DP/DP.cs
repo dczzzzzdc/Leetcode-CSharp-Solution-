@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 
 namespace DP
 {
@@ -12,6 +11,7 @@ namespace DP
 
         }
         #region Leetcode 121/122/123/309/714  Best time to buy and sell stocks
+        #region Leetcode 121
         // Thoughts : The ultimate goal is to find the lowest valley prior to the largest peak
         public int MaxProfitI(int[] prices)
         {
@@ -33,7 +33,9 @@ namespace DP
             }
             return maxProfit;
         }
+        #endregion
 
+        #region Leetcode 122
         // Thoughts : We should do as much as profitable transactions as possible 
         // Solution : Greedy
         public int MaxProfitII(int[] prices)
@@ -57,6 +59,7 @@ namespace DP
             }
             return profit;
         }
+        #endregion
 
         #region Leetcode 123
         public int MaxProfitIII_BruteForce(int[] prices)
@@ -126,6 +129,8 @@ namespace DP
 
         }
         #endregion
+
+        #region Leetcode 309
         // Thoughts : States
         // We have to "vacant" before "buy"
         // We have to "buy" before "sell"
@@ -151,7 +156,9 @@ namespace DP
             return Math.Max(vacant, sell);
             // Buying on the last day is not a wise solution
         }
+        #endregion
 
+        #region Leetcode 714 
         public int MaxProfitwithFee(int[] prices, int fee)
         {
             int n = prices.Length;
@@ -171,6 +178,7 @@ namespace DP
             }
             return Math.Max(dp[n - 1][0], dp[n - 1][1]);
         }
+        #endregion
         #endregion
         #region Leetcode 698  Partition to K Equal Sum Subsets
         public bool CanPartitionKSubsets(int[] nums, int k)
@@ -293,7 +301,7 @@ namespace DP
         #endregion
         #region Leetcode 15  3 Sum
         // O(n2) Time Complexity
-        // We use a double pointer to a 2 Sum
+        // We use a double pointer to do a 2 Sum
         public IList<IList<int>> ThreeSum(int[] nums)
         {
             int n = nums.Length;
@@ -303,17 +311,18 @@ namespace DP
             {
                 int cur = nums[i];
                 if (cur > 0) { break; }// There is no way that we are going to find two positive numbers that have the a negative sum
-                else if (i > 0 && cur == nums[i - 1]) { continue; }// Avoid same value
+                else if (i > 0 && cur == nums[i - 1]) { continue; }// Avoid the same value as the last one
                 int target = -cur;
                 int l = i + 1;
                 int r = n - 1;
+                // Find a two sum that add up to the target, which is -cur
                 while (l < r)
                 {
                     int sum = nums[l] + nums[r];
                     if (sum == target)
                     {
                         ans.Add(new List<int>() { cur, nums[l], nums[r] });
-                        // The following steps must be done to avoid Adding the same combination twice
+                        // The following steps must be done to avoid adding the same combination twice
                         // Note that there could be multiple combinations
                         ++l;
                         while (l < r && nums[l] == nums[l - 1]) { ++l; }

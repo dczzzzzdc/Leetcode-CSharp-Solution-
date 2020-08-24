@@ -5,7 +5,61 @@ using System.Text;
 
 namespace Other_Question
 {
-    class Program
+    class TrieNode
+    {
+        public bool isWord;
+        public TrieNode[] next;
+        public TrieNode(int count = 26)
+        {
+            next = new TrieNode[count];
+        }
+    }
+    #region Leetcode 1032  Stream of Characters
+    public class StreamChecker
+    {
+        TrieNode root;
+        StringBuilder sb;
+        public StreamChecker(string[] words)
+        {
+            root = new TrieNode();
+            sb = new StringBuilder();
+
+            foreach (string word in words)
+            {
+                TrieNode node = root;
+                int n = word.Length;
+                for (int i = n-1; i >= 0; i--)
+                {
+                    char c = word[i];
+                    if(node.next[c-'a'] == null)
+                    {
+                        node.next[c - 'a'] = new TrieNode();
+                    }
+                    node = node.next[c - 'a'];
+                }
+                node.isWord = true;
+            }
+
+        }
+
+        public bool Query(char letter)
+        {
+            sb.Append(letter);
+            TrieNode node = root;
+            for (int i = sb.Length -1; i >=0 && node != null; i--)
+            {
+                char c = sb[i];
+                node = node.next[c - 'a'];
+                if(node != null && node.isWord)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+    #endregion
+    class Other
     {
         static void Main(string[] args)
         {
@@ -528,5 +582,23 @@ namespace Other_Question
             return c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u';
         }
         #endregion
+        #region Leetcode 905  Sort Array By Parity
+        public int[] SortArrayByParity(int[] A)
+        {
+            int j = 0;
+            for (int i = 0; i < A.Length; i++)
+            {
+                if(A[i] %2 == 0)
+                {
+                    int temp = A[i];
+                    A[i] = A[j];
+                    A[j] = temp;
+                }
+                ++j;
+            }
+            return A;
+        }
+        #endregion
+        
     }
 }

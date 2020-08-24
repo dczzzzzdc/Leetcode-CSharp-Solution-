@@ -9,13 +9,13 @@ namespace Math_Question
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(2/3);
+            Console.WriteLine(2 / 3);
         }
         #region Extension: Sum all the digits
         public int SumDigits(int n)
         {
             int sum = 0;
-            while(n != 0)
+            while (n != 0)
             {
                 sum += n % 10;
                 n /= 10;
@@ -27,10 +27,10 @@ namespace Math_Question
         public int Reverse(int x)
         {
             int ans = 0;
-            while(x != 0)
+            while (x != 0)
             {
                 int temp = ans * 10 + x % 10;
-                if(temp /10 != ans) // If temp overflows MaxValue, it will become MinValue
+                if (temp / 10 != ans) // If temp overflows MaxValue, it will become MinValue
                 {
                     return 0;
                 }
@@ -75,7 +75,7 @@ namespace Math_Question
             for (int i = 0; i < s.Length - 1; i++)
             {
                 // Normally, the current character should be bigger than the right character
-                if(roman[s[i]] < roman[s[i + 1]])
+                if (roman[s[i]] < roman[s[i + 1]])
                 {
                     sum -= roman[s[i]];
                 }
@@ -97,14 +97,14 @@ namespace Math_Question
             int i = a.Length - 1;
             int j = b.Length - 1;
             int carry = 0;
-            while(i>=0 || j >= 0)
+            while (i >= 0 || j >= 0)
             {
                 int sum = carry;
                 if (i >= 0)
                 {
                     sum += a[i--] - '0';
                 }
-                if(j>= 0)
+                if (j >= 0)
                 {
                     sum += b[j--] - '0';
                 }
@@ -114,7 +114,7 @@ namespace Math_Question
                 carry = sum / 2;
 
             }
-            if(carry != 0)
+            if (carry != 0)
             {
                 res.Append(1);
             }
@@ -134,7 +134,7 @@ namespace Math_Question
                 res.Append((char)('A' + n % 26));
                 n /= 26;
             }
-            
+
             return new String(res.ToString().Reverse().ToArray());
         }
         #endregion
@@ -248,45 +248,27 @@ namespace Math_Question
             return n == 0;
         }
         #endregion
-        #region Leetcode 396  Rotate Function
-        // Eg. A(k) = [1,2,3,4]
-        // Then A(k-1) = [4,1,2,3]
-        // In other words, A(k)[i] = A(k-1)[i+1]
-
-        // F(k) = 0 * A(k)[0] + 1 * A(k)[1] +...+ (n-1) * A(k)[n-1]
-        // F(k-1) = 0 * A(k-1)[0] + A(k-1)[1] +...+ (n-1) * A(k-1)[n-1]
-        //        = 0 * A(k)[1] + A(k)[2] +...+ (n-2) * A(k)[n-1] + (n-1) * A(k)[0]
-
-        // F(k) - F(k-1) = (A(k)[1] - 0 * A(k)[1]) + (2 * A(k)[2] - A(k)[2]) +...+ (0 * A(k)[0] - (n-1) * A(k)[0])
-        //               = A(k)[1] + A(k)[2] +...+ (1-n) * A(k)[0]
-        //               = (Sum of the array) - n * A(k)[0]
-        // Therefore, F(k) = F(k-1) + sum - n * A(k)[0] , F(k-1) = F(k) - sum + n * 
-
-        // Moreover, A(k)[0] = A(0)[n-k]
-        // A(0) = [1,2,3]
-        // When k = 2, then A(k) = [2,3,1], where A(2)[0] = A(0)[3-2 = 1]
-
-        public int MaxRotateFunction(int[] A)
+        #region Leetcode 517  Super Washing Machine
+        public int FindMinMoves(int[] machines)
         {
-            int n = A.Length;
-            int sum = 0;
-            int F0 = 0;
-
-            for (int i = 0; i < n; i++)
+            int sum = machines.Sum();
+            int n = machines.Length;
+            if(sum % n != 0) { return -1; }
+            int target = sum / n;
+            int over = 0;
+            int ans = 0;
+            foreach(int m in machines)
             {
-                sum += A[i];
-                F0 += i * A[i];
-            }
-            int max = F0;
-            for (int i = n - 1; i >= 1; i--) // Iterate through F(i)
-            {
-                // Re - entering this loop, F0 still store the value of F(i+1)
-                // Therefore, F(i) = F(i) + sum - 
-                F0 += sum - n * A[i];
-                max = Math.Max(F0, max);
-            }
-            return max;
+                over += m - target;
+                ans = Math.Max(ans, Math.Max(m - target, Math.Abs(over)));
+                // If over is positive, than we definitely need to do more than over operations
+                // If over is negative, then we do not really need over operations 
+                // since clothes can be transfered from two of its adjacent machines
 
+                // If the current machine has more clothes than its target, then it also needs more than m - target operations
+
+            }
+            return ans;
         }
         #endregion
         #region Leetcode 400  Nth Digit
@@ -321,5 +303,27 @@ namespace Math_Question
             return (int)Char.GetNumericValue(Convert.ToString(start)[(n - 1) % len]);
         }
         #endregion
+        #region Leetcode 413  Arithmetic Slices
+        public int NumberOfArithmeticSlices(int[] A)
+        {
+            // dp[i] the amount of slices ending with A[i]
+            int ans = 0;
+            int count = 0;
+            // count represents dp[i-1]
+            for (int i = 2; i < A.Length; ++i)
+            { // We at least need three numbers to form a slice
+                if (A[i] - A[i - 1] == A[i - 1] - A[i - 2])
+                {
+                    ++count;
+                    ans += count;
+                }
+                else
+                {
+                    count = 0;
+                }
+            }
+            return ans;
+            #endregion
+        }
     }
 }
