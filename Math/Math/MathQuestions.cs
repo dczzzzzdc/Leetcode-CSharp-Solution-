@@ -9,7 +9,6 @@ namespace Math_Question
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(2 / 3);
         }
         #region Extension: Sum all the digits
         public int SumDigits(int n)
@@ -419,5 +418,78 @@ namespace Math_Question
             return ans;
         }
         #endregion
+        #region Leetcode 507  Perfect Number
+        public bool CheckPerfectNumber(int num)
+        // There is several pairs of divisors, i and num / i
+        {
+            if (num <= 1) { return false; }
+            int sum = 1;
+            for (int i = 2; i * i < num; ++i)
+            {
+                if (num % i == 0)
+                {
+                    sum += i + num / i;
+                }
+            }
+            return sum == num;
+        }
+        #endregion
+        #region Leetcode 523  Continuous Subarray Sum
+        // Core theory (sum1 - sum2) = n * k ==> (sum1 - sum2) % k = 0==> sum1 % k = sum2 % k
+        public bool CheckSubarraySum(int[] nums, int k)
+        {
+            Dictionary<int, int> map = new Dictionary<int, int>();
+            // Key: Index
+            // Value: Running sum
+            map[0] = -1;
+            // If the original array is our target, then n-1 - (-1) is able to find the entire array
+            int sum = 0;
+            for (int i = 0; i < nums.Length; ++i)
+            {
+                sum += nums[i];
+                if (k != 0)
+                {
+                    sum %= k;
+                }
+
+                if (map.ContainsKey(sum))
+                {
+                    if (i - map[sum] >= 2)
+                    // The subarray is long enough
+                    {
+                        return true;
+                    }
+                }
+                else
+                {
+                    map[sum] = i;
+                }
+            }
+            return false;
+
+        }
+        #endregion
+        #region Leetcode 319  Bulb Switcher
+        // Core Observation:
+        // After even times of toggling, the state will not change 
+        // In this case, would still be on 
+
+        // The sixth bulb will be toggled on round 2 & 3 & 6
+        // Therefore, a bulb will be toggled on its factor(excluding one) round
+
+        // In conclusion, the ith bulb will be toggled for k - 1 times, where k is the amount of factors it have
+        // In other words, k must be odd to make k - 1 even
+        // In fact, only perfect square numbers have an odd k
+        // Eg. 25 have 3 factor (1,5,25)
+
+        // Finally, this question is transfered to finding the amount of perfect square number smaller than n
+        // Which is exactly Math.Sqrt(n)
+
+        public int BulbSwitch(int n)
+        {
+            return (int)(Math.Sqrt(n));
+        }
+        #endregion
+
     }
 }
