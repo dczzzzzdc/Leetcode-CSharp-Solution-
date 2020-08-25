@@ -490,6 +490,30 @@ namespace Math_Question
             return (int)(Math.Sqrt(n));
         }
         #endregion
+        #region Leetcode 537  Complex Number Multiplication
+        public string ComplexNumberMultiply(string a, string b)
+        {
+            StringBuilder res = new StringBuilder();
 
+            string[] A = a.Split("+");
+            string[] B = b.Split("+");
+
+            int a1 = Convert.ToInt32(A[0]);
+            int a2 = Convert.ToInt32(B[0]);
+            int b1 = Convert.ToInt32(A[1].Replace('i', ' '));
+            int b2 = Convert.ToInt32(B[1].Replace('i', ' '));
+
+            int a1a2 = a1 * a2;
+            int b1b2 = b1 * b2;
+            // This must be in a form of n * i * i, which is -n
+            res.Append(a1a2 - b1b2).Append('+');
+
+            int a1b2 = a1 * b2;
+            int a2b1 = a2 * b1;
+            res.Append(a1b2 + a2b1).Append('i');
+
+            return res.ToString();
+        }
+        #endregion 
     }
 }
