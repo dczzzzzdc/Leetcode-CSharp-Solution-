@@ -629,6 +629,30 @@ namespace Math_Question
             }
             return op;
         }
-        #endregion 
+        #endregion
+        #region Leetcode 1513  Number of Substrings With Only 1s
+        public int NumSub(string s)
+        {
+            int count = 0;
+            int prev = 0;
+            int mod = (int)Math.Pow(10, 9) + 7;
+
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (s[i] == '0')
+                {
+                    prev = 0;
+                }
+                else
+                {
+                    prev++;
+                    count += prev;
+                    if (count > mod) { count %= mod; }
+                }
+            }
+
+            return count;
+        }
+        #endregion
     }
 }
