@@ -599,6 +599,32 @@ namespace Other_Question
             return A;
         }
         #endregion
-        
+        #region Leetcode 412 Fizz Buzz
+        public IList<string> FizzBuzz(int n)
+        {
+            var ans = new List<string>();
+            for (int i = 1; i <= n; ++i)
+            {
+                if (i % 3 == 0 && i % 5 == 0)
+                {
+                    ans.Add("FizzBuzz");
+                    continue;
+                }
+                else if (i % 3 == 0)
+                {
+                    ans.Add("Fizz");
+                    continue;
+                }
+                else if (i % 5 == 0)
+                {
+                    ans.Add("Buzz");
+                    continue;
+                }
+                ans.Add(Convert.ToString(i));
+            }
+
+            return ans;
+        }
+        #endregion
     }
 }

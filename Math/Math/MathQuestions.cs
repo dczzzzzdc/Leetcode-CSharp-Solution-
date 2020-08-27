@@ -619,5 +619,16 @@ namespace Math_Question
             return (value, x);
         }
         #endregion
+        #region Leetcode 1551  Minimum Operations to Make Array Equal
+        public int MinOperations(int n)
+        {
+            int op = 0;
+            for (int i = n % 2 == 0 ? n + 1 : n; i <= 2 * n - 1; i += 2)
+            {
+                op += i - n;
+            }
+            return op;
+        }
+        #endregion 
     }
 }
