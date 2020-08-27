@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Text;
 
@@ -8,7 +10,8 @@ namespace Math_Question
     class MathQuestions
     {
         static void Main(string[] args)
-        {
+        { 
+       
         }
         #region Extension: Sum all the digits
         public int SumDigits(int n)
@@ -514,6 +517,107 @@ namespace Math_Question
 
             return res.ToString();
         }
-        #endregion 
+        #endregion
+        #region Leetcode 598  Range Addition II
+        // We are trying to find the intersection area of each operation
+        public int MaxCount(int m, int n, int[][] ops)
+        {
+            foreach (int[] op in ops)
+            {
+                m = Math.Min(m, op[0]);
+                n = Math.Min(n, op[1]);
+            }
+            return m * n;
+        }
+        #endregion
+        #region Leetcode  633 Sum of Square Numbers
+        public bool JudgeSquareSum(int c)
+        {
+            for (long a = 0; a * a <= c; ++a)
+            {
+                double b = Math.Sqrt(c - a * a);
+                if (b == (int)b)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        #endregion
+        #region Leetcode 620  Solve the Equation
+        public string SolveEquation(string s)
+        {
+            string[] equation = s.Split("=");
+            var left = evaluateExpression(equation[0]);
+            var right = evaluateExpression(equation[1]);
+            int x = left.Item2 - right.Item2;
+            int value = right.Item1 - left.Item1;
+            if (x == 0)
+            {
+                if (value == 0)
+                {
+                    return "Infinite solutions";
+                }
+                return "No solution";
+            }
+            StringBuilder res = new StringBuilder();
+            res.Append('x').Append('=').Append((int)(value / x));
+            return res.ToString();
+        }
+        private (int, int) evaluateExpression(string s)
+        {
+            int value = 0;
+            int x = 0;
+
+            char[] operators = { '+', '-' };
+            List<string> tokens = s.Split(operators).ToList();
+            for (int i = 0; i < tokens.Count; i++)
+            {
+                if(tokens[i] == "")
+                {
+                    tokens.RemoveAt(i);
+                }
+            }
+            operators = new char[tokens.Count];
+            int index = 0;
+            if (s[0] != '-')
+            {
+                operators[0] = '+';
+                ++index;
+            }
+
+            foreach (char c in s)
+            {
+                if (c == '+' || c == '-')
+                {
+                    operators[index++] = c;
+                }
+            }
+            index = 0;
+            foreach (string token in tokens)
+            {
+                bool plus = operators[index++] == '+';
+                if (token == "x")
+                {
+                    if (plus) { ++x; }
+                    else { --x; }
+                }
+                else if (token.Contains("x"))
+                {
+                    int count = Convert.ToInt32(token.Substring(0, token.IndexOf("x")));
+                    if (plus) { x += count; }
+                    else { x -= count; }
+                }
+                else if (int.TryParse(token, out _))
+                {
+                    int add_value = Convert.ToInt32(token);
+                    if (plus) { value += add_value; }
+                    else { value -= add_value; }
+                }
+            }
+
+            return (value, x);
+        }
+        #endregion
     }
 }
