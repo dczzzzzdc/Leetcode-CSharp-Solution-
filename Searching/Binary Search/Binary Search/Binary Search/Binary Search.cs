@@ -248,6 +248,12 @@ namespace Binary_Search
             return ans;
 
         }
+        /// <summary>
+        /// Search for the first number that is larger or equal than target
+        /// </summary>
+        /// <param name="nums">Intervals</param>
+        /// <param name="target">Target value</param>
+        /// <returns>Returns the first index</returns>
         public int FRIBinary_Search((int,int)[]nums,int target)
         {
             int l = 0;
@@ -264,8 +270,8 @@ namespace Binary_Search
                      l= m+1;
                 }
             }
-            return l == nums.Length /*This means that we have search through the whole array*/ ? -1 : nums[l].Item2; // Note that we are returning the index
-            //We are returning the index here
+            return l == nums.Length /*This means that we have search through the whole array*/ ? -1 : nums[l].Item2;
+            // We are returning the original index before sorting
         }
         #endregion
         #region Leetcode 50  Pow(x,n)

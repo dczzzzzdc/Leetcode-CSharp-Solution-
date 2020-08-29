@@ -654,5 +654,55 @@ namespace Math_Question
             return count;
         }
         #endregion
+        #region Leetcode 1512  Number of Good Pairs
+        public int NumIdenticalPairs(int[] nums)
+        {
+            Dictionary<int, int> count = new Dictionary<int, int>();
+            int ans = 0;
+            foreach (int n in nums)
+            {
+                if (!count.ContainsKey(n))
+                {
+                    count[n] = 0;
+                }
+                ans += count[n]++;
+            }
+            return ans;
+        }
+        #endregion
+        #region Leetcode 1523  Count Odd Numbers in an Interval Range
+        public int CountOdds(int low, int high)
+        {
+            // There will be 1 odd in every 2 numbers
+            return (low % 2 == 1 || high % 2 == 1) ? 1 + (high - low) / 2 : (high - low) / 2;
+        }
+        #endregion
+        #region Leetcode 1524  Number of Sub-arrays With Odd Sum
+        public int NumOfSubarrays(int[] arr)
+        {
+            int ans = 0;
+            int mod = (int)(Math.Pow(10, 9)) + 7;
+            (int, int) even_odd = (0, 0);
+            foreach (int num in arr)
+            {
+                int even = even_odd.Item1;
+                int odd = even_odd.Item2;
+                if (num % 2 == 0)
+                // Adding an even number
+                {
+                    // This will generate a new even subarray which is the number itself
+                    even_odd = (even + 1, odd);
+                }
+                else
+                // Adding an odd number
+                { 
+                    even_odd = (odd, even + 1);
+                }
+                ans = (ans + even_odd.Item2) % mod;
+            }
+
+            return ans;
+        }
+        #endregion
     }
 }
