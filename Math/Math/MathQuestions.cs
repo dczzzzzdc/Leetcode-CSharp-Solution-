@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO.IsolatedStorage;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace Math_Question
@@ -10,8 +11,7 @@ namespace Math_Question
     class MathQuestions
     {
         static void Main(string[] args)
-        { 
-       
+        {
         }
         #region Extension: Sum all the digits
         public int SumDigits(int n)
@@ -703,6 +703,38 @@ namespace Math_Question
 
             return ans;
         }
+        #endregion
+        #region Leetcode 1497  Check If Array Pairs Are Divisible by k
+        // For positive number, the sum of mudulo of two numbers must be k or 0
+        // It is a little more complex for negative numbers
+        // For example, when k = 3, we can pair 1 or -2 with 2
+        // THerefore, 1 and -2 has the equal distance of ((-2 % 3) + 3) % 3 = 1, which is ((num % k) + k) % k to prevent a negative modulo
+        public bool CanArrange(int[] arr, int k)
+        {
+            Dictionary<int, int> modulo = new Dictionary<int, int>();
+            for (int i = 0; i <= k; ++i)
+            {
+                modulo[i] = 0;
+            }
+            foreach (int x in arr)
+            {
+                modulo[((x % k) + k) % k]++;
+            }
+            if (modulo[0] % 2 != 0)
+            {
+                return false;
+            }
+            for (int i = 1; i < k; i++)
+            {
+
+                if (modulo[i] != modulo[k - i])
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         #endregion
     }
 }
