@@ -412,6 +412,7 @@ namespace BFS_and_DFS
                         else
                         {
                             uf.Union(i, dict[j]);
+                            // We do not need to update the dictionary because numbers of the same factor have been unioned already
                         }
 
                         if (!dict.ContainsKey(cur / j))
