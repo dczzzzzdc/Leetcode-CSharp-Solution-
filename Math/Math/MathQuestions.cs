@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO.IsolatedStorage;
+using System.IO.Pipes;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -23,6 +24,15 @@ namespace Math_Question
                 n /= 10;
             }
             return sum;
+        }
+        #endregion
+        #region Extension: Convert a digit to a target digit in a number
+        public int ReplaceDigit(int num,int index, int target)
+        {
+            string s = Convert.ToString(num);
+            int original = (int)Char.GetNumericValue(s[index]);
+            int pow = (int)Math.Pow(10,s.Length - index - 1);
+            return num + pow * (target - original);
         }
         #endregion
         #region Leetcode 7  Reverse Integers
@@ -791,6 +801,36 @@ namespace Math_Question
                 }
             }
             return ans;
+        }
+        #endregion
+        #region Leetcode 1323  Maximum 69 Number
+        public int Maximum69Number(int num)
+        {
+            checked
+            {
+                int index = 0;
+                int first = -1;
+                int n = num;
+                while (n != 0)
+                {
+                    int digit = n % 10;
+                    n /= 10;
+                    if(digit == '6')
+                    {
+                        first = index;
+                        break;
+                    }
+                    ++index;
+                }
+                if (first == -1)
+                {
+                    return num;
+                }
+
+                int pow = (int)Math.Pow(10, first);
+                return num + 3 * pow;
+            }
+            
         }
         #endregion
     }
