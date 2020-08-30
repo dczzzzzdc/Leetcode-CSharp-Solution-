@@ -764,5 +764,34 @@ namespace Math_Question
             return -1;
         }
         #endregion
+        #region Leetcode 1442  Count Triplets That Can Form Two Arrays of Equal XOR
+        public int CountTriplets(int[] arr)
+        {
+            int n = arr.Length;
+            int ans = 0;
+            int[] prefix = new int[n];
+            prefix[0] = arr[0];
+            for (int i = 1; i < n; ++i)
+            {
+                prefix[i] = prefix[i - 1] ^ arr[i];
+            }
+
+            for (int i = 0; i < n; ++i)
+            {
+                if (prefix[i] == 0)
+                {
+                    ans += i;
+                }
+                for (int j = i - 1; j >= 0; --j)
+                {
+                    if (prefix[i] == prefix[j])
+                    {
+                        ans += i - j - 1;
+                    }
+                }
+            }
+            return ans;
+        }
+        #endregion
     }
 }

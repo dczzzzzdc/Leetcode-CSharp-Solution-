@@ -626,5 +626,25 @@ namespace Other_Question
             return ans;
         }
         #endregion
+        #region Leetcode 470  Implement Rand10() Using Rand7()
+        public int Rand7()
+        {
+            return -1;
+        }
+        public int Rand10()
+        // (Rand7() - 1) * 7 + Rand7() - 1 will generate a random number from 0 to 48
+        // However, we can not use (Rand7() - 1) * 8 because this will only make the multiple of 8
+
+
+        {
+
+            int ret = 40;
+            while (ret >= 40)
+            {
+                ret = (Rand7() - 1) * 7 + Rand7() - 1;
+            }
+            return ret % 10 + 1;
+        }
+        #endregion
     }
 }
