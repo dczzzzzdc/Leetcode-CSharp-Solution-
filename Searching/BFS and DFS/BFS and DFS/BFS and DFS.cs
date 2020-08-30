@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -18,6 +19,37 @@ namespace BFS_and_DFS
             this.right = right;
         }
     }
+    #region Union Find Template
+    public class UnionFind
+    {
+        int[] parents;
+        int[] size;
+        int N;
+        public UnionFind(int n)
+        {
+            N = n;
+            size = new int[n];
+            parents = new int[n];
+
+            for (int i = 0; i < N; i++)
+            {
+                parents[i] = i;
+            }
+        }
+        public int Find(int target)
+        {
+            if(target == parents[target]) { return target; }
+            return parents[target] = Find(parents[target]); // Path compression
+        }
+        public void Union(int x, int y)
+        {
+            int rootX = Find(x);
+            int rootY = Find(y);
+
+
+        }
+    }
+    #endregion
     class Program
     {
         static void Main(string[] args)

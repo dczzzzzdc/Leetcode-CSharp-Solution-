@@ -736,5 +736,33 @@ namespace Math_Question
         }
 
         #endregion
+        #region Leetcode 1492  The kth Factor of n
+        public int KthFactor(int n, int k)
+        {
+            int d = 1;
+            // Checking the smaller factors, such as 1 2 3 for 12
+            for (d = 1; d * d <= n; ++d)
+            {
+                if (n % d == 0 && --k == 0)
+                {
+                    return d;
+                }
+            }
+            // Checking the larger factors, such as 4 6 12 for 12
+            for (d = d - 1; d >= 1; --d)
+            {
+                if (d * d == n)
+                {
+                    // We have already counted d once in the previous loop
+                    continue;
+                }
+                if (n % d == 0 && --k == 0)
+                {
+                    return n / d;
+                }
+            }
+            return -1;
+        }
+        #endregion
     }
 }
