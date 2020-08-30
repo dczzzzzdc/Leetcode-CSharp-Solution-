@@ -25,6 +25,7 @@ namespace BFS_and_DFS
         int[] parents;
         int[] size;
         int N;
+
         public UnionFind(int n)
         {
             N = n;
@@ -34,6 +35,7 @@ namespace BFS_and_DFS
             for (int i = 0; i < N; i++)
             {
                 parents[i] = i;
+                size[i] = 1;
             }
         }
         public int Find(int target)
@@ -45,7 +47,48 @@ namespace BFS_and_DFS
         {
             int rootX = Find(x);
             int rootY = Find(y);
+            if(rootX != rootY)
+            {
+                parents[rootY] = parents[rootX];
+                size[rootX] += size[rootX];
+            }
+            
+        }
+    }
+    #endregion
+    #region Union Find Template with Max Length
+    public class UnionFindMax
+    {
+        int[] parents;
+        int[] size;
+        public int max;
+        public UnionFindMax(int n)
+        {
+            max = 0;
+            size = new int[n];
+            parents = new int[n];
 
+            for (int i = 0; i < n; i++)
+            {
+                parents[i] = i;
+                size[i] = 1;
+            }
+        }
+        public int Find(int target)
+        {
+            if (target == parents[target]) { return target; }
+            return parents[target] = Find(parents[target]); // Path compression
+        }
+        public void Union(int x, int y)
+        {
+            int rootX = Find(x);
+            int rootY = Find(y);
+            if (rootX != rootY)
+            {
+                parents[rootY] = parents[rootX];
+                size[rootX] += size[rootY];
+                max = Math.Max(max, size[rootX]);
+            }
 
         }
     }
@@ -344,6 +387,55 @@ namespace BFS_and_DFS
                 }
             }
             return sum;
+        }
+        #endregion
+        #region Leetcode 952  Largest Component Size by Common Factor
+        public int LargestComponentSize(int[] nums)
+        {
+            int n = nums.Length;
+            Dictionary<int, int> dict = new Dictionary<int, int>();
+            // Key: Factor of a number
+            // Value: Node index of the number
+            UnionFindMax uf = new UnionFindMax(n);
+
+            for (int i = 0; i < n; ++i)
+            {
+                int cur = nums[i];
+                for (int j = 2; j * j <= cur; ++j)
+                { // Try every factor of cur excluding one
+                    if (cur % j == 0)
+                    {
+                        if (!dict.ContainsKey(j))
+                        {
+                            dict[j] = i;
+                        }
+                        else
+                        {
+                            uf.Union(i, dict[j]);
+                        }
+
+                        if (!dict.ContainsKey(cur / j))
+                        {
+                            dict[cur / j] = i;
+                        }
+                        else
+                        {
+                            uf.Union(i, dict[cur / j]);
+                        }
+                    }
+
+                }
+                if (!dict.ContainsKey(cur))
+                { // Cur itself could also be a factor
+                    dict[cur] = i;
+                }
+                else
+                {
+                    uf.Union(i, dict[cur]);
+                }
+            }
+
+            return uf.max;
         }
         #endregion
     }
