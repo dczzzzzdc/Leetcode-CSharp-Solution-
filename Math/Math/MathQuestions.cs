@@ -35,6 +35,20 @@ namespace Math_Question
             return num + pow * (target - original);
         }
         #endregion
+        #region Greatest Common Divisor
+        public int GreatestCommonDivisor(int a,int b)
+        {
+            int i;
+            for (i = Math.Min(a,b); i >= 1; i--)
+            {
+                if(a % i == 0 && b % i == 0)
+                {
+                    break;
+                }
+            }
+            return i;
+        }
+        #endregion
         #region Leetcode 7  Reverse Integers
         public int Reverse(int x)
         {
@@ -831,6 +845,27 @@ namespace Math_Question
                 return num + 3 * pow;
             }
             
+        }
+        #endregion
+        #region Leetcode 1447  Simplified Fractions
+        public IList<string> SimplifiedFractions(int n)
+        {
+            IList<string> ans = new List<string>();
+            if (n <= 1) { return ans; }
+
+            for (int i = 2; i <= n; ++i)
+            {
+                for (int j = 1; j < i; ++j)
+                {
+                    if (GreatestCommonDivisor(i,j) == 1)
+                    {
+                        StringBuilder fraction = new StringBuilder();
+                        fraction.Append(j).Append("/").Append(i);
+                        ans.Add(fraction.ToString());
+                    }
+                }
+            }
+            return ans;
         }
         #endregion
     }
