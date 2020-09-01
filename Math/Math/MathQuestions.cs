@@ -5,6 +5,7 @@ using System.IO.IsolatedStorage;
 using System.IO.Pipes;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 
 namespace Math_Question
@@ -867,6 +868,104 @@ namespace Math_Question
             }
             return ans;
         }
+        #endregion
+        #region Leetcode 1344  Angle Between Hands of a Clock
+        // The hour pointer moves 360/12 = 30 degrees per hour,0.5 degree per minute
+        // The minute pointer moves 360/60 = 6 degrees per minute
+        public double AngleClock(int h, int m)
+        {
+            double minute = m * 6.0;
+            double hour = m * 0.5;
+            if(h != 12) { hour += h * 30.0; }
+            double diff = Math.Abs(hour - minute);
+            return Math.Min(diff, 360 - diff);
+        }
+        #endregion
+        #region Leetcode 1232  Check If It Is a Straight Line
+        // If all the points are on the same line, then the slope value between any two points must be the same
+        // Slope = (x1 - x2) / (y1 - y2)
+        // Therefore, (x1 - x) / (y1 - y) = (x1 - x2) / (y1 - y2) => 
+        // (x1 - x) * dy = (y1 - y) * dx
+        public bool CheckStraightLine(int[][] points)
+        {
+            int n = points.Length;
+            if (n == 2)
+            {
+                return true;
+            }
+            int x0 = points[0][0]; int y0 = points[0][1];
+            int x1 = points[1][0]; int y1 = points[1][1];
+            int dx = x1 - x0; int dy = y1 - y0;
+            for (int i = 2; i < n; ++i)
+            {
+                int x = points[i][0];
+                int y = points[i][1];
+                if (dx * (y-y1) != dy * (x-x1))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        #endregion
+        #region Leetcode 1317  Convert Integer to the Sum of Two No-Zero Integers
+        public int[] GetNoZeroIntegers(int n)
+        {
+            for (int i = 1; i <= n / 2; ++i)
+            {
+                if (isNoZeroInt(i) && isNoZeroInt(n - i))
+                {
+                    return new int[2] { i, n - i };
+                }
+            }
+            return null;
+        }
+        public bool isNoZeroInt(int n)
+        {
+            while (n != 0)
+            {
+                int digit = n % 10;
+                if (digit == 0)
+                {
+                    return false;
+                }
+                n /= 10;
+            }
+            return true;
+        }
+        #endregion
+        #region Leetcode 1281  Subtract the Product and Sum of Digits of an Integer
+        public int SubtractProductAndSum(int n)
+        {
+            int sum = 0;
+            int product = 1;
+            while (n != 0)
+            {
+                int digit = n % 10;
+                sum += digit;
+                product *= digit;
+                n /= 10;
+            }
+            return product - sum;
+        }
+        #endregion
+        #region Leetcode 1276  Number of Burgers with No Waste of Ingredients
+        // If small = X and jumbo = Y
+        // x + Y = cheese & 2X + 4Y = tomato
+        // X + Y = cheese & X + 2Y = tomato / 2
+
+        // Therefore, Y = tomato/2 - cheese & X = cheese - Y = cheese - tomato / 2 + cheese = 2 * cheese - tomato / 2
+
+        public IList<int> NumOfBurgers(int t, int c)
+        {
+            if(t % 2 == 0 && c * 2 <= t && t <= c * 4)
+            // Making sure that the result is not a negative number
+            {
+                return new List<int> { t / 2 - c, 2 * c - t / 2 };
+            }
+            return new List<int>();
+        }
+        
         #endregion
     }
 }
