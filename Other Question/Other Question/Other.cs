@@ -634,10 +634,7 @@ namespace Other_Question
         public int Rand10()
         // (Rand7() - 1) * 7 + Rand7() - 1 will generate a random number from 0 to 48
         // However, we can not use (Rand7() - 1) * 8 because this will only make the multiple of 8
-
-
         {
-
             int ret = 40;
             while (ret >= 40)
             {
