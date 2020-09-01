@@ -965,7 +965,60 @@ namespace Math_Question
             }
             return new List<int>();
         }
-        
+
+        #endregion
+        #region Leetcode 1253  Reconstruct a 2-Row Binary Matrix
+        public IList<IList<int>> ReconstructMatrix(int upper, int lower, int[] c)
+        {
+            int[][] grid = new int[2][];
+            int n = c.Length;
+            grid[0] = new int[n];
+            grid[1] = new int[n];
+            for (int i = 0; i < n; ++i)
+            {
+                if (c[i] == 2)
+                {
+                    grid[0][i] = 1;
+                    grid[1][i] = 1;
+                    --upper;
+                    --lower;
+                    if (upper < 0 || lower < 0)
+                    {
+                        return new List<IList<int>>();
+                    }
+                }
+            }
+            for (int i = 0; i < n; ++i)
+            {
+                if (c[i] == 1)
+                {
+                    if (upper > 0)
+                    {
+                        --upper;
+                        grid[0][i] = 1;
+                    }
+                    else if (lower > 0)
+                    {
+                        --lower;
+                        grid[1][i] = 1;
+                    }
+                    else
+                    {
+                        return new List<IList<int>>();
+                    }
+                }
+            }
+            if (upper != 0 || lower != 0)
+            {
+                return new List<IList<int>>();
+            }
+            var ret = new List<IList<int>>();
+            foreach (int[] row in grid)
+            {
+                ret.Add(row.ToList());
+            }
+            return ret;
+        }
         #endregion
     }
 }
