@@ -47,6 +47,14 @@ namespace Binary_Search
             return sum;
         }
     }
+
+    public class CustomFunction
+    {
+        public int f(int x,int y)
+        {
+            return -1;
+        }
+    }
     #endregion
 
     class Program
@@ -866,6 +874,34 @@ namespace Binary_Search
                 }
             }
             return -1;
+        }
+        #endregion
+        #region Leetcode 1237  Find Positive Integer Solution for a Given Equation
+        public IList<IList<int>> FindSolution(CustomFunction f, int z)
+        // Since the return value of f increases along with the increase of its parameters, we can use Binary Search
+        {
+            IList<IList<int>> ans = new List<IList<int>>();
+            for (int x = 1; x <= 1000; ++x)
+            {
+                int l = 1; int r = 1001;
+                while (l < r)
+                {
+                    int m = l + (r - l) / 2;
+                    if (f.f(x, m) < z)
+                    {
+                        l = m + 1;
+                    }
+                    else
+                    {
+                        r = m;
+                    }
+                }
+                if (f.f(x, l) == z)
+                {
+                    ans.Add(new List<int> { x, l });
+                }
+            }
+            return ans;
         }
         #endregion
     }

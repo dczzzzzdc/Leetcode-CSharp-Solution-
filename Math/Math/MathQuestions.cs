@@ -1020,5 +1020,67 @@ namespace Math_Question
             return ret;
         }
         #endregion
+        #region Leetcode 949  Largest Time for Given Digits
+        public string LargestTimeFromDigits(int[] A)
+        {
+            int max = -1;
+
+            for (int h1 = 0; h1 < 4; h1++)
+            {
+                for (int h2 = 0; h2 < 4; h2++)
+                {
+                    if (h1 != h2)
+                    {
+                        for (int m1 = 0; m1 < 4; m1++)
+                        {
+                            if (m1 != h1 && m1 != h2)
+                            {
+                                int m2 = 6 - m1 - h1 - h2;
+
+                                max = Math.Max(max, FormLegalTime(A[h1], A[h2], A[m1], A[m2]));
+                            }
+                        }
+                    }
+                }
+            }
+            if (max == -1)
+            {
+                return "";
+            }
+            return string.Format("{0:D2}:{1:D2}", max / 60, max % 60);
+            // D2 makes one digit numbers two digit decimals
+            // For example, 6 becomes 06
+        }
+        public int FormLegalTime(int a, int b, int c, int d)
+        {
+            int hour = a * 10 + b;
+            int minute = c * 10 + d;
+            if (hour < 24 && minute < 60)
+            {
+                return hour * 60 + minute;
+            }
+            return -1;
+        }
+        #endregion
+        #region Leetcode 1217  Minimum Cost to Move Chips to The Same Position
+        // Find goal is to make all the position have the same parity
+        public int MinCostToMoveChips(int[] position)
+        {
+            int even = 0;
+            int odd = 0;
+            foreach (int chip in position)
+            {
+                if (chip % 2 == 0)
+                {
+                    even++;
+                }
+                else
+                {
+                    odd++;
+                }
+            }
+            return Math.Min(even, odd);
+        }
+        #endregion
     }
 }
