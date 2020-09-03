@@ -158,7 +158,7 @@ namespace BFS_and_DFS
 
         #endregion
         #region Leetcode 78  Subsets
-        public IList<IList<int>> Subsets(int[] nums)
+        public void Subsets(int[] nums)
         {
             int n = nums.Length;
             for (int i = 0; i <= n; ++i)
@@ -166,7 +166,6 @@ namespace BFS_and_DFS
                 IList<int> cur = new List<int>();
                 Subset_dfs(0, ref cur, nums, i);
             }
-            return Subset_ans;
         }
         IList<IList<int>> Subset_ans = new List<IList<int>>();
         public void Subset_dfs(int index, ref IList<int> path, int[] nums, int k)
