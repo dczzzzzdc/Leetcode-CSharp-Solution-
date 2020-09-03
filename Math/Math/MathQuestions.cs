@@ -36,6 +36,43 @@ namespace Math_Question
             return num + pow * (target - original);
         }
         #endregion
+        #region Extension: Find the Greated Common Divisor
+        public static int GCD(int a,int b)
+        {
+            while(a != 0 && b != 0)
+            {
+                if(a > b)
+                {
+                    a %= b;
+                }
+                else
+                {
+                    b %= a;
+                }
+            }
+            return a | b;
+        }
+        public static int GCD(int[] nums)
+        {
+            return nums.Aggregate(GCD);
+        }
+        #endregion
+        #region Extension: Find the Least Common Multiple
+        public static int LCM(int a,int b)
+        {
+            return a * b / GCD(a, b);
+        }
+        public static int LCM(int[] nums)
+        {
+            int result = nums[0];
+            for (int i = 1; i < nums.Length; i++)
+            {
+                result = LCM(result, nums[i]);
+            }
+            return result;
+        }
+        #endregion
+
         #region Greatest Common Divisor
         public int GreatestCommonDivisor(int a,int b)
         {

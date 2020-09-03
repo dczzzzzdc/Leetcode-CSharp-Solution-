@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Dongchen Zou\\Desktop\\Leetcode-CSharp-Solution-\\Data Structure\\Stack & Queue\\Stack and Queue\\Stack and Queue\\Stack and Queue.csproj",
-      "projectName": "Stack and Queue",
-      "projectPath": "C:\\Users\\Dongchen Zou\\Desktop\\Leetcode-CSharp-Solution-\\Data Structure\\Stack & Queue\\Stack and Queue\\Stack and Queue\\Stack and Queue.csproj",
+      "projectUniqueName": "C:\\Users\\Dongchen Zou\\Desktop\\Leetcode-CSharp-Solution-\\String\\String\\String.csproj",
+      "projectName": "String",
+      "projectPath": "C:\\Users\\Dongchen Zou\\Desktop\\Leetcode-CSharp-Solution-\\String\\String\\String.csproj",
       "packagesPath": "C:\\Users\\Dongchen Zou\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Dongchen Zou\\Desktop\\Leetcode-CSharp-Solution-\\Data Structure\\Stack & Queue\\Stack and Queue\\Stack and Queue\\obj\\",
+      "outputPath": "C:\\Users\\Dongchen Zou\\Desktop\\Leetcode-CSharp-Solution-\\String\\String\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Dongchen Zou\\AppData\\Roaming\\NuGet\\NuGet.Config",
