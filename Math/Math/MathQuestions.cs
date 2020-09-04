@@ -72,7 +72,24 @@ namespace Math_Question
             return result;
         }
         #endregion
-
+        #region Extension: Find all the primes within n
+        public bool[] FindPrimes(int n)
+        {
+            bool[] primes = new bool[n + 1];
+            Array.Fill(primes, true);
+            for (int p = 2; p * p <= n ; p++)
+            {
+                if (primes[p])
+                {
+                    for (int i = p * p; i <= n; i+=p)
+                    {
+                        primes[i] = false;
+                    }
+                }
+            }
+            return primes;
+        }
+        #endregion
         #region Greatest Common Divisor
         public int GreatestCommonDivisor(int a,int b)
         {
