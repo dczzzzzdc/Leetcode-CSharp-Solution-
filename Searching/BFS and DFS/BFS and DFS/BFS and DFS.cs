@@ -2,7 +2,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace BFS_and_DFS
@@ -97,7 +100,6 @@ namespace BFS_and_DFS
     {
         static void Main(string[] args)
         {
-
         }
         public bool isLeave(TreeNode node)
         {
@@ -436,6 +438,71 @@ namespace BFS_and_DFS
             }
 
             return uf.max;
+        }
+        #endregion
+        #region Leetcode 1305  All Elements in Two Binary Search Trees
+        public IList<int> GetAllElements(TreeNode root1, TreeNode root2)
+        {
+            List<int> r1 = new List<int>(), r2 = new List<int>();
+            InOrderTraversal(root1, ref r1);
+            InOrderTraversal(root2, ref r2);
+
+            return MergeTwoSortedList(r1, r2);
+        }
+        public void InOrderTraversal(TreeNode root,ref List<int> nodes)
+        {
+            if(root == null)
+            {
+                return;
+            }
+            InOrderTraversal(root.left, ref nodes);
+
+            nodes.Add(root.val);
+
+            InOrderTraversal(root.right, ref nodes);
+        }
+        public List<int> MergeTwoSortedList(List<int> list1, List<int> list2)
+        {
+            int l1 = list1.Count;
+            int l2 = list2.Count;
+
+            if (l1 == 0 || list1 == null)
+            {
+                return new List<int>(list2);
+            }
+            else if (l2 == 0 || list2 == null)
+            {
+                return new List<int>(list1);
+            }
+
+            int i1 = 0, i2 = 0;
+            List<int> merged = new List<int>();
+
+            while(i1 < l1 || i2 < l2)
+            {
+                if(i1 == l1)
+                {
+                    merged.Add(list2[i2++]);
+                    continue;
+                }
+                else if (i2 == l2)
+                {
+                    merged.Add(list1[i1++]);
+                    continue;
+                }
+
+                int cur = Math.Min(list1[i1], list2[i2]);
+                merged.Add(cur);
+                if(cur == list1[i1])
+                {
+                    ++i1;
+                }
+                else
+                {
+                    ++i2;
+                }
+            }
+            return merged;
         }
         #endregion
     }

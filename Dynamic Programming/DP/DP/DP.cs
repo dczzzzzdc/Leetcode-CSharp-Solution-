@@ -10,7 +10,6 @@ namespace DP
     {
         static void Main(string[] args)
         {
-
         }
         #region Leetcode 121/122/123/309/714  Best time to buy and sell stocks
         #region Leetcode 121
@@ -181,6 +180,36 @@ namespace DP
             return Math.Max(dp[n - 1][0], dp[n - 1][1]);
         }
         #endregion
+        #endregion
+        #region Leetcode 64  Minimum Path Sum
+        public int MinPathSum(int[][] grid)
+        {
+            int y = grid.Length;
+            if (y == 0) { return 0; }
+            int x = grid[0].Length;
+            int[][] dp = new int[y][];
+            for (int i = 0; i < y; i++)
+            {
+                dp[i] = new int[x];
+            }
+            dp[0][0] = grid[0][0];
+            for (int i = 1; i < x; i++)
+            {
+                dp[0][i] = dp[0][i - 1] + grid[0][i];
+            }
+            for (int i = 1; i < y; i++)
+            {
+                dp[i][0] = dp[i - 1][0] + grid[i][0];
+            }
+            for (int i = 1; i < y; i++)
+            {
+                for (int j = 1; j < x; j++)
+                {
+                    dp[i][j] = Math.Min(dp[i - 1][j], dp[i][j - 1]) + grid[i][j];
+                }
+            }
+            return dp[y - 1][x - 1];
+        }
         #endregion
         #region Leetcode 698  Partition to K Equal Sum Subsets
         public bool CanPartitionKSubsets(int[] nums, int k)
@@ -837,40 +866,6 @@ namespace DP
             else if (UPmem[y][x] != -1) { return UPmem[y][x]; } // We have already calculated this 
             else if (grid[y][x] == 1) { return 0; }
             return UPmem[y][x] = UPFind(grid, x + 1, y) + UPFind(grid, x, y + 1);
-        }
-        #endregion
-        #region Leetcode 64 Maximum Path Sum
-        public int MinPathSum(int[][] grid)
-        {
-            int y = grid.Length;
-            if (y == 0) { return 0; }
-            int x = grid[0].Length;
-            int[][] dp = new int[y][];
-            // dp[i][j] stores the minimum path sum on (j,i)
-            for (int i = 0; i < y; i++)
-            {
-                dp[i] = new int[x];
-            }
-            #region We initiallize the border
-            dp[0][0] = grid[0][0];
-            for (int i = 1; i < x; i++)
-            {
-                dp[0][i] = dp[0][i - 1] + grid[0][i];
-            }
-            for (int i = 1; i < y; i++)
-            {
-                dp[i][0] = dp[i - 1][0] + grid[i][0];
-            }
-            #endregion
-            for (int i = 1; i < y; i++)
-            {
-                for (int j = 1; j < x; j++)
-                {
-                    // We can come from the top or the left
-                    dp[i][j] = Math.Min(dp[i - 1][j], dp[i][j - 1]) + grid[i][j];
-                }
-            }
-            return dp[y - 1][x - 1];
         }
         #endregion
         #region Leetcode 1340  Jump Game V

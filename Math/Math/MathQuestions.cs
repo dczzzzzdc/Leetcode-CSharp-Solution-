@@ -90,6 +90,7 @@ namespace Math_Question
             return primes;
         }
         #endregion
+
         #region Greatest Common Divisor
         public int GreatestCommonDivisor(int a,int b)
         {
