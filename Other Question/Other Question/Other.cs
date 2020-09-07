@@ -679,5 +679,37 @@ namespace Other_Question
             return count;
         }
         #endregion
+        #region Leetcode 290  Word Pattern
+        public bool WordPattern(string pattern, string str)
+        {
+            string[] words = str.Split(" ");
+            if (words.Length != pattern.Length)
+            {
+                return false;
+            }
+            Dictionary<char, string> match = new Dictionary<char, string>();
+            for (int i = 0; i < words.Length; ++i)
+            {
+                char index = pattern[i];
+
+                if (!match.ContainsKey(index))
+                {
+                    if (match.ContainsValue(words[i]))
+                    {
+                        return false;
+                    }
+                    match[index] = words[i];
+                }
+                else
+                {
+                    if (match[index] != words[i])
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        #endregion
     }
 }

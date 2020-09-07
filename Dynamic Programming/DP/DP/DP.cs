@@ -1265,5 +1265,24 @@ namespace DP
             return hp[0, 0];
         }
         #endregion
+        #region Leetcode 70  Climbing Stairs
+        public int ClimbStairs(int n)
+        {
+            if (n <= 2)
+            {
+                return n;
+            }
+            int dp1 = 2; // dp[i-1]
+            int dp2 = 1; // dp[i-2]
+
+            for (int i = 2; i < n; ++i)
+            {
+                int dp = dp1 + dp2;
+                dp2 = dp1;
+                dp1 = dp;
+            }
+            return dp1;
+        }
+        #endregion
     }
 }
