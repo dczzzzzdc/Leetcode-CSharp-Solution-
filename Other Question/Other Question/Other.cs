@@ -17,8 +17,9 @@ namespace Other_Question
     #region Leetcode 1032  Stream of Characters
     public class StreamChecker
     {
-        TrieNode root;
-        StringBuilder sb;
+        readonly TrieNode root;
+        readonly StringBuilder sb;
+        // Record the recent input
         public StreamChecker(string[] words)
         {
             root = new TrieNode();
@@ -213,7 +214,7 @@ namespace Other_Question
                     isWord = false;
                 }
             }
-            private TrieNode root;
+            readonly TrieNode root;
             /** Initialize your data structure here. */
             public WordDictionary()
             {
@@ -340,9 +341,9 @@ namespace Other_Question
             {
                 nums.Add(n[i] * 1.0);
             }
-            return helper24(nums);
+            return Helper24(nums);
         }
-        public bool helper24(List<double> nums)
+        public bool Helper24(List<double> nums)
         {
             int n = nums.Count;
             if (n == 1)
@@ -369,21 +370,21 @@ namespace Other_Question
                     double b = nums[j];
 
                     next.Add(a + b);
-                    if (helper24(next)) { return true; }
+                    if (Helper24(next)) { return true; }
                     next.RemoveAt(n);
 
                     next.Add(a - b);
-                    if (helper24(next)) { return true; }
+                    if (Helper24(next)) { return true; }
                     next.RemoveAt(n);
 
                     next.Add(a * b);
-                    if (helper24(next)) { return true; }
+                    if (Helper24(next)) { return true; }
                     next.RemoveAt(n);
 
                     if (b != 0)
                     {
                         next.Add(a / b);
-                        if (helper24(next)) { return true; }
+                        if (Helper24(next)) { return true; }
                         next.RemoveAt(n);
                     }
                 }
@@ -437,12 +438,12 @@ namespace Other_Question
         #region Leetcode 1286  Iterator for Combination
         public class CombinationIterator
         {
-            List<string> combinations;
+            private readonly List<string> combinations;
             int index = 0;
             public CombinationIterator(string characters, int n)
             {
                 combinations = new List<string>();
-                dfs(characters, 0, n, new StringBuilder(""));
+                Dfs(characters, 0, n, new StringBuilder(""));
             }
 
             public string Next()
@@ -454,7 +455,7 @@ namespace Other_Question
             {
                 return index != combinations.Count;
             }
-            private void dfs(string word, int index, int length, StringBuilder path)
+            private void Dfs(string word, int index, int length, StringBuilder path)
             {
                 if (path.Length == length)
                 {
@@ -465,7 +466,7 @@ namespace Other_Question
                 for (int i = index; i < word.Length; ++i)
                 {
                     path.Append(word[i]);
-                    dfs(word, i + 1, length, path);
+                    Dfs(word, i + 1, length, path);
                     path.Remove(path.Length - 1, 1);
                 }
             }
@@ -641,6 +642,41 @@ namespace Other_Question
                 ret = (Rand7() - 1) * 7 + Rand7() - 1;
             }
             return ret % 10 + 1;
+        }
+        #endregion
+        #region Leetcode 835  Image Overlap
+        public int LargestOverlap(int[][] A, int[][] B)
+        {
+            int max = 0;
+
+            for (int y = 0; y < A.Length; ++y)
+            {
+                for (int x = 0; x < A.Length; ++x)
+                // Enumerate every possible shift
+                {
+                    max = Math.Max(max, ShiftAndCount(x, y, A, B));
+                    max = Math.Max(max, ShiftAndCount(x, y, B, A));
+                }
+            }
+            return max;
+        }
+        public int ShiftAndCount(int x, int y, int[][] A, int[][] B)
+        // A is shifted based on B, so the index of B always starts from (0,0)
+        // parameters x and y means the start of the overlapping area and also the shifting distance
+        {
+            int count = 0;
+
+            for (int aRow = y,bRow = 0; aRow < A.Length; aRow++,bRow++)  
+            {
+                for (int aCol = x, bCol = 0; aCol < A.Length; aCol++, bCol++)
+                {
+                    if (A[aRow][aCol] == 1 && B[bRow][bCol] == 1)
+                    {
+                        ++count;
+                    }
+                }
+            }
+            return count;
         }
         #endregion
     }

@@ -181,6 +181,33 @@ namespace DP
         }
         #endregion
         #endregion
+        #region Leetcode 115  Distinct Subsequence
+        public int NumDistinct(string s, string t)
+        {
+            //dp[i][j]: The number of subsequence in s[0:j] that equals t[0-i];
+            int ls = s.Length;
+            int lt = t.Length;
+            long[][] dp = new long[lt + 1][];
+            for (int i = 0; i < lt + 1; i++)
+            {
+                dp[i] = new long[ls + 1];
+            }
+            Array.Fill(dp[0], 1); // If the target is empty, then there is only one solution
+            for (int i = 1; i <= lt; ++i)
+            {
+                for (int j = 1; j <= ls; ++j)
+                {
+                    if (s[j - 1] == t[i - 1])
+                    {
+                        dp[i][j] = dp[i][j - 1] // Skip s[j]
+                            +dp[i - 1][j - 1]; // Match s[j] with t[i]
+                    }
+                    else { dp[i][j] = dp[i][j - 1]; } // Skip s[j]
+                }
+            }
+            return (int)(dp[lt][ls]);
+        }
+        #endregion
         #region Leetcode 64  Minimum Path Sum
         public int MinPathSum(int[][] grid)
         {
@@ -1184,6 +1211,59 @@ namespace DP
             return ans;
         }
         #endregion
-        
+        #region Leetcode 120  Triangle
+        public int MinimumTotal(IList<IList<int>> t)
+        {
+            int line = t.Count;
+            if (line == 0) { return 0; }
+            else if (line == 1) { return t[0][0]; }
+
+            int[][] triangle = new int[line][];
+            for (int i = 0; i < line; i++)
+            {
+                triangle[i] = t[i].ToArray();
+            }
+
+            for (int i = line - 2; i >= 0; i--) // From the penultimate column to the top
+            {
+                for (int j = 0; j < triangle[i].Length; j++) // From left to right
+                {
+                    triangle[i][j] = Math.Min(triangle[i + 1][j + 1], triangle[i + 1][j]) + triangle[i][j];
+                    // triangle[i][j]: the minimum path sum from the bottom column to the top
+                }
+            }
+
+            return triangle[0][0];
+        }
+        #endregion
+        #region Leetcode 174  Dungeon Game
+        public int CalculateMinimumHP(int[][] dungeon)
+        {
+            int n = dungeon.Length;
+            int m = dungeon[0].Length;
+            int[,] hp = new int[n + 1, m + 1];
+            // hp[i,j] is the minimum health needed to going from the destination to dungeon[i][j]
+            for (int i = 0; i <= n; ++i)
+            {
+                for (int j = 0; j <= m; ++j)
+                {
+                    hp[i, j] = int.MaxValue;
+                }
+            }
+            hp[n,m - 1] = 1;
+            hp[n - 1, m] = 1;
+            // The character needs one hp to go through the destination
+
+            for (int i = n-1; i >= 0; i--)
+            {
+                for (int j = m-1; j >= 0; j--)
+                {
+                    int need = Math.Min(hp[i+1,j],hp[i,j+1]) + dungeon[i][j];
+                    hp[i, j] = need <= 0 ? 1 : need;
+                }
+            }
+            return hp[0, 0];
+        }
+        #endregion
     }
 }
