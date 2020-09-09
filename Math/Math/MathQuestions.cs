@@ -1148,5 +1148,46 @@ namespace Math_Question
             return Math.Min(even, odd);
         }
         #endregion
+        #region Leetcode 165  Compare Version Numbers
+        public int CompareVersion(string v1, string v2)
+        {
+            if (v1 == v2)
+            {
+                return 0;
+            }
+
+            string[] one = v1.Split(".");
+            string[] two = v2.Split(".");
+
+            int l1 = one.Length, l2 = two.Length;
+            for (int i = 0; i < Math.Max(l1, l2); ++i)
+            {
+                int cur1 = i < l1 ? ConvertToVersionNumber(one[i]) : 0;
+                int cur2 = i < l2 ? ConvertToVersionNumber(two[i]) : 0;
+
+                int compare = cur1.CompareTo(cur2);
+                if (compare != 0)
+                {
+                    return compare;
+                }
+            }
+            return 0;
+        }
+        public int ConvertToVersionNumber(string s)
+        {
+            int index = 0;
+            while (index < s.Length && s[index] == '0')
+            {
+                ++index;
+            }
+            int num = 0;
+            while (index < s.Length && Char.IsNumber(s[index]))
+            {
+                num *= 10;
+                num += (int)(s[index++]);
+            }
+            return num;
+        }
+        #endregion
     }
 }

@@ -29,9 +29,6 @@ namespace Array
     {
         static void Main(string[] args)
         {
-            int[] nums = { 1, 2, 3, 4, 5 };
-            PrefixSum ps = new PrefixSum(nums);
-            Console.WriteLine(ps.Query(1,3));
         }
         #region Contain Duplicate Series  Leetcode 217/219/220
         public bool ContainsDuplicate(int[] nums)
