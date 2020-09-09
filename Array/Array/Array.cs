@@ -4,11 +4,34 @@ using System.Linq;
 
 namespace Array
 {
+    class PrefixSum
+    {
+        private readonly int[] nums;
+        private readonly int[] prefix;
+
+        public PrefixSum(int[] nums)
+        {
+            this.nums = nums;
+
+            prefix = new int[nums.Length + 1];
+            for (int i = 1; i <= nums.Length; i++)
+            {
+                prefix[i] = prefix[i - 1] + this.nums[i-1];
+            }
+        } 
+        public int Query(int i, int j)
+        {
+            return prefix[j+1] - prefix[i];
+        }
+    }
+
     class Array
     {
         static void Main(string[] args)
         {
-            
+            int[] nums = { 1, 2, 3, 4, 5 };
+            PrefixSum ps = new PrefixSum(nums);
+            Console.WriteLine(ps.Query(1,3));
         }
         #region Contain Duplicate Series  Leetcode 217/219/220
         public bool ContainsDuplicate(int[] nums)

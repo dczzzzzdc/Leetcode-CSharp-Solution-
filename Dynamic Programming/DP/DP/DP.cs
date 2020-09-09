@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO.Pipes;
 using System.Linq;
+using System.Text;
 using System.Threading;
 
 namespace DP
@@ -10,6 +11,8 @@ namespace DP
     {
         static void Main(string[] args)
         {
+
+            
         }
         #region Leetcode 121/122/123/309/714  Best time to buy and sell stocks
         #region Leetcode 121
@@ -1017,7 +1020,7 @@ namespace DP
             return MEDdp[i1][i2] = result;
         }
         #endregion
-        #region Leetcode 79  Word Seach
+        #region Leetcode 79  Word Search
         public bool Exist(char[][] board, string word)
         {
             int n = board.Length;
@@ -1282,6 +1285,62 @@ namespace DP
                 dp1 = dp;
             }
             return dp1;
+        }
+        #endregion
+        #region Word Break Series
+        public bool WordBreakI(string s, IList<string> wordDict)
+        {
+            int n = s.Length;
+            bool[] dp = new bool[n + 1];
+            dp[0] = true;
+            // dp[i]: whether the word dict can build s[0:i+1]
+            for (int i = 1; i <= n; i++)
+            {
+                foreach (string word in wordDict.ToArray())
+                {
+                    int l = word.Length;
+                    int start = i - l;
+
+                    if (start < 0 || !dp[start]) { continue; }
+                    else if (word == s.Substring(start, l))
+                    {
+                        dp[i] = true;
+                        break;
+                    }
+                }
+            }
+
+            return dp[n];
+        }
+        IList<string> ans = new List<string>();
+        public IList<string> WordBreak(string s, IList<string> wordDict)
+        {
+            WordBreakDfs(s, wordDict, "");
+            return ans;
+        }
+        public void WordBreakDfs(string s, IList<string> words, string path)
+        {
+            if (WordBreakI(s, words))
+            // If the current string can be separated
+            {
+                if (string.IsNullOrEmpty(s))
+                {
+                    ans.Add(path.Substring(0, path.Length - 1));
+                    // Delete the ending path
+                    return;
+                }
+                else
+                {
+                    for (int i = 1; i <= s.Length; i++)
+                    // Try every middle point to separate the string
+                    {
+                        if (words.Contains(s.Substring(0, i)))
+                        {
+                            WordBreakDfs(s.Substring(i), words, path + s.Substring(0,i) + " ");
+                        }
+                    }
+                }
+            }
         }
         #endregion
     }

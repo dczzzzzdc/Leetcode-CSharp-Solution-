@@ -27,6 +27,17 @@ namespace Math_Question
             return sum;
         }
         #endregion
+        #region Extension: Sum all binary digits
+        public int SumBinaryDigits(int[] digits)
+        {
+            int sum = 0;
+            foreach (int digit in digits)
+            {
+                sum = (sum << 1) | digit;
+            }
+            return sum;
+        }
+        #endregion
         #region Extension: Convert a digit to a target digit in a number
         public int ReplaceDigit(int num,int index, int target)
         {

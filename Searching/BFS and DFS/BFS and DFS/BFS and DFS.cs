@@ -440,6 +440,35 @@ namespace BFS_and_DFS
             return uf.max;
         }
         #endregion
+        #region Leetcode 1022  Sum of Root To Leaf Binary Numbers
+        public int SumRootToLeaf(TreeNode root)
+        {
+            if (root == null)
+            {
+                return 0;
+            }
+            SRTLdfs(root, 0);
+            return ans;
+        }
+        int ans = 0;
+        public void SRTLdfs(TreeNode root, int sum)
+        {
+            sum = (sum << 1) | root.val;
+            if (root.left == null && root.right == null)
+            {
+                ans += sum;
+                return;
+            }
+            if (root.left != null)
+            {
+                SRTLdfs(root.left, sum);
+            }
+            if (root.right != null)
+            {
+                SRTLdfs(root.right, sum);
+            }
+        }
+        #endregion
         #region Leetcode 1305  All Elements in Two Binary Search Trees
         public IList<int> GetAllElements(TreeNode root1, TreeNode root2)
         {
