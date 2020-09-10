@@ -223,5 +223,29 @@ namespace Array
         }
         #endregion
 
+        #region Leetcode 674  Longest Continuous Increasing Subsequence
+        public int FindLengthOfLCIS(int[] nums)
+        {
+            if (nums.Length == 0 || nums == null)
+            {
+                return 0;
+            }
+            int max = 1;
+            int len = 1;
+            for (int i = 1; i < nums.Length; ++i)
+            {
+                if (nums[i] > nums[i - 1])
+                {
+                    len++;
+                }
+                else
+                {
+                    max = Math.Max(len, max);
+                    len = 1;
+                }
+            }
+            return Math.Max(max, len);
+        }
+        #endregion
     }
 }
