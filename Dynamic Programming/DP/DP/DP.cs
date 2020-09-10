@@ -1343,5 +1343,27 @@ namespace DP
             }
         }
         #endregion
+        #region Leetcode 1218  Longest Arithmetic Subsequence of Given Difference
+        public int LongestSubsequence(int[] arr, int k)
+        {
+            Dictionary<int, int> length = new Dictionary<int, int>();
+            // length[i]: the longest arithmetic subsequence that ends with i
+            int max = 1;
+            foreach (int n in arr)
+            {
+                if (length.ContainsKey(n - k/*The previous element in the subsequence that ends with n*/))
+                {
+                    length[n] = length[n - k] + 1;
+                }
+                else
+                // It is not able to form a arithmetic subsequence
+                {
+                    length[n] = 1;
+                }
+                max = Math.Max(max, length[n]);
+            }
+            return max;
+        }
+        #endregion
     }
 }
