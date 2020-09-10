@@ -119,6 +119,15 @@ namespace BIT
             Console.WriteLine(Convert.ToString(n, 2).PadLeft(8, '0'));
             #endregion
         }
+        #region Extension: Gray Code
+        public int GrayCode(int n)
+        {
+            // Gray Code is binary numeric system where two successive values differ in only one bit
+            // When the ith bit of n is 1, the ith bit of G(n) will be 1 and the (i+1)th bit will be 0, and vice versa
+
+            return n ^ (n >> 1);
+        }
+        #endregion
         #region Leetcode 190  Reverse Bits
         public uint reverseBits(uint n)
         {
@@ -407,6 +416,17 @@ namespace BIT
             return max;
         }
         #endregion
-
+        #region Leetcode 1238  Circular Permutation in Binary Representation
+        public IList<int> CircularPermutation(int n, int start)
+        {
+            
+            IList<int> ans = new List<int>();
+            for (int i = 0; i < 1 << n; ++i)
+            {
+                ans.Add(start ^ i ^ i >> 1);
+            }
+            return ans;
+        }
+        #endregion
     }
 }
