@@ -11,8 +11,6 @@ namespace DP
     {
         static void Main(string[] args)
         {
-
-            
         }
         #region Leetcode 121/122/123/309/714  Best time to buy and sell stocks
         #region Leetcode 121
@@ -125,7 +123,7 @@ namespace DP
                 int maxdiff = -prices[0];
                 for (int j = 1; j < n; j++)
                 {
-                    dp[i, j] = Math.Max(dp[i, j - 1], maxdiff +prices[j]);
+                    dp[i, j] = Math.Max(dp[i, j - 1], maxdiff + prices[j]);
                     maxdiff = Math.Max(maxdiff, dp[i - 1, j] - prices[j]);
                 }
             }
@@ -203,7 +201,7 @@ namespace DP
                     if (s[j - 1] == t[i - 1])
                     {
                         dp[i][j] = dp[i][j - 1] // Skip s[j]
-                            +dp[i - 1][j - 1]; // Match s[j] with t[i]
+                            + dp[i - 1][j - 1]; // Match s[j] with t[i]
                     }
                     else { dp[i][j] = dp[i][j - 1]; } // Skip s[j]
                 }
@@ -1253,15 +1251,15 @@ namespace DP
                     hp[i, j] = int.MaxValue;
                 }
             }
-            hp[n,m - 1] = 1;
+            hp[n, m - 1] = 1;
             hp[n - 1, m] = 1;
             // The character needs one hp to go through the destination
 
-            for (int i = n-1; i >= 0; i--)
+            for (int i = n - 1; i >= 0; i--)
             {
-                for (int j = m-1; j >= 0; j--)
+                for (int j = m - 1; j >= 0; j--)
                 {
-                    int need = Math.Min(hp[i+1,j],hp[i,j+1]) + dungeon[i][j];
+                    int need = Math.Min(hp[i + 1, j], hp[i, j + 1]) + dungeon[i][j];
                     hp[i, j] = need <= 0 ? 1 : need;
                 }
             }
@@ -1336,7 +1334,7 @@ namespace DP
                     {
                         if (words.Contains(s.Substring(0, i)))
                         {
-                            WordBreakDfs(s.Substring(i), words, path + s.Substring(0,i) + " ");
+                            WordBreakDfs(s.Substring(i), words, path + s.Substring(0, i) + " ");
                         }
                     }
                 }
@@ -1363,6 +1361,34 @@ namespace DP
                 max = Math.Max(max, length[n]);
             }
             return max;
+        }
+        #endregion
+        #region Leetcode 221  Maximal Square
+        public int MaximalSquare(char[][] matrix)
+        {
+            int n = matrix.Length;
+            if (n == 0) { return 0; }
+            int m = matrix[0].Length;
+
+            int[,] dp = new int[n + 1, m + 1];
+            // dp[i+1,j+1]: The longest side length when the right corner is matrix[i][j]   
+            int max = 0;
+
+            for (int i = 0; i < n; ++i)
+            {
+                for (int j = 0; j < m; ++j)
+                {
+                    if (matrix[i][j] == '1')
+                    // If the current spot can be used as a right corner
+                    {
+                        dp[i + 1, j + 1] = Math.Min(dp[i, j + 1], Math.Min(dp[i + 1, j], dp[i, j])) + 1;
+                        // Coming from three different directions
+                        max = Math.Max(max, dp[i + 1, j + 1]);
+                    }
+                }
+            }
+
+            return max * max;
         }
         #endregion
     }

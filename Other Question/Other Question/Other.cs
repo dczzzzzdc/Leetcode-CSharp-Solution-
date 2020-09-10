@@ -711,5 +711,28 @@ namespace Other_Question
             return true;
         }
         #endregion
+        #region Leetcode 299  Bulls and Cows
+        public string GetHint(string secret, string guess)
+        {
+            int[] count = new int[10];
+            // Add if a char appears in the secret string and vice versa 
+            int bull = 0, cow = 0;
+            for (int i = 0; i < secret.Length; ++i)
+            {
+                int s = secret[i] - '0';
+                int g = guess[i] - '0';
+                if (s == g)
+                {
+                    ++bull;
+                }
+                else
+                {
+                    if (count[s]++ < 0) { ++cow; }
+                    if (count[g]-- > 0) { ++cow; }
+                }
+            }
+            return bull + "A" + cow + "B";
+        }
+        #endregion
     }
 }

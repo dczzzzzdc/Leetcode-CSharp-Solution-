@@ -1189,5 +1189,39 @@ namespace Math_Question
             return num;
         }
         #endregion
+        #region Leetcode 1390  Four Divisors
+        public int SumFourDivisors(int[] nums)
+        {
+            int sum = 0;
+            foreach (int n in nums)
+            {
+                CountFactors(n, ref sum);
+            }
+            return sum;
+        }
+        public void CountFactors(int n, ref int sum)
+        {
+            int count = 0;
+            int cur = 0;
+            for (int i = 1; i * i <= n; ++i)
+            {
+                if (n % i != 0)
+                {
+                    continue;
+                }
+                count++;
+                cur += i;
+                if (i != n / i)
+                {
+                    count++;
+                    cur += n / i;
+                }
+            }
+            if (count == 4)
+            {
+                sum += cur;
+            }
+        }
+        #endregion
     }
 }
