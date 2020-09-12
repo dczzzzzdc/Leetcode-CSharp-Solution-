@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace BFS_and_DFS
@@ -101,9 +102,31 @@ namespace BFS_and_DFS
         static void Main(string[] args)
         {
         }
-        public bool isLeave(TreeNode node)
+        public bool IsLeave(TreeNode node)
         {
             return node.left != null && node.right != null;
+        }
+        public long SumTreeNodes(TreeNode root)
+        {
+            long sum = 0;
+            Queue<TreeNode> q = new Queue<TreeNode>();
+            q.Enqueue(root);
+
+            while(q.Count != 0)
+            {
+                TreeNode cur = q.Dequeue();
+                sum += cur.val;
+                if(cur.left != null)
+                {
+                    q.Enqueue(cur.left);
+                }
+                if(cur.right != null)
+                {
+                    q.Enqueue(cur.right);
+                }
+            }
+
+            return sum;
         }
         #region Leetcode 662  Maximum Width of Binary Tree
 
@@ -379,7 +402,7 @@ namespace BFS_and_DFS
                 }
                 if (left != null)
                 {
-                    if (isLeave(left))
+                    if (IsLeave(left))
                     {
                         sum += left.val;
                         continue;
@@ -533,6 +556,32 @@ namespace BFS_and_DFS
             }
             return merged;
         }
+        #endregion
+        #region Leetcode 1339  Maximum Product of Splitted Binary Tree
+        public int MaxProduct(TreeNode root)
+        {
+            if (root == null)
+            {
+                return 0;
+            }
+            MPdfs(root, SumTreeNodes(root));
+            return (int)(MPans % kmod);
+        }
+        int kmod = (int)Math.Pow(10, 9) + 7;
+        long MPans = int.MinValue;
+        public long MPdfs(TreeNode node, long sum)
+        {
+            if (node == null)
+            {
+                return 0;
+            }
+            long current = MPdfs(node.left, sum) + MPdfs(node.right, sum) + node.val;
+
+            MPans = Math.Max(MPans, current * (sum - current));
+
+            return current;
+        }
+        
         #endregion
     }
 }

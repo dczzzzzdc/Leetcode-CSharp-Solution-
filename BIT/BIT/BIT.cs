@@ -46,7 +46,7 @@ namespace BIT
             return count;
         }
     }
-    class Program
+    class BIT
     {
         static void Main(string[] args)
         {

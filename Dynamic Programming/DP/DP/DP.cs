@@ -590,6 +590,8 @@ namespace DP
             int n2 = nums2.Length;
             // The dp array has a padding
             int[][] dp = new int[n1 + 1][];
+            // dP[i][j]: the maximum dot product of two subsequences 
+            // starting in the position i of nums1 and position j of nums2.
             for (int i = 0; i <= n1; i++)
             {
                 dp[i] = new int[n2 + 1];
@@ -599,7 +601,9 @@ namespace DP
             {
                 for (int j = 1; j <= n2; j++)
                 {
-                    dp[i][j] = Math.Max(Math.Max(0, dp[i - 1][j - 1]) + nums1[i - 1] * nums2[j - 1], Math.Max(dp[i - 1][j], dp[i][j - 1]));
+                    dp[i][j] = Math.Max(Math.Max(0, dp[i - 1][j - 1]) + 
+                        nums1[i - 1] * nums2[j - 1], // Using the current combo 
+                        Math.Max(dp[i - 1][j], dp[i][j - 1]));
                 }
             }
             return dp[n1][n2];
@@ -731,8 +735,8 @@ namespace DP
         {
             if (index >= sat.Length) { return 0; }
             else if (maxsat[index][time] != -1) { return maxsat[index][time]; }
-            return maxsat[index][time] = Math.Max(satFind(index + 1, time, sat),
-                satFind(index + 1, time + 1, sat) + time * sat[index]);
+            return maxsat[index][time] = Math.Max(satFind(index + 1, time, sat)/*Skipping the dish*/,
+                satFind(index + 1, time + 1, sat) + time * sat[index]/*Making the dish*/);
         }
         #endregion
         #region Leetcode 1105  Filling Bookcase shelves
@@ -1060,6 +1064,7 @@ namespace DP
             }
         }
         #endregion
+        #region Cherry Pickup Series
         #region Leetcode 741  Cherry Pickup
         public int CherryPickup(int[][] grid)
         {
@@ -1151,18 +1156,20 @@ namespace DP
             {
                 for (int j = -1; j <= 1; j++)
                 {
+                    // Use for loop to simulate going to all different directions
                     future = Math.Max(future, CPfindII(x1 + i, x2 + j, y + 1, grid));
                 }
             }
             int cur = grid[y][x1];
             if (x1 != x2)
+            // If two robots are not standing on the same spot
             {
                 cur += grid[y][x2];
             }
             return CPdpII[x1][x2][y] = future + cur;
-
         }
 
+        #endregion
         #endregion
         #region Leetcode 368  Largest Divisible Subset
         public IList<int> LargestDivisibleSubset(int[] nums)
@@ -1389,6 +1396,74 @@ namespace DP
             }
 
             return max * max;
+        }
+        #endregion
+        #region Leetcode 1449  Form Largest Integer With Digits That Add up to Target
+        public string LargestNumber(int[] cost, int target)
+        {
+            string[] dp = new string[target + 1];
+            // dp[i]: the answer when the target is i
+            Array.Fill(dp, "0");
+            dp[0] = "";
+            for (int i = 1; i <= target; i++)
+            {
+                for (int j = 1; j <= 9; j++)
+                {
+                    int left = i - cost[j - 1];
+                    if(left < 0 || dp[left] == "0"|| dp[left].Length + 1 < dp[i].Length)
+                    {
+                        continue;
+                    }
+                    StringBuilder cur = new StringBuilder();
+                    cur.Append(j).Append(dp[left]);
+                    dp[i] = cur.ToString();
+                }
+            }
+            return dp[target];
+        }
+        #endregion
+        #region Leetcode 1416  Restore The Array
+        public int NumberOfArrays(string s, int k)
+        {
+            RAdp = new int[s.Length];
+            Array.Fill(RAdp, -1);
+            return Find(s, k, 0);
+        }
+        int[] RAdp;
+        int kmod = (int)Math.Pow(10, 9) + 7;
+        public int Find(string s, int k, int index)
+        {
+            if (index == s.Length)
+            {
+                // Successfully restore the entire array
+                return 1;
+            }
+            else if (s[index] == '0')
+            {
+                // There are no leading zeros in the array
+                return 0;
+            }
+            else if (RAdp[index] != -1)
+            {
+                return RAdp[index];
+            }
+
+            long num = 0;
+            int ans = 0;
+
+            for (int j = index; j < s.Length; ++j)
+            {
+                num = num * 10 + s[j] - '0';
+                // num is the value of s[index:j];
+                // accumulates the digits
+                if (num > k)
+                {
+                    break;
+                }
+                ans += Find(s, k, j + 1);
+                ans %= kmod;
+            }
+            return RAdp[index] = ans;
         }
         #endregion
     }
