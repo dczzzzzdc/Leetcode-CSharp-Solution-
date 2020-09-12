@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO.Pipes;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading;
 
@@ -1464,6 +1465,56 @@ namespace DP
                 ans %= kmod;
             }
             return RAdp[index] = ans;
+        }
+        #endregion
+        #region Leetcode 1191  K-Concatenation Maximum Sum
+        public int KConcatenationMaxSum(int[] arr, int k)
+        {
+            int kmod = (int)Math.Pow(10, 9) + 7;
+            if (k < 3)
+            {
+                return TMaxSubarraySum(arr, k) % kmod;
+            }
+            var m = MaxSubarrayTwoTimes(arr);
+
+            long sum = arr.Sum();
+
+            return (int)Math.Max(Math.Max(m.Item1, m.Item2), (sum * (k - 2) + m.Item2) % kmod);
+        }
+        public int TMaxSubarraySum(int[] arr, int t)
+        {
+            long max = 0;
+            long ans = 0;
+
+            for (int i = 0; i < t; i++)
+            {
+                foreach (int n in arr)
+                {
+                    max = Math.Max(max + n, 0);
+                    ans = Math.Max(ans, max);
+                }
+            }
+            return (int)ans;
+        }
+        public (long, long) MaxSubarrayTwoTimes(int[] arr)
+        {
+            long max1 = 0;
+            long max2 = 0;
+
+            long running = 0;
+            long max = 0;
+
+            for (int i = 0; i < 2; i++)
+            {
+                foreach (int n in arr)
+                {
+                    running = Math.Max(running + n, 0);
+                    max = Math.Max(max, running);
+                }
+                max1 = max;
+            }
+            max2 = max;
+            return (max1, max2);
         }
         #endregion
     }
