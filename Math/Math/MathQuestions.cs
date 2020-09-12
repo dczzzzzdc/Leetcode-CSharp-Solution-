@@ -1223,5 +1223,34 @@ namespace Math_Question
             }
         }
         #endregion
+        #region Leetcode 1362  Closest Divisors
+        public int[] ClosestDivisors(int num)
+        {
+            int max1 = 0;
+            for (int i = 1; i * i <= num + 1; ++i)
+            {
+                if ((num + 1) % i == 0)
+                {
+                    max1 = i;
+                }
+            }
+            int max2 = 0;
+            for (int i = 1; i * i <= num + 2; ++i)
+            {
+                if ((num + 2) % i == 0)
+                {
+                    max2 = i;
+                }
+            }
+            if ((num + 1) / max1 - max1 < (num + 2) / max2 - max2)
+            {
+                return new int[2] { max1, (num + 1) / max1 };
+            }
+            else
+            {
+                return new int[2] { max2, (num + 2) / max2 };
+            }
+        }
+        #endregion
     }
 }
