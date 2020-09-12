@@ -581,7 +581,33 @@ namespace BFS_and_DFS
 
             return current;
         }
-        
+
+        #endregion
+        #region Leetcode 216  Combination Sum III
+        public IList<IList<int>> CombinationSum3(int k, int n)
+        {
+            dfs(new List<int>(), k, n, 1);
+            return CP3ans;
+        }
+        IList<IList<int>> CP3ans = new List<IList<int>>();
+        public void dfs(List<int> path, int k, int n, int start)
+        {
+            if (path.Count > k)
+            {
+                return;
+            }
+            if (path.Count == k && n == 0)
+            {
+                CP3ans.Add(new List<int>(path));
+                return;
+            }
+            for (int i = start; i <= 9 && i <= n; ++i)
+            {
+                path.Add(i);
+                dfs(path, k, n - i, i + 1);
+                path.RemoveAt(path.Count - 1);
+            }
+        }
         #endregion
     }
 }
