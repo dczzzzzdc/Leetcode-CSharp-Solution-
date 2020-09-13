@@ -247,5 +247,37 @@ namespace Array
             return Math.Max(max, len);
         }
         #endregion
+        #region Leetcode 57  Insert Interval
+        public int[][] Insert(int[][] intervals, int[] newInterval)
+        {
+            int n = intervals.Length;
+            List<int[]> result = new List<int[]>();
+            if (n == 0)
+            {
+                result.Add(newInterval);
+                return result.ToArray();
+            }
+            int index = 0;
+            int newStart = newInterval[0];
+            int newEnd = newInterval[1];
+            int mergedEnd = newEnd; int mergedStart = newStart;
+            while (index < n && intervals[index][1] < newStart)
+            {
+                result.Add(intervals[index++]);
+            }
+            while (index < n && intervals[index][0] <= newEnd)
+            {
+                mergedEnd = Math.Max(mergedEnd, intervals[index][1]);
+                mergedStart = Math.Min(mergedStart, intervals[index][0]);
+                ++index;
+            }
+            result.Add(new int[2] { mergedStart, mergedEnd });
+            while (index < n)
+            {
+                result.Add(intervals[index++]);
+            }
+            return result.ToArray();
+        }
+        #endregion
     }
 }
