@@ -1252,5 +1252,39 @@ namespace Math_Question
             }
         }
         #endregion
+        #region Leetcode 1154  Day of the Year
+        public int DayOfYear(string s)
+        {
+            int year = Convert.ToInt32(s.Substring(0, 4));
+            int month = Convert.ToInt32(s.Substring(5, 2));
+            int day = Convert.ToInt32(s.Substring(8));
+            return Days(month, year) + day;
+        }
+        public int Days(int month, int year)
+        {
+            int day = 0;
+            for (int i = month - 1; i > 0; --i)
+            // month - 1 because if it is February, the timed only goes through January
+            {
+                if (i == 2)
+                {
+                    day += 28;
+                    if (year % 400 == 0 || (year % 100 != 0 && year % 4 == 0))
+                    {
+                        ++day;
+                    }
+                }
+                else if (i == 4 || i == 6 || i == 9 || i == 11)
+                {
+                    day += 30;
+                }
+                else
+                {
+                    day += 31;
+                }
+            }
+            return day;
+        }
+        #endregion
     }
 }
