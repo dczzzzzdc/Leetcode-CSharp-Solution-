@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
+using System.Linq;
 
 namespace BST
 {
@@ -24,6 +26,9 @@ namespace BST
             
             // 0. left children smaller than the root and right children bigger than the root
             // 1. The height of the tree: Log(Number of nodes)
+            // 2. When trying to find the path to a label, start tracking from the label and go from the bottom
+            // 3. level_max = Math.Pow(2,level) - 1; level_min = Math.Pow(2,level- 1)
+            // 4. Label is on the Math.Log(label,2) + 1 level
         }
         #region Leetcode 450  Delete Node in a BST
         public TreeNode DeleteNode(TreeNode root, int key)
@@ -55,6 +60,26 @@ namespace BST
                 root = root.left;
             }
             return min;
+        }
+        #endregion
+
+        #region Leetcode 1104  Path In Zigzag Labelled Binary Tree
+        public IList<int> PathInZigZagTree(int label)
+        {
+            List<int> ans = new List<int>();
+            int level = (int)Math.Log(label, 2) + 1;
+            while (label > 0)
+            // Go from the label to the root
+            {
+                ans.Add(label);
+                int level_max = (int)Math.Pow(2, level) - 1;
+                int level_min = (int)Math.Pow(2, level - 1);
+                label = level_max + level_min - label;
+                label /= 2;
+                level--;
+            }
+            ans.Reverse();
+            return new List<int>(ans);
         }
         #endregion
     }
