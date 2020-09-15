@@ -116,5 +116,25 @@ namespace String
             return ans;
         }
         #endregion
+        #region Leetcode 58 Length of Last Word
+        public int LengthOfLastWord(string s)
+        {
+            if (string.IsNullOrWhiteSpace(s))
+            {
+                return 0;
+            }
+            int count = 0;
+            int i = s.Length - 1;
+            while (s[i] == ' ')
+            {
+                --i;
+            }
+            for (; i >= 0 && s[i] != ' '; --i)
+            {
+                ++count;
+            }
+            return count;
+        }
+        #endregion
     }
 }

@@ -18,6 +18,21 @@ namespace BST
             this.right = right;
         }
     }
+    public class Node
+    {
+        public int val;
+        public Node next;
+        public Node left;
+        public Node right;
+
+        public Node(int val = 0, Node next = null, Node left = null, Node right = null)
+        {
+            this.val = val;
+            this.next = next;
+            this.left = left;
+            this.right = right;
+        }
+    }
     class Program
     {
         static void Main(string[] args)
@@ -80,6 +95,52 @@ namespace BST
             }
             ans.Reverse();
             return new List<int>(ans);
+        }
+        #endregion
+        #region Leetcode 226  Invert Binary Tree
+        // Simply swap the left children with the right one
+        public TreeNode InvertTree(TreeNode root)
+        {
+            if (root == null)
+            {
+                return null;
+            }
+
+            TreeNode temp = root.left;
+            root.left = root.right;
+            root.right = temp;
+
+            InvertTree(root.left);
+            InvertTree(root.right);
+
+            return root;
+        }
+        #endregion
+        #region Leetcode 116  Populating Next Right Pointers in Each Node
+        public Node Connect(Node root)
+        {
+            if (root == null)
+            {
+                return null;
+            }
+            ConnectTwoNodes(root.left, root.right);
+            return root;
+        }
+        public void ConnectTwoNodes(Node root1, Node root2)
+        {
+            if (root2 == null || root1 == null)
+            {
+                return;
+            }
+
+            root1.next = root2;
+
+            // Connect two nodes under the same parent
+            ConnectTwoNodes(root1.left, root1.right);
+            ConnectTwoNodes(root2.left, root2.right);
+
+            // Connect the bordering nodes under different parents
+            ConnectTwoNodes(root1.right, root2.left);
         }
         #endregion
     }

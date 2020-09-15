@@ -1286,5 +1286,20 @@ namespace Math_Question
             return day;
         }
         #endregion
+        #region Smallest Range Series
+        // Smallest Range I
+        public int SmallestRangeI(int[] A, int K)
+        {
+            int min = A[0];
+            int max = A[0];
+            foreach (int n in A)
+            {
+                min = Math.Min(min, n);
+                max = Math.Max(max, n);
+            }
+            return Math.Max(0, max - min - 2 * K);
+        }
+        #endregion
+
     }
 }
