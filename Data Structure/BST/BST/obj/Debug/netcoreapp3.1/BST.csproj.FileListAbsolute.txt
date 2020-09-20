@@ -1,0 +1,13 @@
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Data Structure\BST\BST\bin\Debug\netcoreapp3.1\BST.exe
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Data Structure\BST\BST\bin\Debug\netcoreapp3.1\BST.deps.json
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Data Structure\BST\BST\bin\Debug\netcoreapp3.1\BST.runtimeconfig.json
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Data Structure\BST\BST\bin\Debug\netcoreapp3.1\BST.runtimeconfig.dev.json
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Data Structure\BST\BST\bin\Debug\netcoreapp3.1\BST.dll
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Data Structure\BST\BST\bin\Debug\netcoreapp3.1\BST.pdb
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Data Structure\BST\BST\obj\Debug\netcoreapp3.1\BST.csprojAssemblyReference.cache
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Data Structure\BST\BST\obj\Debug\netcoreapp3.1\BST.AssemblyInfoInputs.cache
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Data Structure\BST\BST\obj\Debug\netcoreapp3.1\BST.AssemblyInfo.cs
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Data Structure\BST\BST\obj\Debug\netcoreapp3.1\BST.csproj.CoreCompileInputs.cache
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Data Structure\BST\BST\obj\Debug\netcoreapp3.1\BST.dll
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Data Structure\BST\BST\obj\Debug\netcoreapp3.1\BST.pdb
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Data Structure\BST\BST\obj\Debug\netcoreapp3.1\BST.genruntimeconfig.cache

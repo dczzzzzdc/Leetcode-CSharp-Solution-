@@ -6,6 +6,7 @@ using System.IO.Pipes;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Metadata.Ecma335;
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace Math_Question
@@ -1300,6 +1301,39 @@ namespace Math_Question
             return Math.Max(0, max - min - 2 * K);
         }
         #endregion
+        #region Leetcode 1041  Robot Bounded in Circle
+        public bool IsRobotBounded(string instructions)
+        {
+            int x = 0, y = 0;
+            // Indicates the position of the robot
+            int direction = 0;
+            foreach(char instruction in instructions)
+            {
+                switch (instruction)
+                {
+                    case 'R':
+                        direction = (direction + 3) % 4;
+                        break;
+                    case 'L':
+                        direction = (direction + 1) % 4;
+                        break;
 
+                    case 'G':
+                        switch (direction)
+                        {
+                            case 0: y++; break;
+                            case 1: x++; break;
+                            case 2: y--; break;
+                            case 3: x--; break;
+                        }
+                        break;
+                }
+            }
+            // A cycle exist if:
+            // It is in its initial position
+            // It is facing at a different direction 
+            return direction != 0 || (x == 0 && y == 0);
+        }
+        #endregion
     }
 }

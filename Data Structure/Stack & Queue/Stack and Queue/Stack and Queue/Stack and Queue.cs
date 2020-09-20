@@ -199,5 +199,31 @@ namespace Stack_and_Queue
 
         }
         #endregion
+        #region Leetcode 1291  Sequential Digits
+        public IList<int> SequentialDigits(int low, int high)
+        {
+            List<int> ans = new List<int>();
+            Queue<int> q = new Queue<int>();
+            for(int i  = 1; i <= 9; ++i)
+            {
+                q.Enqueue(i);
+            }
+
+            while(q.Count != 0)
+            {
+                int element = q.Dequeue();
+                if(low <= element && high >= element)
+                {
+                    ans.Add(element);
+                }
+                int last_digit = element % 10;
+                if(last_digit < 9)
+                {
+                    q.Enqueue(element * 10 + last_digit + 1);
+                }
+            }
+            return ans;
+        }
+        #endregion
     }
 }

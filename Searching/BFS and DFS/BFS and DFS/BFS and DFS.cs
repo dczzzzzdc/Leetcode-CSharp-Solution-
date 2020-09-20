@@ -609,5 +609,62 @@ namespace BFS_and_DFS
             }
         }
         #endregion
+        #region Leetcode 980 Unique Path III
+        public int UniquePathsIII(int[][] grid)
+        {
+            int n = grid.Length;
+            int m = grid[0].Length;
+
+            int sx = -1, sy = -1;
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < m; j++)
+                {
+                    if (grid[i][j] == 0)
+                    {
+                        ++empty;
+                    }
+                    else if (grid[i][j] == 1)
+                    {
+                        sy = i;
+                        sx = j;
+                    }
+                }
+            }
+            UP3dfs(grid, sx, sy);
+            return UP3ans;
+        }
+        private int empty = 1, UP3ans = 0;
+        public void UP3dfs(int[][] grid, int x, int y)
+        {
+            if (x < 0 || y < 0 || x >= grid[0].Length || y >= grid.Length || grid[y][x] < 0)
+            {
+                return;
+            }
+            else if (grid[y][x] == 2)
+            {
+                if (empty == 0)
+                {
+                    ++UP3ans;
+                }
+                return;
+            }
+            --empty;
+            grid[y][x] = -2;
+            // Then it is always illegal to access whenever the value is negative
+            // -1 - obstacle
+            // -2 - currently visiting
+
+            UP3dfs(grid, x + 1, y);
+            UP3dfs(grid, x - 1, y);
+            UP3dfs(grid, x, y + 1);
+            UP3dfs(grid, x, y - 1); 
+            // Go through four directions
+
+            empty++;
+            grid[y][x] = 0;
+            // Reverse
+        }
+        #endregion
     }
 }
