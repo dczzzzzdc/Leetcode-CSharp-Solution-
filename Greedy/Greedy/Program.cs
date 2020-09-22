@@ -1,5 +1,8 @@
 ﻿using System;
+using System.IO;
+using System.Reflection.Metadata.Ecma335;
 using System.Text.Json.Serialization;
+using System.Threading;
 
 namespace Greedy
 {
@@ -52,6 +55,37 @@ namespace Greedy
             return ans;
         }
         #endregion
+        #region Leetcode
+        public bool CarPooling(int[][] trips, int capacity)
+        {
+            int[] passenger = new int[1001];
 
+            int dest = 0;
+            foreach(int[] trip in trips)
+            {
+                int count = trip[0];
+                int start = trip[1];
+                int end = trip[2];
+
+                if(start > dest)
+                {
+                    dest = end;
+                }
+                passenger[start] += count;
+                passenger[end] -= count;
+            }
+
+            int cur = 0;
+            for(int i = 0; i <= dest; ++i)
+            {
+                cur += passenger[i];
+                if(cur > capacity)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        #endregion
     }
 }

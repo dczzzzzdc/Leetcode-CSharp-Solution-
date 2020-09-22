@@ -1517,5 +1517,26 @@ namespace DP
             return (max1, max2);
         }
         #endregion
+        #region Leetcode 1155  Number of Dice Rolls With Target Sum
+        public int NumRollsToTarget(int dices, int f, int target)
+        {
+            int[,] dp = new int[dices + 1, target + 1];
+            // dp[i,j]: The amount of way to reach the sum of j with i dices
+            dp[0, 0] = 1;
+            int kmod = (int)Math.Pow(10, 9) + 7;
+            for (int d = 1; d <= dices; ++d) 
+            {
+                for (int k = 1; k <= f; ++k) // Enumerate every possible dice face
+                {
+                    for (int j = k; j <= target; ++j)// Range to the target
+                    {
+                        dp[d, j] += dp[d - 1, j - k/*With one less dice and reach j - k with a k on this turn*/];
+                        dp[d, j] %= kmod;
+                    }
+                }
+            }
+            return dp[dices, target];
+        }
+        #endregion
     }
 }
