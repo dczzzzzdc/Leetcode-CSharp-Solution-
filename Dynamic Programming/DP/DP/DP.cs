@@ -12,6 +12,7 @@ namespace DP
     {
         static void Main(string[] args)
         {
+            Console.WriteLine(2/3);
         }
         #region Leetcode 121/122/123/309/714  Best time to buy and sell stocks
         #region Leetcode 121
@@ -532,7 +533,7 @@ namespace DP
         #endregion
         #region Leetcode 1320   Minimum Distance to Type a Word Using Two Fingers
         // Once the best solution to type word[0-i] is found, we only care about the last position of two fingers 
-        // Moreover, we only need to record the position of the last finger because another finger is always on word[i-1]
+        // Therefore, we only need to record the position of the last finger because another finger is always on word[i-1]
         public int MinimumDistance(string word)
         {
             int n = word.Length;
@@ -1538,5 +1539,11 @@ namespace DP
             return dp[dices, target];
         }
         #endregion
+        #region Leetcode 1127  Airplane Seat Assignment Possibility
+        public double NthPersonGetsNthSeat(int n)
+        {
+            return n == 1 ? 1.0d : 0.5d;
+        }
+    #endregion
     }
 }

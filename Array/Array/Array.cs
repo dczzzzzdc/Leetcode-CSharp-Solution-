@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.IO.Pipes;
 using System.Linq;
 
 namespace Array
@@ -278,6 +280,70 @@ namespace Array
             }
             return result.ToArray();
         }
+        #endregion
+        #region Leetcode 229  Majority Element II
+        public IList<int> MajorityElement(int[] nums)
+        {
+            int len = nums.Length;
+            if(len == 0)
+            {
+                return new List<int>();
+            }
+            int target = len / 3;
+
+            int count1 = 0, count2 =0;
+            int candidate1 = 0, candidate2 = 1;
+            
+            foreach(int n in nums)
+            {
+                if(n == candidate1)
+                {
+                    count1++;
+                }
+                else if(n == candidate2)
+                {
+                    count2++;
+                }
+                else if(count1 == 0)
+                {
+                    candidate1 = n;
+                    count1 = 1;
+                }
+                else if(count2 == 0)
+                {
+                    candidate2 = n;
+                    count2 = 1;
+                }
+                else
+                {
+                    count1--;
+                    count2--;
+                }
+            }
+            List<int> ans = new List<int>();
+            int real1 = 0, real2 = 0;
+            foreach(int n in nums)
+            {
+                if(n == candidate1)
+                {
+                    real1++;
+                }
+                else if(n == candidate2)
+                {
+                    real2++;
+                }
+            }
+            if (real1 > target)
+            {
+                ans.Add(candidate1);
+            }
+            if (real2 > target)
+            {
+                ans.Add(candidate2);
+            }
+            return ans;
+        }
+        
         #endregion
     }
 }
