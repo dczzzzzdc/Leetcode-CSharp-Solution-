@@ -343,7 +343,53 @@ namespace Array
             }
             return ans;
         }
-        
+
+        #endregion
+        #region Leetcode 134  Gas Station
+        public int CanCompleteCircuitBruteForce(int[] gas, int[] cost)
+        {
+            int n = gas.Length;
+            for (int i = 0; i < n; ++i) // Try every starting point
+            {
+                int total = 0, count = 0, j = i;
+                while (count < n)
+                {
+                    total += gas[j % n] - cost[j % n];
+                    if (total < 0)
+                    {
+                        break;
+                    }
+                    ++j;
+                    ++count;
+                }
+                if (count == n && total >= 0)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        // Since every problem is guaranteed to have a solution, whenever the tank is negative
+        // the ith station and all its previous ones cannot be the answer
+        public int CanCompleteCircuit(int[] gas, int[] cost)
+        {
+            int total = 0, tank = 0, ans = 0;
+
+            for (int i = 0; i < cost.Length; i++)
+            {
+                int consume = gas[i] - cost[i];
+                tank += consume;
+                total += consume;
+
+                if(tank < 0)
+                {
+                    tank = 0;
+                    ans = i + 1;
+                }
+            }
+            return total < 0 ? -1 : ans;
+        }
         #endregion
     }
 }

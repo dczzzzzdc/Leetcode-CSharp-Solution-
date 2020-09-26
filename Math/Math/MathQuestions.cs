@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.IO.IsolatedStorage;
 using System.IO.Pipes;
 using System.Linq;
@@ -1335,5 +1337,64 @@ namespace Math_Question
             return direction != 0 || (x == 0 && y == 0);
         }
         #endregion
+        #region Leetcode 179  Largest Number
+        public string LargestNumber(int[] nums)
+        {
+            string[] snum = nums.Select(x => x.ToString()).ToArray();
+            Array.Sort(snum, (string s1,string s2) =>
+            {
+                string str1 = s1 + s2;
+                string str2 = s2 + s1;
+                return str2.CompareTo(str1);
+            });
+
+            if (snum[0].Equals("0"))
+            {
+                return snum[0];
+            }
+            return string.Join("",snum);
+        }
+        #endregion
+        #region Leetcode 781  Rabbits in Forest
+        // When a rabbit answers i, then there are i + 1 rabbits that have the same color with it
+        public int NumRabbits(int[] answers)
+        {
+            if(answers.Length == 0)
+            {
+                return 0;
+            }
+
+            int sum = 0;
+            Dictionary<int, int> count = new Dictionary<int, int>();
+            // DIctionary is used to record the frequency of a specific answer
+            // Key: The answer
+            // Value: Times it occurs
+
+            foreach(int a in answers)
+            {
+                if(a == 0)
+                {
+                    sum++;
+                    continue;
+                }
+                if(!count.ContainsKey(a))
+                {
+                    count[a] = 1;
+                    sum += a + 1;
+                }
+                else
+                {
+                    count[a]++;
+                    if(count[a] == a + 1)
+                    // If all a + 1 rabbits are present, remove them for future calculations
+                    {
+                        count.Remove(a);
+                    }
+                }
+            }
+            return sum;
+        }
+        #endregion
     }
+
 }
