@@ -609,7 +609,7 @@ namespace BFS_and_DFS
             }
         }
         #endregion
-        #region Leetcode 980 Unique Path III
+        #region Leetcode 980  Unique Path III
         public int UniquePathsIII(int[][] grid)
         {
             int n = grid.Length;
@@ -664,6 +664,71 @@ namespace BFS_and_DFS
             empty++;
             grid[y][x] = 0;
             // Reverse
+        }
+        #endregion
+        #region Leetcode
+        // The ultimate theory for this question is to find the path length between a and b
+        public double[] CalcEquation(IList<IList<string>> equations, double[] values, IList<IList<string>> queries)
+        {
+            int n = queries.Count;
+            Dictionary<string, Dictionary<string, double>> graph = new Dictionary<string, Dictionary<string, double>>();
+            // graph[a][b]: The value of a / b or the path length from a to b
+
+            for (int i = 0; i < values.Length; i++)
+            {
+                string a = equations[i][0];
+                string b = equations[i][1];
+                double value = values[i];
+
+                if (!graph.ContainsKey(a)) { graph[a] = new Dictionary<string, double>(); }
+                if (!graph.ContainsKey(b)) { graph[b] = new Dictionary<string, double>(); }
+
+                // Build a graph that has two directions
+                graph[a].Add(b, value);
+                graph[b].Add(a, 1.0 / value);
+            }
+            double[] ans = new double[n];
+
+            for (int i = 0; i < n; i++)
+            {
+                string a = queries[i][0];
+                string b = queries[i][1];
+                if (!graph.ContainsKey(a) || !graph.ContainsKey(b))
+                {
+                    ans[i] = -1.0;
+                    continue;
+                }
+                ans[i] = CEdfs(a, b, new HashSet<string>(),graph);
+            }
+            return ans;
+        }
+        // This function returns the path length from a to b, if it exists or otherwise -1.0
+        private double CEdfs(string a, string b, HashSet<string> seen, Dictionary<string, Dictionary<string, double>> graph)
+        {
+            if(a == b)
+            // The division is complete
+            {
+                return 1.0;
+            }
+            seen.Add(a);
+            
+            foreach(var dict in graph[a])
+            // Looking for a middle point: next 
+            // The answer would be graph[a][next] + graph[next][b]
+            {
+                string next = dict.Key;
+                if (seen.Contains(next))
+                {
+                    continue;
+                }
+                double result = CEdfs(next, b, seen, graph);
+                if(result > 0)
+                // If a path exists
+                {
+                    return result * graph[a][next];
+                }
+            }
+            return -1.0;
         }
         #endregion
     }

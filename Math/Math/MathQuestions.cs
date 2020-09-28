@@ -1395,6 +1395,66 @@ namespace Math_Question
             return sum;
         }
         #endregion
-    }
+        #region Leetcode 645  Region Mismatch
+        public int[] FindErrorNums(int[] nums)
+        {
+            int n = nums.Length;
+            int[] count = new int[n + 1];
+            foreach (int i in nums)
+            {
+                count[i]++;
+            }
+            bool f1 = false;
+            bool f2 = false;
+            int[] ans = new int[2];
+            for (int i = 1; i <= n && (!f1 || !f2); ++i)
+            {
+                if (count[i] == 2)
+                {
+                    ans[0] = i;
+                }
+                else if (count[i] == 0)
+                {
+                    ans[1] = i;
+                }
+            }
+            return ans;
+        }
+        #endregion
+        #region Leetcode 495  Teemo Attacking
+        public int FindPoisonedDuration(int[] time, int duration)
+        {
+            int n = time.Length;
+            int sum = n * duration;
 
+            for (int i = 1; i < n; ++i)
+            {
+                sum -= Math.Max(0, duration - (time[i] - time[i - 1]));
+            }
+            return sum;
+        }
+        #endregion
+    }
+    public class Sort2DArray : IComparer<int[]>
+    {
+        public int Compare(int[] a, int[] b)
+        {
+            int index = 0;
+            int na = a.Length, nb = b.Length;
+            int l = Math.Min(na,nb);
+            while(index < l)
+            {
+                if(a[index] > b[index])
+                {
+                    return 1;
+                }
+                else if(a[index] < b[index])
+                {
+                    return -1;
+                }
+            }
+
+            return na == nb ? 0 : na > nb ? 1 : -1;
+        }
+    }
 }
