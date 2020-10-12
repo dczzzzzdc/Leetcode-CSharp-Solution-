@@ -391,5 +391,35 @@ namespace Array
             return total < 0 ? -1 : ans;
         }
         #endregion
+        #region Leetcode 41  First Missing Positive
+        // Number x should be on nums[x-1] 
+        // The missing number must be in range from[1 - n] so we can just ignore the number that
+        public int FirstMissingPositive(int[] nums)
+        {
+            int n = nums.Length;
+            int i = 0;
+            while(i < n)
+            {
+                if(nums[i] > 0 && nums[i] <= n && nums[i] != nums[nums[i]-1])
+                {
+                    int temp = nums[nums[i] - 1];
+                    nums[nums[i] - 1] = nums[i];
+                    nums[i] = temp;
+                }
+                else
+                {
+                    ++i;
+                }
+            }
+            for (int x = 0; x < n; x++)
+            {
+                if(nums[x] != x + 1)
+                {
+                    return x + 1;
+                }
+            }
+            return n + 1;
+        }
+        #endregion
     }
 }

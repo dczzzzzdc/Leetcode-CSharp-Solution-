@@ -12,7 +12,7 @@ namespace DP
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(2/3);
+            Console.WriteLine('c' ^'c' ^ 'b');
         }
         #region Leetcode 121/122/123/309/714  Best time to buy and sell stocks
         #region Leetcode 121
@@ -626,6 +626,7 @@ namespace DP
             if (index == special.Count) { return OriginalPrice(needs, prices); } // We have no more special offer to use
             IList<int> offer = special[index];
             List<int> clone = new List<int>();
+            // The after need after using the current coupon
             int i;
             for (i = 0; i < offer.Count - 1; i++) // Note that the last value of this list is actually the price
             {

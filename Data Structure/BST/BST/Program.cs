@@ -143,5 +143,26 @@ namespace BST
             ConnectTwoNodes(root1.right, root2.left);
         }
         #endregion
+        #region Leetcode 701  Insert into a Binary Search Tree
+        public TreeNode InsertIntoBST(TreeNode root, int val)
+        {
+            if (root == null)
+            {
+                return new TreeNode(val);
+            }
+            else
+            {
+                if (root.val > val)
+                {
+                    root.left = InsertIntoBST(root.left, val);
+                }
+                else
+                {
+                    root.right = InsertIntoBST(root.right, val);
+                }
+            }
+            return root;
+        }
+        #endregion
     }
 }

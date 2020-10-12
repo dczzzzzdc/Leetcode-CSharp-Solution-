@@ -734,5 +734,29 @@ namespace Other_Question
             return bull + "A" + cow + "B";
         }
         #endregion
+        #region Leetcode 713  Subarray Product Less Than k
+        // Remain a sliding window of product less than k
+        // Whenever a new element is introduced, there are more (size of window) combinations
+        public int NumSubarrayProductLessThanK(int[] nums, int k)
+        {
+            if (k == 0)
+            {
+                return 0;
+            }
+            int product = 1;
+            int count = 0;
+
+            for (int i = 0, j = 0; j < nums.Length; ++j)
+            {
+                product *= nums[j];
+                while (i <= j && product >= k)
+                {
+                    product /= nums[i++];
+                }
+                count += j - i + 1;
+            }
+            return count;
+        }
+        #endregion
     }
 }

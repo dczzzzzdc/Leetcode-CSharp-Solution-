@@ -17,6 +17,7 @@ namespace Math_Question
     {
         static void Main(string[] args)
         {
+
         }
         #region Extension: Sum all the digits
         public int SumDigits(int n)
@@ -50,7 +51,7 @@ namespace Math_Question
             return num + pow * (target - original);
         }
         #endregion
-        #region Extension: Find the Greated Common Divisor
+        #region Extension: Find the Greatest Common Divisor
         public static int GCD(int a,int b)
         {
             while(a != 0 && b != 0)
@@ -1432,6 +1433,79 @@ namespace Math_Question
                 sum -= Math.Max(0, duration - (time[i] - time[i - 1]));
             }
             return sum;
+        }
+        #endregion
+        #region Leetcode 670  Maximum Swap
+        //Greedy approach
+        public int MaximumSwap(int num)
+        {
+            char[] n = Convert.ToString(num).ToCharArray();
+            int[] last = new int[10];
+
+            for (int i = 0; i < n.Length; ++i)
+            {
+                last[n[i] - '0'] = i;
+            }
+
+            for (int i = 0; i < n.Length; ++i)
+            {
+                for (int d = 9; d > n[i] - '0'; --d)
+                {
+                    if (last[d] > i) // Find the last character that was bigger than n[i]
+                    {
+                        char temp = n[i];
+                        n[i] = n[last[d]];
+                        n[last[d]] = temp;
+                        return Convert.ToInt32(new string(n));
+                    }
+                }
+            }
+            return num;
+        }
+        #endregion
+        #region Leetcode 991 Broken Calculator
+        // Work this backwards, whenever Y is divisible by 2, we do it
+        // Loop until X >= Y, then just do X - Y addition to reach X
+        public int BrokenCalc(int X, int Y)
+        {
+            int count = 0;
+            while (Y > X)
+            {
+                if (Y % 2 == 0)
+                {
+                    Y /= 2;
+                }
+                else
+                {
+                    ++Y;
+                }
+                ++count;
+            }
+            return count + X - Y;
+        }
+        #endregion
+        #region Leetcode 592  Fraction Addition and Subtraction
+        public string FractionAddition(string expression)
+        {
+            string[] frs = expression.Replace("-", "+-").Split('+');
+            int A = 0, B = 1, a, b;
+            foreach (string s in frs)
+            {
+                if (string.IsNullOrEmpty(s)) continue;
+
+                string[] zm = s.Split('/');
+
+                a = Convert.ToInt32(zm[0]);
+                b = Convert.ToInt32(zm[1]);
+
+                A = A * b + a * B;
+                B *= b;
+
+                int cd = GCD(Math.Abs(A), B);
+                A /= cd;
+                B /= cd;
+            }
+            return string.Format("{0}/{1}", A, B);
         }
         #endregion
     }

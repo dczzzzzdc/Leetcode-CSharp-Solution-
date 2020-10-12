@@ -4,11 +4,21 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO.Pipes;
 using System.Reflection.Metadata.Ecma335;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace BIT
 {
+    class Cow
+    {
+        private int age;
+
+        private void setAge(int age)
+        {
+            this.age = age;
+        }
+    }
     public class ListNode
     {
         public int val;
@@ -119,6 +129,72 @@ namespace BIT
             Console.WriteLine(Convert.ToString(n, 2).PadLeft(8, '0'));
             #endregion
         }
+        #region Extension: Count set bits
+        public int CountSetBits(int n)
+        {
+            int count = 0;
+            while(n > 0)
+            {
+                if((n&1) > 0)
+                {
+                    ++count;
+                }
+                n >>= 1;
+            }
+            return count;
+        }
+        #endregion
+        #region Extension: Convert to Bases
+        public string BaseNeg2(int N)
+        {
+            StringBuilder result = new StringBuilder();
+
+            while (N != 0)
+            {
+                result.Insert(0, N & 1);
+                N = -(N >> 1);
+            }
+
+            return result.Length == 0 ? "0" : result.ToString();
+        }
+        public string Base10To2(int n)
+        {
+            StringBuilder res = new StringBuilder();
+
+            while(n != 0)
+            {
+                res.Append(n & 1);
+                n >>= 1;
+            }
+            return res.Length > 0 ? res.ToString() : "0";
+        }
+        public int Base2To10(string s)
+        {
+            int result = 0;
+            int n = s.Length;
+            for (int i = 0; i < n; i++)
+            {
+                result += (int)Char.GetNumericValue(s[i]) * (int)Math.Pow(2,n - i - 1);
+            }
+            return result;
+        }
+        public string Base10Tok(int n, int k)
+        {
+            StringBuilder res = new StringBuilder();
+            while(n != 0)
+            {
+                res.Insert(0, n % k);
+                n /= k;
+            }
+            return res.ToString();
+        }
+        #endregion
+        #region Check ith Bit
+        public bool Ithsetbit(int n, int i)
+        {
+            return (n & (1 << i)) == 0;
+        }
+        #endregion
         #region Extension: Gray Code
         public int GrayCode(int n)
         {
