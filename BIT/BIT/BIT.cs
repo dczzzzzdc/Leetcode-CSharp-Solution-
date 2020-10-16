@@ -7,22 +7,23 @@ using System.Reflection.Metadata.Ecma335;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
+using System.Transactions;
+using System.Xml.Schema;
 
 namespace BIT
 {
+    
     public class PrefixXOR
     {
-        private int[] nums;
-        private int[] prefix;
+        public int[] prefix;
 
         public PrefixXOR(int[] n)
         {
-            this.nums = n;
-            prefix = new int[this.nums.Length + 1];
+            prefix = new int[n.Length + 1];
             
-            for(int i = 1; i <= this.nums.Length; ++i)
+            for(int i = 1; i <= n.Length; ++i)
             {
-                prefix[i] = prefix[i - 1] ^ this.nums[i - 1];
+                prefix[i] = prefix[i - 1] ^ n[i - 1];
             }
         }
         /// <summary>
@@ -145,13 +146,14 @@ namespace BIT
             Console.WriteLine(Convert.ToString(n, 2).PadLeft(8, '0'));
             #endregion
         }
+
         #region Extension: Count set bits
         public int CountSetBits(int n)
         {
             int count = 0;
-            while(n > 0)
+            while (n > 0)
             {
-                if((n&1) > 0)
+                if ((n & 1) > 0)
                 {
                     ++count;
                 }
@@ -177,7 +179,7 @@ namespace BIT
         {
             StringBuilder res = new StringBuilder();
 
-            while(n != 0)
+            while (n != 0)
             {
                 res.Append(n & 1);
                 n >>= 1;
@@ -190,14 +192,14 @@ namespace BIT
             int n = s.Length;
             for (int i = 0; i < n; i++)
             {
-                result += (int)Char.GetNumericValue(s[i]) * (int)Math.Pow(2,n - i - 1);
+                result += (int)Char.GetNumericValue(s[i]) * (int)Math.Pow(2, n - i - 1);
             }
             return result;
         }
         public string Base10Tok(int n, int k)
         {
             StringBuilder res = new StringBuilder();
-            while(n != 0)
+            while (n != 0)
             {
                 res.Insert(0, n % k);
                 n /= k;
@@ -251,6 +253,8 @@ namespace BIT
             int ans = 0;
             int mask = 665772;
             // 1010 0010 1000 1010 1100
+            // The prime number bits can only be 2,3,5,7,11,13,17,19 
+            // because R is smaller that 10 ^ 6 and at most have 20 bits
             for (int i = L; i <= R; i++)
             {
                 if ((mask & (1 << CountBits(i))) != 0) { ++ans; }
@@ -493,7 +497,7 @@ namespace BIT
                 }
                 foreach (int value in set)
                 {
-                    if(set.Contains(value ^ (max | one)))
+                    if (set.Contains(value ^ (max | one)))
                     {
                         max |= one; // Adding an one on the current bit
                         break;
@@ -506,13 +510,40 @@ namespace BIT
         #region Leetcode 1238  Circular Permutation in Binary Representation
         public IList<int> CircularPermutation(int n, int start)
         {
-            
+
             IList<int> ans = new List<int>();
             for (int i = 0; i < 1 << n; ++i)
             {
                 ans.Add(start ^ i ^ i >> 1);
             }
             return ans;
+        }
+        #endregion
+        #region Leetcode 898  Bitwise ORs of Subarrays
+        public int SubarrayBitwiseORs(int[] A)
+        {
+            HashSet<int> res = new HashSet<int>(), prev = new HashSet<int>(), cur;
+
+            foreach (int n in A)
+            {
+                cur = new HashSet<int>();
+                cur.Add(n);
+
+                foreach (int i in prev)
+                {
+                    cur.Add(n | i);
+                }
+
+                prev = cur;
+
+                foreach (int p in prev)
+                {
+                    res.Add(p);
+                }
+
+            }
+
+            return res.Count;
         }
         #endregion
         #region Leetcode 1552  Count Triplets That Can Form Two Arrays of Equal XOR
@@ -537,5 +568,62 @@ namespace BIT
             return count;
         }
         #endregion
+        #region Leetcode 756  Pyramid Transition Matrix
+        public bool PyramidTransition(string bottom, IList<string> allowed)
+        {
+            Dictionary<string, List<char>> a = new Dictionary<string, List<char>>();
+            for (int i = 0; i < allowed.Count; ++i)
+            {
+                string cur = allowed[i];
+                string key = cur.Substring(0, 2);
+                if (!a.ContainsKey(key))
+                {
+                    a[key] = new List<char>();
+                }
+                a[key].Add(cur[2]);
+            }
+            return PT_dfs(bottom, a);
+        }
+        private bool PT_dfs(string cur, Dictionary<string, List<char>> a)
+        {
+            int n = cur.Length;
+            if (n == 1)
+            {
+                return true;
+            }
+            for (int i = 0; i < n - 1; ++i)
+            {
+                if (!a.ContainsKey(cur.Substring(i, 2)))
+                {
+                    return false;
+                }
+            }
+            List<string> possible = new List<string>();
+            GetList(ref possible, a, cur, 0, new StringBuilder());
+            foreach (string s in possible)
+            {
+                if (PT_dfs(s, a))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        private void GetList(ref List<string> possible, Dictionary<string, List<char>> a, string cur, int index, StringBuilder sb)
+        {
+            if (index == cur.Length - 1)
+            {
+                possible.Add(sb.ToString());
+                return;
+            }
+            foreach (char c in a[cur.Substring(index, 2)])
+            {
+                sb.Append(c);
+                GetList(ref possible, a, cur, index + 1, sb);
+                sb.Remove(sb.Length - 1, 1);
+            }
+        }
+        #endregion
+
     }
 }
