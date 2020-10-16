@@ -10,13 +10,29 @@ using System.Text;
 
 namespace BIT
 {
-    class Cow
+    public class PrefixXOR
     {
-        private int age;
+        private int[] nums;
+        private int[] prefix;
 
-        private void setAge(int age)
+        public PrefixXOR(int[] n)
         {
-            this.age = age;
+            this.nums = n;
+            prefix = new int[this.nums.Length + 1];
+            
+            for(int i = 1; i <= this.nums.Length; ++i)
+            {
+                prefix[i] = prefix[i - 1] ^ this.nums[i - 1];
+            }
+        }
+        /// <summary>
+        /// Query XOR sum from arr[i] to arr[j]
+        /// </summary>
+        /// <param name="i">The starting index(inclusive)</param>
+        /// <param name="j">The ending index(inclusive)</param>
+        public int Query(int i, int j)
+        {
+            return prefix[j + 1] ^ prefix[i];
         }
     }
     public class ListNode
@@ -202,6 +218,19 @@ namespace BIT
             // When the ith bit of n is 1, the ith bit of G(n) will be 1 and the (i+1)th bit will be 0, and vice versa
 
             return n ^ (n >> 1);
+        }
+        #endregion
+        #region Leetcode 1310  XOR Queries of a Subarray
+        public int[] XorQueries(int[] arr, int[][] queries)
+        {
+            PrefixXOR p = new PrefixXOR(arr);
+            int[] ans = new int[queries.Length];
+            int i = 0;
+            foreach (int[] q in queries)
+            {
+                ans[i++] = p.Query(q[0], q[1]);
+            }
+            return ans;
         }
         #endregion
         #region Leetcode 190  Reverse Bits
@@ -399,6 +428,7 @@ namespace BIT
             while (head != null)
             {
                 ans = ans << 1 | head.val;
+                // ans = a * 2 + head.val;
                 head = head.next;
             }
             return ans;
@@ -446,25 +476,6 @@ namespace BIT
             cur.Remove(index, 1);
         }
         #endregion
-        #region Leetcode 1310  XOR Queries of a Subarray
-        public int[] XorQueries(int[] arr, int[][] queries)
-        {
-            int n = queries.Length;
-            int[] prefix_sum = new int[n + 1];
-            for (int i = 0; i < n; i++)
-            {
-                prefix_sum[i + 1] = prefix_sum[i] ^ arr[i];
-            }
-            int[] ans = new int[n];
-            // If we know the xor query from 0~7 and we want to calculate 4~7
-            // We just need to xor 0~3 because it will offset with the 0~3 in 0~7 and then leave 4~7
-            for (int i = 0; i < n; ++i)
-            {
-                ans[i] = prefix_sum[queries[i][1] + 1] ^ prefix_sum[queries[i][0]/*The start of the range*/];
-            }
-            return ans;
-        }
-        #endregion
         #region Leetcode 421  Maximum XOR of Two Numbers in an Array
         public int FindMaximumXOR(int[] nums)
         {
@@ -502,6 +513,28 @@ namespace BIT
                 ans.Add(start ^ i ^ i >> 1);
             }
             return ans;
+        }
+        #endregion
+        #region Leetcode 1552  Count Triplets That Can Form Two Arrays of Equal XOR
+        public int CountTriplets(int[] arr)
+        {
+            PrefixXOR p = new PrefixXOR(arr);
+            // for a = b, a ^ b = 0. 
+            // Therefore, arr[i] ^ arr[i+1]  ^...^ arr[k]
+            // Once we settle a legal range of (i,k), we have k - i choice because i < j <= k
+            int n = arr.Length;
+            int count = 0;
+            for (int i = 0; i < n; ++i)
+            {
+                for (int j = i + 1; j < n; ++j)
+                {
+                    if (p.Query(i, j) == 0)
+                    {
+                        count += j - i;
+                    }
+                }
+            }
+            return count;
         }
         #endregion
     }
