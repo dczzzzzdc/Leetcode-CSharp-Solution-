@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -16,6 +17,12 @@ namespace BFS_and_DFS
         visiting,
         visited,
         unvisited
+    }
+    public enum Colors
+    {
+        blue,
+        red,
+        uncolored
     }
     public class TreeNode
     {
@@ -1215,6 +1222,69 @@ namespace BFS_and_DFS
                 ans.Add(level);
             }
             return ans;
+        }
+        #endregion
+        #region Leetcode 559  Maximum Depth of N-ary Tree
+        public int MaxDepth(Node root)
+        {
+            if(root == null)
+            {
+                return 0;
+            }
+            int height = 0;
+            Queue<Node> q = new Queue<Node>();
+            q.Enqueue(root);
+            while(q.Count != 0)
+            {
+                height++;
+                int count = q.Count;
+                for (int i = 0; i < count; i++)
+                {
+                    Node cur = q.Dequeue();
+                    foreach(Node child in cur.children)
+                    {
+                        if(child != null)
+                        {
+                            q.Enqueue(child);
+                        }
+                    }
+                }
+            }
+            return height;
+        }
+        #endregion
+        #region Leetcode 785  Is Graph Bipartite?
+        // If a graph is bipartitie, then no two adjacent nodes should be in the same group
+        public bool IsBipartite(int[][] graph)
+        {
+            int n = graph.Length;
+            int[] numbers = new int [n];
+
+            for (int i = 0; i < n; i++)
+            {
+                if(numbers[i] == 0 && !IBdfs(graph,i,1,ref numbers))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        private bool IBdfs(int[][] graph, int cur, int index, ref int[] numbers)
+        {
+            numbers[cur] = index;
+
+            foreach(int next in graph[cur])
+            {
+                if(numbers[next] == index)
+                {
+                    return false;
+                }
+                if(numbers[next] == 0 && !IBdfs(graph,next,-index,ref numbers))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
         #endregion
     }
