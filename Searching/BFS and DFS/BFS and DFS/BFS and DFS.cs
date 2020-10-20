@@ -11,6 +11,12 @@ using System.Text;
 
 namespace BFS_and_DFS
 {
+    public enum States
+    {
+        visiting,
+        visited,
+        unvisited
+    }
     public class TreeNode
     {
         public int val;
@@ -21,6 +27,24 @@ namespace BFS_and_DFS
             this.val = val;
             this.left = left;
             this.right = right;
+        }
+    }
+    public class Node
+    {
+        public int val;
+        public IList<Node> children;
+
+        public Node() { }
+
+        public Node(int _val)
+        {
+            val = _val;
+        }
+
+        public Node(int _val, IList<Node> _children)
+        {
+            val = _val;
+            children = _children;
         }
     }
     #region Union Find Template
@@ -60,7 +84,7 @@ namespace BFS_and_DFS
         }
     }
     #endregion
-    #region Union Find Template with Max Length
+    #region Union Find Template with Max Size
     public class UnionFindMax
     {
         int[] parents;
@@ -112,15 +136,15 @@ namespace BFS_and_DFS
             Queue<TreeNode> q = new Queue<TreeNode>();
             q.Enqueue(root);
 
-            while(q.Count != 0)
+            while (q.Count != 0)
             {
                 TreeNode cur = q.Dequeue();
                 sum += cur.val;
-                if(cur.left != null)
+                if (cur.left != null)
                 {
                     q.Enqueue(cur.left);
                 }
-                if(cur.right != null)
+                if (cur.right != null)
                 {
                     q.Enqueue(cur.right);
                 }
@@ -133,7 +157,7 @@ namespace BFS_and_DFS
             IList<IList<int>> ret = new List<IList<int>>();
             Queue<TreeNode> q = new Queue<TreeNode>();
             q.Enqueue(root);
-            while(q.Count!= 0)
+            while (q.Count != 0)
             {
                 int count = q.Count;
                 List<int> cur = new List<int>();
@@ -141,12 +165,12 @@ namespace BFS_and_DFS
                 {
                     TreeNode node = q.Dequeue();
                     cur.Add(node.val);
-                    if(node.left!= null)
+                    if (node.left != null)
                     {
                         q.Enqueue(node.left);
                     }
 
-                    if(node.right != null)
+                    if (node.right != null)
                     {
                         q.Enqueue(node.right);
                     }
@@ -346,9 +370,9 @@ namespace BFS_and_DFS
         // Key: The prefix sum 
         // Value: The amount of ways to get to this prefix sum
         int pathsumiiians = 0;
-        public void pathsumiiidfs(TreeNode root, int target,int curSum)
+        public void pathsumiiidfs(TreeNode root, int target, int curSum)
         {
-            if(root == null) { return; }
+            if (root == null) { return; }
             curSum += root.val;
             int oldSum = curSum - target;
             if (pathsumiiimem.ContainsKey(oldSum))
@@ -398,7 +422,7 @@ namespace BFS_and_DFS
             int steps = 0;
             while (q.Count != 0)
             {
-                int count= q.Count;
+                int count = q.Count;
                 for (int i = 0; i < count; ++i)
                 {
                     var cur = q.Dequeue();
@@ -557,9 +581,9 @@ namespace BFS_and_DFS
 
             return MergeTwoSortedList(r1, r2);
         }
-        public void InOrderTraversal(TreeNode root,ref List<int> nodes)
+        public void InOrderTraversal(TreeNode root, ref List<int> nodes)
         {
-            if(root == null)
+            if (root == null)
             {
                 return;
             }
@@ -586,9 +610,9 @@ namespace BFS_and_DFS
             int i1 = 0, i2 = 0;
             List<int> merged = new List<int>();
 
-            while(i1 < l1 || i2 < l2)
+            while (i1 < l1 || i2 < l2)
             {
-                if(i1 == l1)
+                if (i1 == l1)
                 {
                     merged.Add(list2[i2++]);
                     continue;
@@ -601,7 +625,7 @@ namespace BFS_and_DFS
 
                 int cur = Math.Min(list1[i1], list2[i2]);
                 merged.Add(cur);
-                if(cur == list1[i1])
+                if (cur == list1[i1])
                 {
                     ++i1;
                 }
@@ -714,7 +738,7 @@ namespace BFS_and_DFS
             UP3dfs(grid, x + 1, y);
             UP3dfs(grid, x - 1, y);
             UP3dfs(grid, x, y + 1);
-            UP3dfs(grid, x, y - 1); 
+            UP3dfs(grid, x, y - 1);
             // Go through four directions
 
             empty++;
@@ -754,21 +778,21 @@ namespace BFS_and_DFS
                     ans[i] = -1.0;
                     continue;
                 }
-                ans[i] = CEdfs(a, b, new HashSet<string>(),graph);
+                ans[i] = CEdfs(a, b, new HashSet<string>(), graph);
             }
             return ans;
         }
         // This function returns the path length from a to b, if it exists or otherwise -1.0
         private double CEdfs(string a, string b, HashSet<string> seen, Dictionary<string, Dictionary<string, double>> graph)
         {
-            if(a == b)
+            if (a == b)
             // The division is complete
             {
                 return 1.0;
             }
             seen.Add(a);
-            
-            foreach(var dict in graph[a])
+
+            foreach (var dict in graph[a])
             // Looking for a middle point: next 
             // The answer would be graph[a][next] + graph[next][b]
             {
@@ -778,7 +802,7 @@ namespace BFS_and_DFS
                     continue;
                 }
                 double result = CEdfs(next, b, seen, graph);
-                if(result > 0)
+                if (result > 0)
                 // If a path exists
                 {
                     return result * graph[a][next];
@@ -790,7 +814,7 @@ namespace BFS_and_DFS
         #region Leetcode 103  Binary Tree Zigzag Level Order Traversal
         public IList<IList<int>> ZigzagLevelOrder(TreeNode root)
         {
-            if(root == null)
+            if (root == null)
             {
                 return new List<IList<int>>();
             }
@@ -799,7 +823,7 @@ namespace BFS_and_DFS
             IList<IList<int>> ans = new List<IList<int>>();
             bool reverse = false;
 
-            while(q.Count != 0)
+            while (q.Count != 0)
             {
                 int count = q.Count;
                 List<int> cur = new List<int>();
@@ -862,6 +886,335 @@ namespace BFS_and_DFS
                 ans[index--] = cur;
             }
             return ans.ToList();
+        }
+        #endregion
+        #region Leetcode 130  Surrounded Regions
+        // We can change our thought here to: find all the secure points (points that has a connection to the border points) 
+        // and the rest of them are insecure
+        public void Solve(char[][] board)
+        {
+            int m = board.Length;
+            if (m == 0)
+            {
+                return;
+            }
+            int n = board[0].Length;
+            for (int i = 0; i < m; i++)
+            {
+                SRdfs(ref board, n - 1, i);
+                SRdfs(ref board, 0, i);
+            }
+            for (int i = 0; i < n; i++)
+            {
+                SRdfs(ref board, i, 0);
+                SRdfs(ref board, i, m - 1);
+            }
+
+            for (int i = 0; i < m; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    if (board[i][j] == 'O')
+                    {
+                        board[i][j] = 'X';
+                    }
+                    else if (board[i][j] == 'S')
+                    {
+                        board[i][j] = 'O';
+                    }
+                }
+            }
+        }
+        private void SRdfs(ref char[][] board, int x, int y)
+        {
+            if (x < 0 || y < 0 || x >= board[0].Length || y >= board.Length || board[y][x] != 'O')
+            {
+                return;
+            }
+
+            board[y][x] = 'S';
+            SRdfs(ref board, x + 1, y);
+            SRdfs(ref board, x - 1, y);
+            SRdfs(ref board, x, y + 1);
+            SRdfs(ref board, x, y - 1);
+        }
+        #endregion
+        #region Leetcode 199  Binary Tree Right Side View
+        public IList<int> RightSideView(TreeNode root)
+        {
+            if (root == null)
+            {
+                return new List<int>();
+            }
+            IList<int> ans = new List<int>();
+            Queue<TreeNode> q = new Queue<TreeNode>();
+            q.Enqueue(root);
+            while (q.Count != 0)
+            {
+                TreeNode level = null;
+                int count = q.Count;
+
+                for (int i = 0; i < count; i++)
+                {
+                    TreeNode cur = q.Dequeue();
+                    level = cur;
+
+                    if (cur.left != null)
+                    {
+                        q.Enqueue(cur.left);
+                    }
+                    if (cur.right != null)
+                    {
+                        q.Enqueue(cur.right);
+                    }
+                }
+                ans.Add(level.val);
+            }
+            return ans;
+        }
+        #endregion
+        #region Leetcode 200  Number of Islands
+        public int NumIslands(char[][] grid)
+        {
+            int m = grid.Length;
+            if (m == 0)
+            {
+                return 0;
+            }
+            int count = 0, n = grid[0].Length;
+
+            for (int i = 0; i < m; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    if (grid[i][j] == '1')
+                    {
+                        count++;
+                        NIdfs(ref grid, j, i);
+                    }
+                }
+            }
+            return count;
+        }
+        private void NIdfs(ref char[][] grid, int x, int y)
+        {
+            if (x < 0 || y < 0 || x >= grid[0].Length || y >= grid.Length || grid[y][x] != '1')
+            {
+                return;
+            }
+
+            grid[y][x] = '0';
+
+            NIdfs(ref grid, x + 1, y);
+            NIdfs(ref grid, x - 1, y);
+            NIdfs(ref grid, x, y + 1);
+            NIdfs(ref grid, x, y - 1);
+        }
+        #endregion
+        #region Course Schedule Series
+        // Leetcode 207  Course Schedule
+        public bool CanFinish(int numCourses, int[][] prerequisites)
+        {
+            List<int>[] map = new List<int>[numCourses];
+            // map[i]: the prerequisite courses that have to be taken before taking course i
+            for (int i = 0; i < numCourses; i++)
+            {
+                map[i] = new List<int>();
+            }
+            foreach (int[] p in prerequisites)
+            {
+                map[p[0]].Add(p[1]);
+            }
+            States[] states = new States[numCourses];
+            for (int i = 0; i < numCourses; i++)
+            {
+                states[i] = States.unvisited;
+            }
+            for (int i = 0; i < numCourses; i++)
+            {
+                if (!CFdfs(i, map, ref states))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        public int[] FindOrder(int numCourses, int[][] prerequisites)
+        {
+            List<int>[] graph = new List<int>[numCourses];
+            for (int i = 0; i < numCourses; ++i)
+            {
+                graph[i] = new List<int>();
+            }
+            foreach (int[] course in prerequisites)
+            {
+                graph[course[0]].Add(course[1]);
+            }
+            States[] states = new States[numCourses];
+            for (int i = 0; i < numCourses; i++)
+            {
+                states[i] = States.unvisited;
+            }
+            List<int> ans = new List<int>();
+            for (int i = 0; i < numCourses; ++i)
+            {
+                if (!CFdfs(i, graph, ref states, ref ans))
+                {
+                    return new int[] { };
+                }
+            }
+            return ans.ToArray();
+        }
+        private bool CFdfs(int i, List<int>[] map, ref States[] states, ref List<int> ans)
+        {
+            if (states[i] == States.visiting)
+            {
+                return false;
+            }
+            else if (states[i] == States.visited)
+            {
+                return true;
+            }
+
+            states[i] = States.visiting;
+
+            foreach (int next in map[i])
+            {
+                if (!CFdfs(next, map, ref states, ref ans))
+                {
+                    return false;
+                }
+            }
+
+            states[i] = States.visited;
+            ans.Add(i);
+            return true;
+        }
+        private bool CFdfs(int i, List<int>[] map, ref States[] states)
+        {
+            if (states[i] == States.visiting)
+            {
+                return false;
+            }
+            else if (states[i] == States.visited)
+            {
+                return true;
+            }
+
+            states[i] = States.visiting;
+
+            foreach (int next in map[i])
+            {
+                if (!CFdfs(next, map, ref states))
+                {
+                    return false;
+                }
+            }
+
+            states[i] = States.visited;
+            return true;
+        }
+        #endregion
+        #region Leetcode 513  Find Bottom Left Tree Value
+        public int FindBottomLeftValue(TreeNode root)
+        {
+            if (root == null)
+            {
+                return 0;
+            }
+            Queue<TreeNode> q = new Queue<TreeNode>();
+            q.Enqueue(root);
+            TreeNode last = null;
+            while (q.Count != 0)
+            {
+                int count = q.Count;
+                bool get = false;
+                for (int i = 0; i < count; ++i)
+                {
+                    TreeNode cur = q.Dequeue();
+                    if (!get)
+                    {
+                        get = true;
+                        last = cur;
+                    }
+
+                    if (cur.left != null)
+                    {
+                        q.Enqueue(cur.left);
+                    }
+                    if (cur.right != null)
+                    {
+                        q.Enqueue(cur.right);
+                    }
+                }
+            }
+            return last.val;
+        }
+        #endregion
+        #region Leetcode 515  Find Largest Value in Each Tree Row
+        public IList<int> LargestValues(TreeNode root)
+        {
+            if (root == null)
+            {
+                return new List<int>();
+            }
+            IList<int> ans = new List<int>();
+            Queue<TreeNode> q = new Queue<TreeNode>();
+            q.Enqueue(root);
+
+            while (q.Count != 0)
+            {
+                int max = int.MinValue;
+                int count = q.Count;
+                for (int i = 0; i < count; i++)
+                {
+                    TreeNode cur = q.Dequeue();
+
+                    max = Math.Max(max, cur.val);
+
+                    if (cur.left != null)
+                    {
+                        q.Enqueue(cur.left);
+                    }
+                    if (cur.right != null)
+                    {
+                        q.Enqueue(cur.right);
+                    }
+                }
+                ans.Add(max);
+            }
+            return ans;
+        }
+        #endregion
+        #region Leetcode 429  N-ary Tree Level Order Traversal
+        public IList<IList<int>> LevelOrder(Node root)
+        {
+            if (root == null)
+            {
+                return new List<IList<int>>();
+            }
+            Queue<Node> q = new Queue<Node>();
+            q.Enqueue(root);
+            IList<IList<int>> ans = new List<IList<int>>();
+            while(q.Count != 0)
+            {
+                int count = q.Count;
+                List<int> level = new List<int>();
+                for (int i = 0; i < count; i++)
+                {
+                    Node cur = q.Dequeue();
+                    level.Add(cur.val);
+                    foreach(Node children in cur.children)
+                    {
+                        if(children != null)
+                        {
+                            q.Enqueue(children);
+                        }
+                    }
+                }
+                ans.Add(level);
+            }
+            return ans;
         }
         #endregion
     }
