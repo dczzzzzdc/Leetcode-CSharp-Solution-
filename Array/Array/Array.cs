@@ -16,6 +16,7 @@ namespace Array
             this.nums = nums;
 
             prefix = new int[nums.Length + 1];
+            prefix[0] = 1;
             for (int i = 1; i <= nums.Length; i++)
             {
                 prefix[i] = prefix[i - 1] + this.nums[i-1];

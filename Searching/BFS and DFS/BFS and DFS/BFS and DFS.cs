@@ -128,6 +128,62 @@ namespace BFS_and_DFS
 
             return sum;
         }
+        public IList<IList<int>> Traverse(TreeNode root)
+        {
+            IList<IList<int>> ret = new List<IList<int>>();
+            Queue<TreeNode> q = new Queue<TreeNode>();
+            q.Enqueue(root);
+            while(q.Count!= 0)
+            {
+                int count = q.Count;
+                List<int> cur = new List<int>();
+                for (int i = 0; i < count; i++)
+                {
+                    TreeNode node = q.Dequeue();
+                    cur.Add(node.val);
+                    if(node.left!= null)
+                    {
+                        q.Enqueue(node.left);
+                    }
+
+                    if(node.right != null)
+                    {
+                        q.Enqueue(node.right);
+                    }
+                }
+                ret.Add(cur);
+            }
+            return ret;
+        }
+        public int HeightofTree(TreeNode root)
+        {
+            if (root == null)
+            {
+                return 0;
+            }
+            Queue<TreeNode> q = new Queue<TreeNode>();
+            q.Enqueue(root);
+            int level = 0;
+            while (q.Count != 0)
+            {
+                level++;
+                int count = q.Count;
+                for (int i = 0; i < count; i++)
+                {
+                    TreeNode cur = q.Dequeue();
+
+                    if (cur.left != null)
+                    {
+                        q.Enqueue(cur.left);
+                    }
+                    if (cur.right != null)
+                    {
+                        q.Enqueue(cur.right);
+                    }
+                }
+            }
+            return level;
+        }
         #region Leetcode 662  Maximum Width of Binary Tree
 
         public int WidthOfBinaryTree(TreeNode root)
@@ -666,7 +722,7 @@ namespace BFS_and_DFS
             // Reverse
         }
         #endregion
-        #region Leetcode
+        #region Leetcode 399  Evaluate Division
         // The ultimate theory for this question is to find the path length between a and b
         public double[] CalcEquation(IList<IList<string>> equations, double[] values, IList<IList<string>> queries)
         {
@@ -729,6 +785,83 @@ namespace BFS_and_DFS
                 }
             }
             return -1.0;
+        }
+        #endregion
+        #region Leetcode 103  Binary Tree Zigzag Level Order Traversal
+        public IList<IList<int>> ZigzagLevelOrder(TreeNode root)
+        {
+            if(root == null)
+            {
+                return new List<IList<int>>();
+            }
+            Queue<TreeNode> q = new Queue<TreeNode>();
+            q.Enqueue(root);
+            IList<IList<int>> ans = new List<IList<int>>();
+            bool reverse = false;
+
+            while(q.Count != 0)
+            {
+                int count = q.Count;
+                List<int> cur = new List<int>();
+
+                for (int i = 0; i < count; i++)
+                {
+                    TreeNode node = q.Dequeue();
+                    cur.Add(node.val);
+                    if (node.left != null)
+                    {
+                        q.Enqueue(node.left);
+                    }
+                    if (node.right != null)
+                    {
+                        q.Enqueue(node.right);
+                    }
+                }
+
+                if (reverse)
+                {
+                    cur.Reverse();
+                }
+                ans.Add(cur);
+                reverse = !reverse;
+            }
+
+            return ans;
+        }
+        #endregion
+        #region Leetcode 107  Binary Tree Level Order Traversal II 
+        public IList<IList<int>> LevelOrderBottom(TreeNode root)
+        {
+            if (root == null)
+            {
+                return new List<IList<int>>();
+            }
+            int n = HeightofTree(root);
+            IList<int>[] ans = new IList<int>[n];
+            Queue<TreeNode> q = new Queue<TreeNode>();
+            int index = n - 1;
+            q.Enqueue(root);
+            while (q.Count != 0)
+            {
+                int count = q.Count;
+                List<int> cur = new List<int>();
+                for (int i = 0; i < count; i++)
+                {
+                    TreeNode node = q.Dequeue();
+                    cur.Add(node.val);
+                    if (node.left != null)
+                    {
+                        q.Enqueue(node.left);
+                    }
+
+                    if (node.right != null)
+                    {
+                        q.Enqueue(node.right);
+                    }
+                }
+                ans[index--] = cur;
+            }
+            return ans.ToList();
         }
         #endregion
     }
