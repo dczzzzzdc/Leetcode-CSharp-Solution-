@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace BFS_and_DFS
@@ -1285,6 +1286,152 @@ namespace BFS_and_DFS
                 }
             }
             return true;
+        }
+        #endregion
+        #region Leetcode 863  All Nodes Distance K in Binary Tree
+        public IList<int> DistanceK(TreeNode root, TreeNode target, int K)
+        {
+            if(root == null)
+            {
+                return new List<int>();
+            }
+            Queue<TreeNode> q = new Queue<TreeNode>();
+            q.Enqueue(target);
+
+            Dictionary<TreeNode, List<TreeNode>> graph = new Dictionary<TreeNode, List<TreeNode>>();
+            Build(ref graph, root);
+
+            List<TreeNode> seen = new List<TreeNode>();
+
+            for (int i = 0; i < K; i++)
+            {
+                int count = q.Count;
+                for (int x = 0; x < count; x++)
+                {
+                    TreeNode cur = q.Dequeue();
+                    seen.Add(cur);
+
+                    foreach(TreeNode next in graph[cur])
+                    {
+                        if (!seen.Contains(next))
+                        {
+                            q.Enqueue(next);
+                        }
+                    }
+                }
+            }
+
+            IList<int> ans = new List<int>();
+            while(q.Count != 0)
+            {
+                ans.Add(q.Dequeue().val);
+            }
+            return ans;
+        }
+        private void Build(ref Dictionary<TreeNode, List<TreeNode>> graph, TreeNode cur)
+        {
+            if(cur == null)
+            {
+                return;
+            }
+            if (!graph.ContainsKey(cur))
+            {
+                graph[cur] = new List<TreeNode>();
+            }
+
+            TreeNode left = cur.left, right = cur.right;
+            if(left != null)
+            {
+                if (!graph.ContainsKey(left))
+                {
+                    graph[left] = new List<TreeNode>();
+                }
+                graph[left].Add(cur);
+                graph[cur].Add(left);
+            }
+            if(right != null)
+            {
+                if (!graph.ContainsKey(right))
+                {
+                    graph[right] = new List<TreeNode>();
+                }
+                graph[right].Add(cur);
+                graph[cur].Add(right);
+            }
+            Build(ref graph, left);
+            Build(ref graph, right);
+        }
+        #endregion
+        #region Leetcode
+        public int ShortestBridge(int[][] A)
+        {
+            int m = A.Length;
+            if(m == 0)
+            {
+                return 0;
+            }
+            int n = A[0].Length;
+            Queue<(int, int)> q = new Queue<(int, int)>();
+            bool found = false;
+
+            for (int i = 0; i < m && !found; i++)
+            {
+                for (int j = 0; j < n && !found; j++)
+                {
+                    if(A[i][j] == 1)
+                    {
+                        found = true;
+                        SBdfs(ref A, j, i, ref q);
+                    }
+                }
+            }
+
+            int ans = 0;
+            int[] step = { 0, 1, 0, -1, 0, };
+
+            while(q.Count!= 0)
+            {
+                int count = q.Count;
+                for (int i = 0; i < count; i++)
+                {
+                    int x = q.Peek().Item1;
+                    int y = q.Peek().Item2;
+                    q.Dequeue();
+
+                    for (int j = 0; j < 4; j++)
+                    {
+                        int nx = x + step[j];
+                        int ny = y + step[j + 1];
+
+                        if(nx < 0 || ny < 0 || nx >= n || ny >= m || A[ny][nx] == 2)
+                        {
+                            continue;
+                        }
+                        else if(A[ny][nx] == 1)
+                        {
+                            return ans;
+                        }
+                        A[ny][nx] = 2;
+                        q.Enqueue((nx, ny));
+                    }
+                }
+                ++ans;
+            }
+            return -1;
+        }
+        private void SBdfs(ref int[][]A, int x, int y, ref Queue<(int, int)> q)
+        {
+            if(x < 0 || y < 0 || y >= A.Length || x >= A[0].Length || A[y][x] != 1)
+            {
+                return;
+            }
+
+            A[y][x] = 2;
+            q.Enqueue((x, y));
+            SBdfs(ref A, x + 1, y, ref q);
+            SBdfs(ref A, x - 1, y, ref q);
+            SBdfs(ref A, x, y + 1, ref q);
+            SBdfs(ref A, x, y - 1, ref q);
         }
         #endregion
     }
