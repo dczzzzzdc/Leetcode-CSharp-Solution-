@@ -4,12 +4,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 
 namespace BFS_and_DFS
 {
@@ -89,6 +91,19 @@ namespace BFS_and_DFS
                 size[rootX] += size[rootX];
             }
             
+        }
+        public int GroupCount()
+        {
+            int count = 0;
+
+            for (int i = 0; i < N; i++)
+            {
+                if(i == Find(i))
+                {
+                    ++count;
+                }
+            }
+            return count;
         }
     }
     #endregion
@@ -216,6 +231,25 @@ namespace BFS_and_DFS
             }
             return level;
         }
+
+        #region Leetcode 101  Symmetric Tree
+        public bool IsSymmetric(TreeNode root)
+        {
+            return root == null || ISdfs(root.left, root.right);
+        }
+        private bool ISdfs(TreeNode left, TreeNode right)
+        {
+            if(left == null || right == null)
+            {
+                return left == right;
+            }
+            else if(left.val != right.val)
+            {
+                return false;
+            }
+            return ISdfs(left.left, right.right) && ISdfs(left.right, right.left);
+        }
+        #endregion
         #region Leetcode 662  Maximum Width of Binary Tree
 
         public int WidthOfBinaryTree(TreeNode root)
@@ -399,74 +433,6 @@ namespace BFS_and_DFS
             pathsumiiidfs(root.right, target, curSum);
             pathsumiiimem[curSum]--; // We no longer can accessed this path
             return;
-        }
-        #endregion
-        #region Leetcode 994  Rotting Oranges
-        public int OrangesRotting(int[][] grid)
-        {
-            int fresh = 0;
-            int m = grid.Length;
-            if (m == 0 || grid == null) { return 0; }
-            int n = grid[0].Length;
-            Queue<(int, int)> q = new Queue<(int, int)>();
-            for (int i = 0; i < m; ++i)
-            {
-                for (int j = 0; j < n; ++j)
-                {
-                    if (grid[i][j] == 1)
-                    {
-                        ++fresh;
-                    }
-                    else if (grid[i][j] == 2)
-                    {
-                        q.Enqueue((j, i));
-                    }
-                }
-            }
-            if (fresh == 0)
-            {
-                return 0;
-            }
-            int steps = 0;
-            while (q.Count != 0)
-            {
-                int count = q.Count;
-                for (int i = 0; i < count; ++i)
-                {
-                    var cur = q.Dequeue();
-                    int x = cur.Item1;
-                    int y = cur.Item2;
-                    if (y + 1 < m && grid[y + 1][x] == 1)
-                    {
-                        q.Enqueue((x, y + 1));
-                        --fresh;
-                        grid[y + 1][x] = 2;
-                    }
-                    if (y - 1 >= 0 && grid[y - 1][x] == 1)
-                    {
-                        q.Enqueue((x, y - 1));
-                        --fresh;
-                        grid[y - 1][x] = 2;
-
-                    }
-                    if (x - 1 >= 0 && grid[y][x - 1] == 1)
-                    {
-                        q.Enqueue((x - 1, y));
-                        --fresh;
-                        grid[y][x - 1] = 2;
-
-                    }
-                    if (x + 1 < n && grid[y][x + 1] == 1)
-                    {
-                        q.Enqueue((x + 1, y));
-                        --fresh;
-                        grid[y][x + 1] = 2;
-                    }
-                }
-                ++steps;
-
-            }
-            return fresh == 0 ? steps - 1 : -1;
         }
         #endregion
         #region Leetcode 404  Sum of Left Leaves
@@ -1362,7 +1328,7 @@ namespace BFS_and_DFS
             Build(ref graph, right);
         }
         #endregion
-        #region Leetcode
+        #region Leetcode 934  Shortest Bridge
         public int ShortestBridge(int[][] A)
         {
             int m = A.Length;
@@ -1432,6 +1398,81 @@ namespace BFS_and_DFS
             SBdfs(ref A, x - 1, y, ref q);
             SBdfs(ref A, x, y + 1, ref q);
             SBdfs(ref A, x, y - 1, ref q);
+        }
+        #endregion
+        #region Leetcode 994  Oranges Rotting
+        public int OrangesRotting(int[][] grid)
+        {
+            int m = grid.Length;
+            if(m == 0)
+            {
+                return 0;
+            }
+            int n = grid[0].Length;
+            int fresh = 0;
+            Queue<(int, int)> q = new Queue<(int, int)>();
+            for (int i = 0; i < m; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    if(grid[i][j] == 1)
+                    {
+                        ++fresh;
+                    }
+                    else if(grid[i][j] == 2)
+                    {
+                        q.Enqueue((j, i));
+                    }
+                }
+            }
+            if(fresh == 0)
+            {
+                return 0;
+            }
+
+            int time = 0;
+            int[] dir = new int[5] { 0, 1, 0, -1, 0 };
+            while(q.Count != 0)
+            {
+                int count = q.Count;
+                for (int i = 0; i < count; i++)
+                {
+                    int x = q.Peek().Item1;
+                    int y = q.Peek().Item2;
+                    q.Dequeue();
+
+                    for (int j = 0; j < 4; j++)
+                    {
+                        int nx = x + dir[i];
+                        int ny = y + dir[i + 1];
+
+                        if(nx >= 0 && nx < n && ny >= 0 && ny < m && grid[ny][nx] == 1)
+                        {
+                            --fresh;
+                            q.Enqueue((nx, ny));
+                            grid[ny][nx] = 2;
+                        }
+                    }
+                }
+                ++time;
+            }
+            return fresh == 0?time-1: -1;
+        }
+        #endregion
+        #region Leetcode 1319  Number of Operations to Make Network Connected
+        public int MakeConnected(int n, int[][] connections)
+        {
+            if(connections.Length < n - 1)
+            {
+                return -1;
+            }
+            UnionFind uf = new UnionFind(n);
+
+            foreach(int[] c in connections)
+            {
+                uf.Union(c[0], c[1]);
+            }
+            return uf.GroupCount() - 1;
         }
         #endregion
     }
