@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO.Pipes;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 
@@ -13,6 +14,13 @@ namespace DP
         static void Main(string[] args)
         {
             Console.WriteLine('c' ^'c' ^ 'b');
+        }
+        /// <summary>
+        /// Returns whether the current block is legal to visit
+        /// </summary>
+        private bool CanVisit(int m, int n, int x, int y)
+        {
+            return x < n && x >= 0 && y >= 0 && y < m;
         }
         #region Leetcode 121/122/123/309/714  Best time to buy and sell stocks
         #region Leetcode 121
@@ -1545,6 +1553,63 @@ namespace DP
         {
             return n == 1 ? 1.0d : 0.5d;
         }
-    #endregion
+        #endregion
+        #region Leetcode 329  Longest Increasing Path
+        public int LongestIncreasingPath(int[][] matrix)
+        {
+            m = matrix.Length;
+            if(m == 0)
+            {
+                return 0;
+            }
+            n = matrix[0].Length;
+            LIPdp = new int[m, n];
+            int ans = 0;
+
+            // Enumerate every possible ending points
+            for (int i = 0; i < m; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    ans = Math.Max(ans, LIPfind(matrix, j, i));
+                }
+            }
+            return ans;
+        }
+        int m;
+        int n;
+        /// <summary>
+        /// dp[i][j]: The longest increasing path that ends at matrix[i][j]
+        /// </summary>
+        int[,] LIPdp;
+
+        /// <summary>
+        /// The dp function of LIP
+        /// </summary>
+        /// <param name="matrix">The given matrix</param>
+        /// <param name="x">The current x position</param>
+        /// <param name="y">The current y position</param>
+        /// <returns>Returns the longest increasing path that ends at matrix[y][x]</returns>
+        private int LIPfind(int[][] matrix, int x, int y)
+        {
+            if(LIPdp[y,x] != 0)
+            {
+                return LIPdp[y, x];
+            }
+
+            int result = 0, cur = matrix[y][x];
+            int[] dir = new int[5] { 0, 1, 0, -1, 0 };
+            for (int i = 0; i < 4; i++)
+            {
+                int nx = x + dir[i];
+                int ny = y + dir[i + 1];
+                if(CanVisit(m,n,nx,ny) && cur > matrix[ny][nx])
+                {
+                    result = Math.Max(result, LIPfind(matrix, x + dir[i], y + dir[i + 1]));
+                }
+            }
+            return LIPdp[y,x] = result + 1;
+        }
+        #endregion
     }
 }
