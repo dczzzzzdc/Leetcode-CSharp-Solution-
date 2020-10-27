@@ -42,6 +42,9 @@ namespace BFS_and_DFS
     public class Node
     {
         public int val;
+        public Node left;
+        public Node right;
+        public Node next;
         public IList<Node> children;
 
         public Node() { }
@@ -55,6 +58,13 @@ namespace BFS_and_DFS
         {
             val = _val;
             children = _children;
+        }
+        public Node(int _val, Node _left, Node _right, Node _next)
+        {
+            val = _val;
+            left = _left;
+            right = _right;
+            next = _next;
         }
     }
     #region Union Find Template
@@ -151,7 +161,7 @@ namespace BFS_and_DFS
         }
         public bool IsLeave(TreeNode node)
         {
-            return node.left != null && node.right != null;
+            return node.left == null && node.right == null;
         }
         public long SumTreeNodes(TreeNode root)
         {
@@ -177,6 +187,10 @@ namespace BFS_and_DFS
         }
         public IList<IList<int>> Traverse(TreeNode root)
         {
+            if(root== null)
+            {
+                return new List<IList<int>>();
+            }
             IList<IList<int>> ret = new List<IList<int>>();
             Queue<TreeNode> q = new Queue<TreeNode>();
             q.Enqueue(root);
@@ -248,6 +262,12 @@ namespace BFS_and_DFS
                 return false;
             }
             return ISdfs(left.left, right.right) && ISdfs(left.right, right.left);
+        }
+        #endregion
+        #region Leetcode 102  Binary Tree Level Order Traversal
+        public IList<IList<int>> LevelOrder(TreeNode root)
+        {
+            return Traverse(root);
         }
         #endregion
         #region Leetcode 662  Maximum Width of Binary Tree
@@ -525,9 +545,9 @@ namespace BFS_and_DFS
                 return 0;
             }
             SRTLdfs(root, 0);
-            return ans;
+            return SRTans;
         }
-        int ans = 0;
+        int SRTans = 0;
         public void SRTLdfs(TreeNode root, int sum)
         {
             sum = (sum << 1) | root.val;
@@ -1475,5 +1495,140 @@ namespace BFS_and_DFS
             return uf.GroupCount() - 1;
         }
         #endregion
+        #region Leetcode 112  Path Sum
+        public bool HasPathSum(TreeNode root, int sum)
+        {
+            return HPSdfs(root, 0, sum);
+        }
+        private bool HPSdfs(TreeNode cur, int sum, int target)
+        {
+            if (cur == null)
+            {
+                return false;
+            }
+            sum += cur.val;
+            if (sum == target && IsLeave(cur))
+            {
+                return true;
+            }
+            return HPSdfs(cur.left, sum, target) || HPSdfs(cur.right, sum, target);
+        }
+        #endregion
+        #region Leetcode 113  Path Sum II
+        public IList<IList<int>> PathSumII(TreeNode root, int sum)
+        {
+            PSIIdfs(root, new List<int>(), 0, sum);
+            return PSIIans;
+        }
+        IList<IList<int>> PSIIans = new List<IList<int>>();
+        private void PSIIdfs(TreeNode cur, List<int> path, int sum , int target)
+        {
+            if(cur == null)
+            {
+                return;
+            }
+            sum += cur.val;
+            path.Add(cur.val);
+            if(sum == target && IsLeave(cur))
+            {
+                PSIIans.Add(new List<int>(path));
+            }
+            else
+            {
+                PSIIdfs(cur.left, path, sum, target);
+                PSIIdfs(cur.right, path, sum, target);
+            }
+            path.RemoveAt(path.Count - 1);
+        }
+        #endregion
+        #region Leetcode 116  Populating Next Right Pointers in Each Node
+        public Node Connect(Node root)
+        {
+            if (root == null)
+            {
+                return null;
+            }
+            ConnectTwoNodes(root.left, root.right);
+            return root;
+        }
+        public void ConnectTwoNodes(Node root1, Node root2)
+        {
+            if (root2 == null || root1 == null)
+            {
+                return;
+            }
+
+            root1.next = root2;
+
+            ConnectTwoNodes(root1.left, root1.right);
+            ConnectTwoNodes(root2.left, root2.right);
+
+            ConnectTwoNodes(root1.right, root2.left);
+        }
+        #endregion
+        #region Leetcode 124  Binary Tree Maximum Path Sum
+        public int MaxPathSum(TreeNode root)
+        {
+            if(root == null)
+            {
+                return 0;
+            }
+            int ans = int.MinValue;
+            MPShelper(root, ref ans);
+            return ans;
+        }
+        /// <summary>
+        /// The helper function of Max Path Sum
+        /// </summary>
+        /// <param name="root">The current root</param>
+        /// <param name="ans">An ref integar that represent the possible maximum subtree sum</param>
+        /// <returns>Returns the path sum of the branch(left or right) with the largest path sum</returns>
+        public int MPShelper(TreeNode root, ref int ans)
+        {
+            if(root == null)
+            {
+                return 0;
+            }
+            int left_sum = Math.Max(0,MPShelper(root.left, ref ans));
+            int right_sum = Math.Max(0, MPShelper(root.right, ref ans));
+
+            ans = Math.Max(ans, left_sum + right_sum + root.val);
+            return Math.Max(left_sum, right_sum) + root.val;
+
+        }
+        #endregion
+        #region Leetcode 129  Sum Root to Leaf Numbers
+        public int SumNumbers(TreeNode root)
+        {
+            if (root == null)
+            {
+                return 0;
+            }
+            SRTdfs(new StringBuilder(), root);
+            return ans;
+        }
+        int ans = 0;
+        private void SRTdfs(StringBuilder path, TreeNode cur)
+        {
+            if(cur == null)
+            {
+                return;
+            }
+            path.Append(cur.val);
+            if (IsLeave(cur))
+            {
+                ans += Convert.ToInt32(path.ToString());
+                path.Remove(path.Length - 1, 1);
+                return;
+            }
+            else
+            {
+                SRTdfs(path, cur.left);
+                SRTdfs(path, cur.right);
+            }
+            path.Remove(path.Length - 1, 1);
+        }
+        #endregion
+
     }
 }
