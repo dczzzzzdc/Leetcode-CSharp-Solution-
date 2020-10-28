@@ -245,7 +245,28 @@ namespace BFS_and_DFS
             }
             return level;
         }
+        /// <summary>
+        /// Builds a bi - directional graph based upon the given 2d array
+        /// </summary>
+        /// <param name="edges">The given array that contains the connection</param>
+        /// <returns>A Bi-Directional graph of format List<int>[]</int></returns>
+        private List<int>[] BuildBiDirectionalGraph(int[][] edges, int n)
+        {
+            List<int>[] graph = new List<int>[n];
+            
+            for (int i = 0; i < n; i++)
+            {
+                graph[i] = new List<int>();
+            }
 
+            foreach(int[] connection in edges)
+            {
+                int u = connection[0], v = connection[1];
+                graph[u].Add(v);
+                graph[v].Add(u);
+            }
+            return graph;
+        }
         #region Leetcode 101  Symmetric Tree
         public bool IsSymmetric(TreeNode root)
         {
@@ -1627,6 +1648,257 @@ namespace BFS_and_DFS
                 SRTdfs(path, cur.right);
             }
             path.Remove(path.Length - 1, 1);
+        }
+        #endregion
+        #region Leetcode 257  Binary Tree Paths
+        public IList<string> BinaryTreePaths(TreeNode root)
+        {
+            if (root == null)
+            {
+                return BPans;
+            }
+            BPdfs(root, new StringBuilder());
+            return BPans;
+        }
+        IList<string> BPans = new List<string>();
+        private void BPdfs(TreeNode cur, StringBuilder path)
+        {
+            path.Append(cur.val);
+            if (IsLeave(cur))
+            {
+                BPans.Add(path.ToString());
+                return;
+            }
+            path.Append("->");
+            if (cur.left != null)
+            {
+                BPdfs(cur.left, new StringBuilder(path.ToString()));
+            }
+            if (cur.right != null)
+            {
+                BPdfs(cur.right, new StringBuilder(path.ToString()));
+            }
+        }
+        #endregion
+        #region Leetcode 417  Pacific Atlantic Water Flow
+        public IList<IList<int>> PacificAtlantic(int[][] matrix)
+        {
+            IList<IList<int>> ans = new List<IList<int>>();
+            int m = matrix.Length;
+            if (m == 0)
+            {
+                return ans;
+            }
+            int n = matrix[0].Length;
+            bool[,] atlantic = new bool[m, n], pacific = new bool[m, n];
+            for (int y = 0; y < m; y++)
+            {
+                PAdfs(matrix, 0, y, int.MinValue, ref pacific);
+                PAdfs(matrix, n - 1, y, int.MinValue, ref atlantic);
+            }
+            for (int x = 0; x < n; x++)
+            {
+                PAdfs(matrix, x, 0, int.MinValue, ref pacific);
+                PAdfs(matrix, x, m - 1, int.MinValue, ref atlantic);
+            }
+            for (int i = 0; i < m; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    if (atlantic[i, j] && pacific[i, j])
+                    {
+                        ans.Add(new List<int> { i, j });
+                    }
+                }
+            }
+            return ans;
+        }
+        /// <summary>
+        /// The helper dfs function of Pacific Atlantic Water Flow
+        /// </summary>
+        /// <param name="matrix">The given matrix</param>
+        /// <param name="x">The current x position</param>
+        /// <param name="y">The curent y position</param>
+        /// <param name="prev">The value of the previous block</param>
+        /// <param name="rec">The ref bool array to record the blocks that can be reached</param>
+        private void PAdfs(int[][] matrix, int x, int y, int prev, ref bool[,] rec)
+        {
+            if (x < 0 || y < 0 || x >= matrix[0].Length || y >= matrix.Length || prev > matrix[y][x] || rec[y, x] == true)
+            {
+                return;
+            }
+
+            rec[y, x] = true;
+            int cur = matrix[y][x];
+            int[] dir = new int[5] { 0, 1, 0, -1, 0 };
+            for (int i = 0; i < 4; i++)
+            {
+                PAdfs(matrix, x + dir[i], y + dir[i + 1], cur, ref rec);
+            }
+        }
+        #endregion
+        #region Leetcode 1443  Minimum Time to Collect All Apples in a Tree
+        public int MinTime(int n, int[][] edges, IList<bool> hasApple)
+        {
+            List<int>[] graph = new List<int>[n];
+            for (int i = 0; i < n; i++)
+            {
+                graph[i] = new List<int>();
+            }
+            foreach (int[] connection in edges)
+            {
+                int u = connection[1];
+                int v = connection[0];
+                graph[v].Add(u);
+                graph[u].Add(v);
+            }
+            int count = dfs(graph, 0, hasApple) - 1;
+            return count < 0 ? 0 : count * 2;
+        }
+        HashSet<int> seen = new HashSet<int>();
+        private int dfs(List<int>[] graph, int cur, IList<bool> apple)
+        {
+            if (graph[cur].Count == 0)
+            {
+                return apple[cur] ? 1 : 0;
+            }
+            int result = 0;
+            seen.Add(cur);
+            foreach (int next in graph[cur])
+            {
+                if (seen.Contains(next)) { continue; }
+                result += dfs(graph, next, apple);
+            }
+            if (result > 0 || apple[cur])
+            {
+                return result + 1;
+            }
+            return 0;
+        }
+        #endregion
+        #region Leetcode 1448  Count Good Nodes in Binary Tree
+        public int GoodNodes(TreeNode root)
+        {
+            if(root == null)
+            {
+                return 0;
+            }
+            GNdfs(root.val, root);
+            return GNcount;
+        }
+        int GNcount = 0;
+        private void GNdfs(int prev_max, TreeNode root)
+        {
+            if(root.val >= prev_max)
+            {
+                ++GNcount;
+            }
+            if(root.left != null)
+            {
+                GNdfs(Math.Max(prev_max, root.val), root.left);
+            }
+            if(root.right != null)
+            {
+                GNdfs(Math.Max(prev_max, root.val), root.right);
+            }
+        }
+        #endregion
+        #region Leetcode 1376  Time Needed to Inform All Employees
+        public int NumOfMinutes(int n, int headID, int[] manager, int[] informTime)
+        {
+            List<(int,int)>[] sub = new List<(int,int)>[n];
+            for (int i = 0; i < n; i++)
+            {
+                sub[i] = new List<(int, int)>();
+            }
+            for (int i = 0; i < n; i++)
+            {
+                if(headID == i)
+                {
+                    continue;
+                }
+                int boss = manager[i];
+                sub[boss].Add((i,informTime[boss]));
+            }
+
+            return NOMdfs(headID, sub);
+        }
+        /// <summary>
+        /// The helper dfs function of Leetcode
+        /// </summary>
+        /// <param name="cur">The current person</param>
+        /// <param name="sub">The graph of employer/employee relationships</param>
+        /// <returns>Returns the time needed to inform every employer</returns>
+        private int NOMdfs(int cur, List<(int, int)>[] sub)
+        {
+            if(sub[cur].Count == 0) // If there is no person to inform
+            {
+                return 0;
+            }
+            int ans = 0;
+
+            foreach((int,int) next in sub[cur])
+            {
+                int person = next.Item1;
+                int time = next.Item2;
+                ans = Math.Max(ans, NOMdfs(person, sub) + time);
+            }
+            return ans;
+        }
+        #endregion
+        #region Leetcode 1254  Number of Closed Islands
+        public int ClosedIsland(int[][] grid)
+        {
+            int ans = 0;
+            int n = grid.Length;
+            int m = grid[0].Length;
+            for (int x = 0; x < m; ++x) // Expand Horizontally
+            {
+                if (grid[0][x] == 0)
+                {
+                    CIdfs(x, 0, ref grid);
+                }
+                if (grid[n - 1][x] == 0)
+                {
+                    CIdfs(x, n - 1, ref grid);
+                }
+            }
+            for (int y = 0; y < n; y++) //Expand Vertically
+            {
+                if (grid[y][0] == 0)
+                {
+                    CIdfs(0, y, ref grid);
+                }
+                if (grid[y][m - 1] == 0)
+                {
+                    CIdfs(m - 1, y, ref grid);
+                }
+            }
+            for (int i = 0; i < m; ++i)
+            {
+                for (int j = 0; j < n; ++j)
+                {
+                    if (grid[j][i] == 0)
+                    {
+                        ++ans;
+                        CIdfs(i, j, ref grid);
+                    }
+                }
+            }
+            return ans;
+
+        }
+        public void CIdfs(int x, int y, ref int[][] map)
+        {
+            if (x < 0 || x >= map[0].Length || y < 0 || y >= map.Length || map[y][x] != 0)
+            {
+                return;
+            }
+            map[y][x] = 1;
+            CIdfs(x + 1, y, ref map);
+            CIdfs(x - 1, y, ref map);
+            CIdfs(x, y + 1, ref map);
+            CIdfs(x, y - 1, ref map);
         }
         #endregion
 
