@@ -6,15 +6,24 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading;
 
 namespace BFS_and_DFS
 {
+    public enum State
+    {
+        Safe,
+        Unsafe, 
+        Visiting, 
+        Unknown
+    }
     public enum States
     {
         visiting,
@@ -1901,6 +1910,258 @@ namespace BFS_and_DFS
             CIdfs(x, y - 1, ref map);
         }
         #endregion
+        #region Leetcode 698 & 473
+        public bool CanPartitionKSubsets(int[] nums, int k)
+        {
+            if(nums == null)
+            {
+                return false;
+            }
+            int n = nums.Length;
+            int sum = nums.Sum();
+            if(sum % k != 0)
+            {
+                return false;
+            }
+            int target = sum / k;
+            Array.Sort(nums);
+            int index = n -1;
+            while(index >= 0 && nums[index] == target)
+            {
+                --index;
+                --k;
+            }
+            return Kpartition(index, nums, new int[k], target);
+        }
+        public bool Makesquare(int[] nums)
+        {
+            return CanPartitionKSubsets(nums, 4);
+        }
+        /// <summary>
+        /// The partition helper function of CanPartitionKSubsets
+        /// </summary>
+        /// <param name="index">The current index we are trying to add into the subsets</param>
+        /// <param name="nums">The given nums array</param>
+        /// <param name="subset">The array that records the sum of subsets</param>
+        /// <param name="k">The target sum</param>
+        /// <returns>Returns whether it is possible to divides the nums array into subsets that all the sum of k</returns>
+        private bool Kpartition(int index, int[] nums, int[] subset, int k)
+        {
+            if(index < 0)
+            {
+                return true;
+            }
+            int cur = nums[index];
+            for (int i = 0; i < subset.Length; i++)
+            {
+                if(cur + subset[i] <= k)
+                {
+                    subset[i] += cur;
+                    if(Kpartition(index - 1, nums, subset, k))
+                    {
+                        return true;
+                    }
+                    subset[i] -= cur;
+                }
+            }
+            return false;
+        }
+        #endregion
+        #region Leetcode 695  Max Area of Island
+        public int MaxAreaOfIsland(int[][] grid)
+        {
+            int m = grid.Length;
+            int n = grid[0].Length;
+            int ans = 0;
+            for (int i = 0; i < m; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    if(grid[i][j] == 1)
+                    {
+                        Queue<(int, int)> q = new Queue<(int, int)>();
+                        q.Enqueue((i, j));
+                        int count = 1;
+                        grid[i][j] = 2;
+                        int[] dir = new int[5] { 0, 1, 0, -1, 0 };
+                        while(q.Count != 0)
+                        {
+                            (int, int) cur = q.Dequeue();
+                            int y = cur.Item1, x = cur.Item2;
 
+                            for (int d = 0; d < 4; d++)
+                            {
+                                int nx = x + dir[d + 1];
+                                int ny = y + dir[d];
+
+                                if(nx >= 0 && nx < n && ny >= 0 && ny < m && grid[ny][nx] == 1)
+                                {
+                                    grid[ny][nx] = 2;
+                                    q.Enqueue((ny, nx));
+                                    ++count;
+                                }
+                            }
+                        }
+                        ans = Math.Max(ans, count);
+                    }
+                }
+            }
+            return ans;
+        }
+        #endregion
+        #region Leetcode 756  Pyramid Transition Matrix
+        public bool PyramidTransition(string bottom, IList<string> allowed)
+        {
+            Dictionary<string, List<char>> a = new Dictionary<string, List<char>>();
+            for (int i = 0; i < allowed.Count; ++i)
+            {
+                string cur = allowed[i];
+                string key = cur.Substring(0, 2);
+                if (!a.ContainsKey(key))
+                {
+                    a[key] = new List<char>();
+                }
+                a[key].Add(cur[2]);
+            }
+            return PTdfs(bottom, a);
+        }
+        private bool PTdfs(string cur, Dictionary<string, List<char>> a)
+        {
+            int n = cur.Length;
+            if (n == 1)
+            {
+                return true;
+            }
+            for (int i = 0; i < n - 1; ++i)
+            {
+                if (!a.ContainsKey(cur.Substring(i, 2)))
+                {
+                    return false;
+                }
+            }
+            List<string> possible = new List<string>();
+            GetList(ref possible, a, cur, 0, new StringBuilder());
+            foreach (string s in possible)
+            {
+                if (PTdfs(s, a))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        private void GetList(ref List<string> possible, Dictionary<string, List<char>> a, string cur, int index, StringBuilder sb)
+        {
+            if (index == cur.Length - 1)
+            {
+                possible.Add(sb.ToString());
+                return;
+            }
+            foreach (char c in a[cur.Substring(index, 2)])
+            {
+                sb.Append(c);
+                GetList(ref possible, a, cur, index + 1, sb);
+                sb.Remove(sb.Length - 1, 1);
+            }
+        }
+        #endregion
+        #region Leetcode 
+        public IList<int> EventualSafeNodes(int[][] graph)
+        {
+            IList<int> safe = new List<int>();
+            State[] states = new State[graph.Length];
+            Array.Fill(states, State.Unknown);
+            for (int i = 0; i < graph.Length; i++)
+            {
+                if (ESNdfs(graph, i, ref states) == State.Safe)
+                {
+                    safe.Add(i);
+                }
+            }
+            return safe;
+        }
+        public State ESNdfs(int[][] graph, int cur, ref State[] states)
+        {
+            if (states[cur] == State.Visiting) { return State.Unsafe; }
+            else if (states[cur] != State.Unknown) { return states[cur]; }
+            states[cur] = State.Visiting;
+            foreach (var item in graph[cur])
+            {
+                if (ESNdfs(graph, item, ref states) == State.Unsafe) { return states[cur] = State.Unsafe; }
+            }
+            return states[cur] = State.Safe;
+        }
+        #endregion
+        #region Leetcode 679  24 Game
+        public bool JudgePoint24(int[] n)
+        {
+            double[] nums = new double[4];
+            for (int i = 0; i < n.Length; i++)
+            {
+                nums[i] = n[i] * 1.0;
+            }
+            return helper24(nums);
+        }
+        /// <summary>
+        /// The helper function of Leetcode 679 - 24 Game
+        /// </summary>
+        /// <param name="nums"></param>
+        /// <returns></returns>
+        public bool helper24(double[] nums)
+        {
+            int n = nums.Length;
+            if (n == 1)
+            // The calculation has been done
+            {
+                return Math.Abs(nums[0] - 24) <= 1e-6;
+                // Whether our current result is close enough 24
+            }
+
+            // Try every possible combination of numbers performing all kinds of combination
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    if (i == j)
+                    {
+                        continue;
+                    }
+
+                    double[] next = new double[n - 1];
+                    int index = 0;
+  
+                    for (int k = 0; k < n; k++)
+                    // First put in all the numbers that is not going to be a part of the calculation
+                    {
+                        if (k != i && k != j)
+                        {
+                            next[index++] = nums[k];
+                        }
+                    }
+
+                    double a = nums[i];
+                    double b = nums[j];
+
+                    next[n-2] = a + b;
+                    if (helper24(next)) { return true; }
+                    next[n - 2] = 0;
+                    next[n-2] = a - b;
+                    if (helper24(next)) { return true; }
+                    next[n - 2] = 0;
+
+                    next[n-2] = a * b;
+                    if (helper24(next)) { return true; }
+                    next[n - 2] = 0;
+                    if (b != 0)
+                    {
+                        next[n-2] = (a / b);
+                        if (helper24(next)) { return true; }
+                        next[n - 2] = 0;
+                    }
+                }
+            }
+            return false;
+        }
+        #endregion
     }
 }
