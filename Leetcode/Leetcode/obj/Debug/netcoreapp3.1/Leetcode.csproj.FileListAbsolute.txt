@@ -1,0 +1,13 @@
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Leetcode\Leetcode\bin\Debug\netcoreapp3.1\Leetcode.exe
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Leetcode\Leetcode\bin\Debug\netcoreapp3.1\Leetcode.deps.json
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Leetcode\Leetcode\bin\Debug\netcoreapp3.1\Leetcode.runtimeconfig.json
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Leetcode\Leetcode\bin\Debug\netcoreapp3.1\Leetcode.runtimeconfig.dev.json
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Leetcode\Leetcode\bin\Debug\netcoreapp3.1\Leetcode.dll
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Leetcode\Leetcode\bin\Debug\netcoreapp3.1\Leetcode.pdb
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Leetcode\Leetcode\obj\Debug\netcoreapp3.1\Leetcode.csprojAssemblyReference.cache
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Leetcode\Leetcode\obj\Debug\netcoreapp3.1\Leetcode.AssemblyInfoInputs.cache
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Leetcode\Leetcode\obj\Debug\netcoreapp3.1\Leetcode.AssemblyInfo.cs
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Leetcode\Leetcode\obj\Debug\netcoreapp3.1\Leetcode.csproj.CoreCompileInputs.cache
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Leetcode\Leetcode\obj\Debug\netcoreapp3.1\Leetcode.dll
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Leetcode\Leetcode\obj\Debug\netcoreapp3.1\Leetcode.pdb
+C:\Users\Dongchen Zou\Desktop\Leetcode-CSharp-Solution-\Leetcode\Leetcode\obj\Debug\netcoreapp3.1\Leetcode.genruntimeconfig.cache
