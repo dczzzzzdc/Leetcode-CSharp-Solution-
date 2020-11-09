@@ -1,13 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json.Serialization;
 
 namespace Leetcode
 {
+    class Node
+    {
+        public int val;
+        public Node left;
+        public Node right;
+        public Node next;
+
+        public Node() { }
+
+        public Node(int _val)
+        {
+            val = _val;
+        }
+
+        public Node(int _val, Node _left, Node _right, Node _next)
+        {
+            val = _val;
+            left = _left;
+            right = _right;
+            next = _next;
+        }
+    }
     class Prefix_Sum
     {
         private readonly int[] prefix;
@@ -1018,6 +1042,291 @@ namespace Leetcode
             return ans;
         }
         #endregion
+        #region Leetcode 104  Maximum Depth of Binary Tree
+        public int MaxDepth(TreeNode root)
+        {
+            if (root == null) { return 0; }
+            int level = 0;
+            Queue<TreeNode> q = new Queue<TreeNode>();
+            q.Enqueue(root);
+            while (q.Count > 0)
+            {
+                int count = q.Count;
+                ++level;
+                for (int i = 0; i < count; ++i)
+                {
+                    TreeNode cur = q.Dequeue();
+                    if (cur.left != null)
+                    {
+                        q.Enqueue(cur.left);
+                    }
+                    if (cur.right != null)
+                    {
+                        q.Enqueue(cur.right);
+                    }
+                }
+            }
+            return level;
+        }
+        #endregion
+        #region Leetcode 107  Binary Tree Level Order Traversal II
+        public IList<IList<int>> LevelOrderBottom(TreeNode root)
+        {
+            if (root == null)
+            {
+                return new List<IList<int>>();
+            }
+            IList<IList<int>> ans = new List<IList<int>>();
+            Queue<TreeNode> q = new Queue<TreeNode>();
+            q.Enqueue(root);
+            while (q.Count != 0)
+            {
+                int count = q.Count;
+                List<int> cur = new List<int>();
+                for (int i = 0; i < count; i++)
+                {
+                    TreeNode node = q.Dequeue();
+                    cur.Add(node.val);
+                    if (node.left != null)
+                    {
+                        q.Enqueue(node.left);
+                    }
+
+                    if (node.right != null)
+                    {
+                        q.Enqueue(node.right);
+                    }
+                }
+                ans.Insert(0, cur);
+            }
+            return ans;
+        }
+        #endregion
+        #region Leetcode 112  Path Sum 
+        public bool HasPathSum(TreeNode root, int sum)
+        {
+            return HPSdfs(root, 0, sum);
+        }
+        private bool HPSdfs(TreeNode cur, int sum, int target)
+        {
+            if (cur == null)
+            {
+                return false;
+            }
+            sum += cur.val;
+            if (sum == target && cur.left == null&& cur.right == null) 
+            // Reached the target sum and the current node is a leave
+            {
+                return true;
+            }
+            return HPSdfs(cur.left, sum, target) || HPSdfs(cur.right, sum, target);
+        }
+        #endregion
+        #region Leetcode 113 Path Sum II
+        public IList<IList<int>> PathSum(TreeNode root, int sum)
+        {
+            PSIIdfs(root, new List<int>(), 0, sum);
+            return PSIIans;
+        }
+        IList<IList<int>> PSIIans = new List<IList<int>>();
+        private void PSIIdfs(TreeNode cur, List<int> path, int sum, int target)
+        {
+            if (cur == null)
+            {
+                return;
+            }
+            sum += cur.val;
+            path.Add(cur.val);
+            if (sum == target && (cur.left == null && cur.right ==null))
+            {
+                PSIIans.Add(new List<int>(path));
+            }
+            else
+            {
+                PSIIdfs(cur.left, path, sum, target);
+                PSIIdfs(cur.right, path, sum, target);
+            }
+            path.RemoveAt(path.Count - 1);
+        }
+        #endregion
+        #region Leetcode 115  Distinct Subsequence
+        public int NumDistinct(string s, string t)
+        {
+            int ls = s.Length, lt = t.Length;
+
+            int[,] dp = new int[lt + 1, ls + 1];
+            //dp[i,j] = the amount of distinct subsequence in s[0:j - 1] that is the same as t[0:i - 1]
+
+            for (int i = 0; i < ls + 1; i++)
+            {
+                dp[0,i] = 1; // When the target is empty, there is one subsequence, which is empty
+            }
+            for (int i = 1; i < lt + 1; i++)
+            {
+                for (int j = 1; j < ls + 1; j++)
+                {
+                    dp[i, j] = dp[i, j - 1]; // Skip these chars
+                    if (s[i - 1] == t[j - 1])
+                    {
+                        dp[i, j] += dp[i - 1,j - 1]; // Match these two chars
+                    }
+                }
+            }
+            return dp[lt, ls];
+        }
+        #endregion
+        #region Leetcode 116  Populating Next Right Pointers in Each Node
+        public Node Connect(Node root)
+        {
+            if (root == null)
+            {
+                return null;
+            }
+            ConnectTwoNodes(root.left, root.right);
+            return root;
+        }
+        public void ConnectTwoNodes(Node root1, Node root2)
+        {
+            if (root2 == null || root1 == null)
+            {
+                return;
+            }
+
+            root1.next = root2;
+
+            ConnectTwoNodes(root1.left, root1.right);
+            ConnectTwoNodes(root2.left, root2.right);
+
+            ConnectTwoNodes(root1.right, root2.left);
+        }
+        #endregion
+        #region Leetcode 119  Pascal's Triangle II
+        public IList<int> GetRow(int rowIndex)
+        {
+            IList<int> level = new List<int>();
+             
+            if (rowIndex == 0) // First row
+            {
+                level.Add(1);
+                return level;
+            }
+
+            level.Add(1);
+            level.Add(1); // Second row
+            for (int i = 0; i < rowIndex - 1; ++i)
+            {
+                level = update(level);
+            }
+            return level;
+        }
+        public IList<int> update(IList<int> level)
+        {
+            IList<int> cur = new List<int>();
+            cur.Add(1);
+            for (int i = 0; i < level.Count - 1; ++i)
+            {
+                cur.Add(level[i] + level[i + 1]);
+            }
+            cur.Add(1);
+            return cur;
+        }
+        #endregion
+        #region Leetcode 120  Triangle
+        public int MinimumTotal(IList<IList<int>> t)
+        {
+            int line = t.Count;
+            if (line == 0) { return 0; }
+            else if (line == 1) { return t[0][0]; }
+
+            int[][] triangle = new int[line][];
+            for (int i = 0; i < line; i++)
+            {
+                triangle[i] = t[i].ToArray();
+            }
+
+            for (int i = line - 2; i >= 0; i--) // From the penultimate column to the top
+            {
+                for (int j = 0; j < triangle[i].Length; j++) // From left to right
+                {
+                    triangle[i][j] = Math.Min(triangle[i + 1][j + 1], triangle[i + 1][j]) + triangle[i][j];
+                    // triangle[i][j]: the minimum path sum from the bottom column to (i,j)
+                }
+            }
+
+            return triangle[0][0];
+        }
+        #endregion
+        #region Leetcode 121  Best Time to Buy and Sell Stock
+        public int MaxProfit(int[] prices)
+        {
+            int minPrice = int.MaxValue;
+            int maxProfit = 0;
+            int n = prices.Length;
+            if (n == 0 || n == 1) { return 0; } // Unable to make a deal
+            for (int i = 0; i < n; ++i)
+            {
+                // Keep updating the lowest price and max profit
+                if (prices[i] < minPrice)
+                {
+                    minPrice = prices[i];
+                }
+                else if (maxProfit < prices[i] - minPrice)
+                {
+                    maxProfit = prices[i] - minPrice;
+                }
+            }
+            return maxProfit;
+        }
+        #endregion
+        #region Leetcode 130  Surrounded Regions
+        public void Solve(char[][] board)
+        {
+            int m = board.Length;
+            if (m == 0)
+            {
+                return;
+            }
+            int n = board[0].Length;
+            for (int i = 0; i < m; i++)
+            {
+                SRdfs(ref board, n - 1, i);
+                SRdfs(ref board, 0, i);
+            }
+            for (int i = 0; i < n; i++)
+            {
+                SRdfs(ref board, i, 0);
+                SRdfs(ref board, i, m - 1);
+            }
+
+            for (int i = 0; i < m; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    if (board[i][j] == 'O')
+                    {
+                        board[i][j] = 'X';
+                    }
+                    else if (board[i][j] == 'S')
+                    {
+                        board[i][j] = 'O';
+                    }
+                }
+            }
+        }
+        private void SRdfs(ref char[][] board, int x, int y)
+        {
+            if (x < 0 || y < 0 || x >= board[0].Length || y >= board.Length || board[y][x] != 'O')
+            {
+                return;
+            }
+
+            board[y][x] = 'S';
+            SRdfs(ref board, x + 1, y);
+            SRdfs(ref board, x - 1, y);
+            SRdfs(ref board, x, y + 1);
+            SRdfs(ref board, x, y - 1);
+        }
+        #endregion
         #region Leetcode 206  Reverse Linked List
         public ListNode ReverseList(ListNode head)
         {
@@ -1032,6 +1341,72 @@ namespace Leetcode
                 head = hNext; // head = head.next
             }
             return nHead;
+        }
+        #endregion
+        #region Leetcode 310  Minimum Height Tree
+        // Distance between two nodes is the amount of edges that connect the two nodes
+        // Height of a tree can be defined as the maximum distance between its root and one of its leaves
+
+        // This question can be converted to finding centroids. Centroids are nodes that are closest to leaf nodes
+        // Not only that, there are atmost two centroids in a tree
+
+        public IList<int> FindMinHeightTrees(int n, int[][] edges)
+        {
+            IList<int> ans = new List<int>(); 
+            if(n <= 2)
+            {
+                for (int i = 0; i < n; i++)
+                {
+                    ans.Add(i);
+                }
+                return ans;
+            }
+            List<int>[] graph = new List<int>[n];
+            for (int i = 0; i < n; i++)
+            {
+                graph[i] = new List<int>();
+            }
+            foreach(int[] e in edges)
+            {
+                int u = e[0], v = e[1];
+
+                graph[u].Add(v);
+                graph[v].Add(u);
+            }
+
+
+            List<int> leaves = new List<int>();
+            for (int i = 0; i < n; i++) // Initiallize the first layer of leaves
+            {
+                if(graph[i].Count == 1)
+                {
+                    leaves.Add(i);
+                }
+            }
+
+            int remaining = n;
+            while (remaining > 2)
+            {
+                remaining -= leaves.Count;
+                List<int> newLeaves = new List<int>();
+                
+                // Find the inner layer of leaves
+
+
+                foreach(int leaf in leaves)
+                {
+                    foreach(int next in graph[leaf])
+                    {
+                        graph[next].Remove(leaf);
+                        if(graph[next].Count == 1)
+                        {
+                            newLeaves.Add(next);
+                        }
+                    }
+                }
+                leaves = newLeaves;
+            }
+            return leaves;
         }
         #endregion
         #region Leetcode 445  Add Two Numbers II
