@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection.Metadata.Ecma335;
+using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.Cryptography;
 using System.Text;
@@ -179,7 +180,7 @@ namespace Leetcode
         }
         #endregion
         #region Leetcode 2  Add Two Numbers
-        public ListNode AddTwoNumbers(ListNode l1, ListNode l2)
+        public ListNode AddTwoNumbers(ListNode l1, ListNode l2, int q_Index = 1)
         {
             ListNode dummy = new ListNode(0);
             ListNode tail = dummy;
@@ -768,12 +769,12 @@ namespace Leetcode
             {
                 // Try every possible length of our subset
                 IList<int> cur = new List<int>();
-                dfs(0, ref cur, nums, i);
+                Subsetdfs(0, ref cur, nums, i);
             }
             return Subset_ans;
         }
         IList<IList<int>> Subset_ans = new List<IList<int>>();
-        public void dfs(int index, ref IList<int> path, int[] nums, int k)
+        public void Subsetdfs(int index, ref IList<int> path, int[] nums, int k)
         {
             if (path.Count == k)
             {
@@ -784,7 +785,7 @@ namespace Leetcode
             for (int i = index; i < nums.Length; ++i)
             {
                 path.Add(nums[i]);
-                dfs(i + 1, ref path, nums, k);
+                Subsetdfs(i + 1, ref path, nums, k);
                 path.RemoveAt(path.Count - 1); // Reverse
             }
 
@@ -1259,23 +1260,157 @@ namespace Leetcode
         #region Leetcode 121  Best Time to Buy and Sell Stock
         public int MaxProfit(int[] prices)
         {
-            int minPrice = int.MaxValue;
+            int minBuyIn = int.MaxValue;
             int maxProfit = 0;
             int n = prices.Length;
             if (n == 0 || n == 1) { return 0; } // Unable to make a deal
             for (int i = 0; i < n; ++i)
             {
                 // Keep updating the lowest price and max profit
-                if (prices[i] < minPrice)
+                if (prices[i] < minBuyIn)
                 {
-                    minPrice = prices[i];
+                    minBuyIn = prices[i];
                 }
-                else if (maxProfit < prices[i] - minPrice)
+                else if(prices[i] - minBuyIn > maxProfit) // Use else if here because buying and selling cannot be on the same day
                 {
-                    maxProfit = prices[i] - minPrice;
+                    maxProfit = prices[i] - minBuyIn;
                 }
             }
             return maxProfit;
+        }
+        #endregion
+        #region Leetcode 122  Best Time to Buy and Sell Stock II 
+        public int MaxProfitII(int[] prices, int qIndex = 2)
+        {
+            int n = prices.Length;
+            if (n <= 1) { return 0; }
+            int buy = 0; int sell = 0; int profit = 0;
+            // Goal here is to as much positive trades as possible
+            while (buy < n && sell < n)
+            {
+                while (buy + 1 < n && prices[buy + 1] < prices[buy])
+                {
+                    ++buy;
+                }
+                sell = buy;
+                while (sell + 1 < n && prices[sell + 1] > prices[sell])
+                {
+                    ++sell;
+                }
+                profit += prices[sell] - prices[buy];
+                buy = sell + 1;
+            }
+            return profit;
+        }
+        #endregion
+        #region Leetcode 123  Best Time to Buy and Sell Stock III
+        public int MaxProfit(int[] prices, int qIndex = 3)
+        {
+            int n = prices.Length;
+            if (n == 0) { return 0; }
+            int k = 2;
+            int[,] dp = new int[k + 1, n];
+            for (int i = 1; i <= k; i++)
+            {
+                int maxdiff = -prices[0];
+                for (int j = 1; j < n; j++)
+                {
+                    dp[i, j] = Math.Max(dp[i, j - 1], maxdiff + +prices[j]);
+                    maxdiff = Math.Max(maxdiff, dp[i - 1, j] - prices[j]);
+                }
+            }
+            return dp[k, n - 1];
+
+        }
+        #endregion
+        #region Leetcode 124  Binary Tree Maximum Path Sum
+        public int MaxPathSum(TreeNode root)
+        {
+            if (root == null)
+            {
+                return 0;
+            }
+            int ans = int.MinValue;
+            MPShelper(root, ref ans);
+            return ans;
+        }
+        /// <summary>
+        /// The helper function of Max Path Sum
+        /// </summary>
+        /// <param name="root">The current root</param>
+        /// <param name="ans">An ref integar that represent the possible maximum subtree sum</param>
+        /// <returns>Returns the path sum of the branch(left or right) with the largest path sum</returns>
+        public int MPShelper(TreeNode root, ref int ans)
+        {
+            if (root == null)
+            {
+                return 0;
+            }
+            int left_sum = Math.Max(0, MPShelper(root.left, ref ans));
+            int right_sum = Math.Max(0, MPShelper(root.right, ref ans));
+
+            ans = Math.Max(ans, left_sum + right_sum + root.val);
+            return Math.Max(left_sum, right_sum) + root.val;
+
+        }
+        #endregion
+        #region Leetcode 125  Valid Panlindrome
+        public bool IsPalindrome(string s)
+        {
+            int n = s.Length;
+            int l = 0;
+            int r = n - 1;
+            while (l < r)
+            {
+                // Skip white spaces
+                while (l < r && !Char.IsLetterOrDigit(s[l]))
+                {
+                    ++l;
+                }
+                while (l < r && !Char.IsLetterOrDigit(s[r]))
+                {
+                    --r;
+                }
+
+                if (Char.ToLower(s[l++]) != Char.ToLower(s[r--]))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        #endregion
+        #region Leetcode 129  Sum Root to Leaf Numbers
+        public int SumNumbers(TreeNode root)
+        {
+            if (root == null)
+            {
+                return 0;
+            }
+            dfs(new StringBuilder(), root);
+            return SNans;
+        }
+        int SNans = 0;
+        private void dfs(StringBuilder path, TreeNode cur)
+        {
+            path.Append(cur.val);
+            if (cur.left == null && cur.right == null)
+            {
+                SNans += Convert.ToInt32(path.ToString());
+            }
+            else
+            {
+                if (cur.left != null)
+                {
+                    dfs(path, cur.left);
+                }
+                if (cur.right != null)
+                {
+                    dfs(path, cur.right);
+                }
+            }
+
+            path.Remove(path.Length - 1, 1);
         }
         #endregion
         #region Leetcode 130  Surrounded Regions
@@ -1325,6 +1460,166 @@ namespace Leetcode
             SRdfs(ref board, x - 1, y);
             SRdfs(ref board, x, y + 1);
             SRdfs(ref board, x, y - 1);
+        }
+        #endregion
+        #region Leetcode 134  Gas Station
+        // This is actually not the most optimized solution
+        public int CanCompleteCircuit(int[] gas, int[] cost)
+        {
+            int n = gas.Length;
+            for (int i = 0; i < n; ++i) // Try every starting position
+            {
+                int total = 0, count = 0, j = i;
+                while (count < n)
+                {
+                    total += gas[j % n] - cost[j % n]; // Use the mod here because j could be larger than n
+                    if (total < 0) // Run out of gases
+                    {
+                        break;
+                    }
+                    ++j;
+                    ++count;
+                }
+                if (count == n && total >= 0)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+        #endregion
+        #region Leetcode 136  Single Number
+        public int SingleNumber(int[] nums)
+        {
+            int ans = 0;
+            foreach (int num in nums)
+            {
+                ans ^= num;
+            }
+            return ans;
+        }
+        #endregion
+        #region Leetcode 137  Single Number II
+        public int SingleNumber(int[] nums,int qIndex = 2)
+        {
+            int res = 0;
+            for (int i = 0; i < 32; i++)
+            {
+                int sum = 0;
+                for (int j = 0; j < nums.Length; j++)
+                {
+                    if (((nums[j] >> i) & 1) == 1)
+                    {
+                        ++sum;
+                    }
+                }
+                sum %= 3;
+                // A set bit must occur 3n times or it is also a bit of the single number
+                if (sum == 1)
+                {
+                    res += 1 << i;
+                }
+            }
+            return res;
+        }
+        #endregion
+        #region Leetcode 139  Word Break
+        public bool WordBreak(string s, IList<string> wordDict)
+        {
+            int n = s.Length;
+            bool[] dp = new bool[n + 1];
+            dp[0] = true;
+            // dp[i]: whether the word dict can build s[0:i+1]
+            for (int i = 1; i <= n; i++)
+            {
+                foreach (string word in wordDict.ToArray())
+                {
+                    int l = word.Length;
+                    int start = i - l;
+
+                    if (start < 0 || !dp[start]) { continue; }
+                    else if (word == s.Substring(start, l))
+                    {
+                        dp[i] = true;
+                        break;
+                    }
+                }
+            }
+
+            return dp[n];
+        }
+        #endregion
+        #region Leetcode 141  Linked List Cycle
+        public bool HasCycle(ListNode head)
+        {
+            if (head == null)
+            {
+                return false;
+            }
+            ListNode fast = head, slow = head;
+            while (fast.next != null && fast.next.next != null)
+            {
+                fast = fast.next.next;
+                slow = slow.next;
+
+                if (fast == slow)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        #endregion
+        #region Leetcode 142  Linked List Cycle II
+        /*
+        Assume the distance from head to the start of the loop is x1
+        the distance from the start of the loop to the point fast and slow meet is x2
+        the distance from the point fast and slow meet to the start of the loop is x3
+        What is the distance fast moved? What is the distance slow moved? And their relationship?
+
+        x1 + x2 + x3 + x2
+        x1 + x2
+        x1 + x2 + x3 + x2 = 2 (x1 + x2)
+
+        Thus x1 = x3
+        */
+
+        public ListNode DetectCycle(ListNode head)
+        {
+            if(head == null || head.next == null)
+            {
+                return null;
+            }
+
+            bool hasCycle = false;
+            ListNode fast = head, slow = head;
+            while(fast.next != null && fast.next.next != null)
+            {
+                slow = slow.next;
+                if(fast.next == null)
+                {
+                    return null;
+                }
+                fast = fast.next.next;
+                if(fast == slow)
+                {
+                    hasCycle = true;
+                    break;
+                }
+            }
+
+            if (!hasCycle)
+            {
+                return null;
+            }
+
+            fast = head;
+            while(fast != slow)
+            {
+                fast = fast.next;
+                slow = slow.next;
+            }
+            return fast;
         }
         #endregion
         #region Leetcode 206  Reverse Linked List
@@ -1411,7 +1706,7 @@ namespace Leetcode
         #endregion
         #region Leetcode 445  Add Two Numbers II
         // Original function name: AddTwoNumbers, changed to avoid clash with Leetcode 2
-        public ListNode AddTwoNumbersII(ListNode l1, ListNode l2)
+        public ListNode AddTwoNumbersII(ListNode l1, ListNode l2, int qIndex = 2)
         {
             Stack<int> s1 = new Stack<int>();
             Stack<int> s2 = new Stack<int>();
@@ -1443,6 +1738,102 @@ namespace Leetcode
             }
             return dummy;
 
+        }
+        #endregion
+        #region Leetcode 593  Valid Square
+        public bool ValidSquare(int[] p1, int[] p2, int[] p3, int[] p4)
+        {
+            IDictionary<int, int> distMap = new Dictionary<int, int>();
+            int[][] points = new int[4][];
+            points[0] = p1;
+            points[1] = p2;
+            points[2] = p3;
+            points[3] = p4;
+
+            for (int i = 0; i < 4; ++i)
+            {
+                for (int j = i + 1; j < 4; ++j)
+                {
+                    int[] p = points[i];
+                    int[] q = points[j];
+                    int dist = CalculateDistSquare(p, q);
+                    if (distMap.ContainsKey(dist))
+                    {
+                        distMap.Add(dist, 0);
+                    }
+                    distMap[dist]++;
+                }
+            }
+
+            if (distMap.Count != 2)
+                return false;
+
+            foreach (var kvp in distMap)
+            {
+                if (kvp.Value!= 2 && kvp.Value!= 4)
+                    return false;
+            }
+
+            return true;
+        }
+
+        private int CalculateDistSquare(int[] p1, int[] p2)
+        {
+            return (p1[0] - p2[0]) * (p1[0] - p2[0]) + (p1[1] - p2[1]) * (p1[1] - p2[1]);
+        }
+        #endregion
+        #region Leetcode 938  Range Sum of BST
+        public int RangeSumBST(TreeNode root, int low, int high)
+        {
+            if (root == null)
+            {
+                return 0;
+            }
+            int ans = 0;
+            Queue<TreeNode> q = new Queue<TreeNode>();
+            q.Enqueue(root);
+            while (q.Count != 0)
+            {
+                TreeNode cur = q.Dequeue();
+                if (cur.val <= high && cur.val >= low)
+                {
+                    ans += cur.val;
+                }
+
+                if (cur.left != null)
+                {
+                    q.Enqueue(cur.left);
+                }
+                if (cur.right != null)
+                {
+                    q.Enqueue(cur.right);
+                }
+            }
+            return ans;
+        }
+        #endregion
+        #region Leetcode 1026  Maximum Difference Between Node and Ancestor
+        public int MaxAncestorDiff(TreeNode root)
+        {
+            if (root == null)
+            {
+                return MADans;
+            }
+
+            MADdfs(root.left, root.val, root.val);
+            MADdfs(root.right, root.val, root.val);
+
+            return MADans;
+        }
+        int MADans = 0;
+        private void MADdfs(TreeNode node, int prev_min, int prev_max)
+        {
+            if (node == null) { return; }
+            MADans = Math.Max(MADans, Math.Max(Math.Abs(prev_min - node.val), Math.Abs(prev_max - node.val)));
+            int new_min = Math.Min(node.val, prev_min), new_max = Math.Max(node.val, prev_max);
+
+            MADdfs(node.left, new_min, new_max);
+            MADdfs(node.right, new_min, new_max);
         }
         #endregion
         #region Leetcode 1446  Consecutive Characters
