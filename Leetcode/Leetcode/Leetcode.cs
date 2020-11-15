@@ -17,12 +17,14 @@ namespace Leetcode
         public Node left;
         public Node right;
         public Node next;
-
+        public Node random;
         public Node() { }
 
         public Node(int _val)
         {
             val = _val;
+            next = null;
+            random = null;
         }
 
         public Node(int _val, Node _left, Node _right, Node _next)
@@ -32,6 +34,7 @@ namespace Leetcode
             right = _right;
             next = _next;
         }
+
     }
     class Prefix_Sum
     {
@@ -1521,6 +1524,51 @@ namespace Leetcode
                 }
             }
             return res;
+        }
+        #endregion
+        #region Leetcode 138  Copy List with Random Pointer
+        public Node CopyRandomList(Node head)
+        {
+            if (head == null)
+            {
+                return null;
+            }
+
+            Dictionary<Node, int> position = new Dictionary<Node, int>();
+            // Key: The Node  Value: The original index of the node
+            Node temp = head;
+            List<Node> nodemap = new List<Node>();
+            // The list
+
+            int index = 0;
+            while (temp != null) // Traverse
+            {
+                nodemap.Add(new Node(temp.val));
+                position.Add(temp, index);
+                temp = temp.next; 
+                ++index;
+            }
+
+            int length = index;
+            temp = head;
+            index = 0;
+            while (temp != null)
+            {
+                // nodemap[index] is the current node
+                if (index < length - 1)
+                {
+                    nodemap[index].next = nodemap[index + 1];
+                    // Connect the normal pointers 
+                }
+                if (temp.random != null) // If it do have a random pointer
+                {
+                    nodemap[index].random = nodemap[position[temp.random]];
+                }
+
+                temp = temp.next;
+                ++index;
+            }
+            return nodemap[0];
         }
         #endregion
         #region Leetcode 139  Word Break
