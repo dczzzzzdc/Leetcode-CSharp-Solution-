@@ -160,7 +160,7 @@ namespace Leetcode
         #endregion
         static void Main(string[] args)
         {
-            
+            DecodeString("3[a]2[bc]");
         }
         #region Leetcode 1  Two Sum
         public int[] TwoSum(int[] nums, int target)
@@ -183,7 +183,7 @@ namespace Leetcode
         }
         #endregion
         #region Leetcode 2  Add Two Numbers
-        public ListNode AddTwoNumbers(ListNode l1, ListNode l2, int q_Index = 1)
+        public ListNode AddTwoNumbers(ListNode l1, ListNode l2)
         {
             ListNode dummy = new ListNode(0);
             ListNode tail = dummy;
@@ -422,6 +422,86 @@ namespace Leetcode
                 interval *= 2;
             }
             return lists[0];
+        }
+        #endregion
+        #region Leetcode 34  Find First and Last Position of Element in Sorted Array
+        public int[] SearchRange(int[] nums, int target)
+        {
+            int[] ans = new int[2];
+            ans[0] = FindFirst(nums, target);
+            ans[1] = FindLast(nums, target);
+            return ans;
+        }
+        public int FindFirst(int[] nums, int target)
+        {
+            int index = -1;
+            int l = 0;
+            int r = nums.Length;
+            while (l < r)
+            {
+                int m = l + (r - l) / 2;
+                int cur = nums[m];
+                if (cur >= target)
+                {
+                    r = m;
+                }
+                else
+                {
+                    l = m + 1;
+                }
+                if (cur == target) { index = m; }
+            }
+            return index;
+        }
+        public int FindLast(int[] nums, int target)
+        {
+            int index = -1;
+            int l = 0;
+            int r = nums.Length;
+            while (l < r)
+            {
+                int m = l + (r - l) / 2;
+                int cur = nums[m];
+                if (cur <= target)
+                {
+                    l = m + 1;
+                }
+                else
+                {
+                    r = m;
+                }
+                if (cur == target) { index = m; }
+            }
+            return index;
+        }
+        #endregion
+        #region Leetcode 41  First Missing Positive
+        public int FirstMissingPositive(int[] nums)
+        {
+            int n = nums.Length;
+            int i = 0;
+            while (i < n) // Put every number on its position. For example, put 5 on nums[4]
+            {
+                int cur = nums[i];
+                if (cur > 0 && cur <=n && nums[cur -1] != cur)
+                {
+                    int temp = nums[cur];
+                    nums[cur - 1] = nums[cur];
+                    nums[i] = temp;
+                }
+                else
+                {
+                    ++i;
+                }
+            }
+            for (int x = 0; x < n; x++)
+            {
+                if (nums[x] != x + 1)
+                {
+                    return x + 1;
+                }
+            }
+            return n + 1;
         }
         #endregion
         #region Leetcode 50  Pow(x,n)
@@ -1670,6 +1750,351 @@ namespace Leetcode
             return fast;
         }
         #endregion
+        #region Leetcode 151  Reverse Words in a String
+        public string ReverseWords(string s)
+        {
+            string[] quick = s.Trim().Split(' ');
+            StringBuilder sb = new StringBuilder("");
+            for (int i = quick.Length - 1; i >= 0; i--)
+            {
+                if (quick[i].Trim().Length > 0)
+                {
+                    sb.Append(quick[i].Trim());
+                    sb.Append(" ");
+                }
+            }
+            return sb.ToString().Trim();
+        }
+        #endregion
+        #region Leetcode 152  Maximum Product Subarray
+        public int MaxProduct(int[] nums)
+        {
+
+            int min = nums[0]; int max = min;
+            int ans = min;
+
+            for (int i = 1; i < nums.Length; ++i)
+            {
+                int n = nums[i];
+                int r1 = min * n;
+                int r2 = max * n;
+
+                max = Math.Max(Math.Max(r1, r2), n);
+                min = Math.Min(Math.Min(r1, r2), n);
+
+                ans = Math.Max(ans, max);
+            }
+            return ans;
+
+        }
+        #endregion
+        #region Leetcode 162  Peak Element 
+        public int FindPeakElement(int[] nums)
+        {
+            int left = 0;
+            int right = nums.Length;
+
+            while (left < right)
+            {
+                int m = left + (right - left) / 2;
+                if (nums[m] < nums[m + 1])// We are in an ascending order
+                {
+                    left = m + 1;
+                }
+                else // We are in an decending order
+                {
+                    right = m;
+                }
+            }
+            return left;
+        }
+        #endregion
+        #region Leetcode 165  Compare Version Numbers
+        public int CompareVersion(string v1, string v2)
+        {
+            if (v1 == v2)
+            {
+                return 0;
+            }
+
+            string[] one = v1.Split(".");
+            string[] two = v2.Split(".");
+
+            int l1 = one.Length, l2 = two.Length;
+            for (int i = 0; i < Math.Max(l1, l2); ++i)
+            {
+                int cur1 = i < l1 ? Convert.ToInt32(one[i]) : 0;
+                int cur2 = i < l2 ? Convert.ToInt32(two[i]) : 0;
+
+                int compare = cur1.CompareTo(cur2);
+                if (compare != 0)
+                {
+                    return compare;
+                }
+            }
+            return 0;
+        }
+        #endregion
+        #region Leetcode 167  Two Sum II - Input array is sorted
+        public int[] TwoSum(int[] numbers, int target, int qIndex = 2)
+        {
+            int l = 0;
+            int r = numbers.Length - 1;
+            int[] results = new int[2];
+            while (l < r)
+            {
+                int sum = numbers[l] + numbers[r];
+                if (sum == target)
+                {
+                    return new int[2] { l + 1, r + 1 };
+                }
+                else if (sum > target)
+                {
+                    --r;
+                }
+                else { ++l; }
+            }
+            return new int[2] { 0, 0 };
+        }
+        #endregion
+        #region Leetcode 169  Majority Element
+        public int MajorityElement(int[] nums)
+        {
+            int majority = nums[0];
+            int count = 0;
+            foreach (int num in nums)
+            {
+                if (num == majority) { ++count; }
+                else if (--count == 0)
+                {
+                    count = 1;
+                    majority = num;
+                }
+            }
+            return majority;
+        }
+        #endregion
+        #region Leetcode 171  Excel Sheet Column Number
+        public int TitleToNumber(string s)
+        {
+            int res = 0;
+            for (int i = 0; i < s.Length; ++i)
+            {
+                res *= 26;
+                res += (s[i] - 'A' + 1);
+            }
+            return res;
+        }
+        #endregion
+        #region Leetcode 172  Factorial Trailing Zero
+        public int TrailingZeroes(int n)
+        {
+            // A trailing zero can only be made by a factor of 2 and 5
+            // In a n! operation, there is always more 2 than 5
+            // Therefore, we just have to count the amount of 5
+            return n == 0 ? 0 : n / 5 + TrailingZeroes(n / 5);
+        }
+        #endregion
+        #region Leetcode 174  Dungeon Game 
+        public int CalculateMinimumHP(int[][] dungeon)
+        {
+            int n = dungeon.Length;
+            int m = dungeon[0].Length;
+            int[,] hp = new int[n + 1, m + 1];
+            // hp[i,j] is the minimum health needed to going from the destination to dungeon[i][j]
+            for (int i = 0; i <= n; ++i)
+            {
+                for (int j = 0; j <= m; ++j)
+                {
+                    hp[i, j] = int.MaxValue;
+                }
+            }
+            hp[n, m - 1] = 1;
+            hp[n - 1, m] = 1;
+            // The character needs one hp to go through the destination
+
+            for (int i = n - 1; i >= 0; i--)
+            {
+                for (int j = m - 1; j >= 0; j--)
+                {
+                    int need = Math.Min(hp[i + 1, j], hp[i, j + 1]) - dungeon[i][j];
+                    hp[i, j] = need <= 0 ? 1 : need;
+                }
+            }
+            return hp[0, 0];
+        }
+        #endregion
+        #region Leetcode 179  Largest Number
+        public string LargestNumber(int[] nums)
+        {
+            Array.Sort(nums, new SortToMakeLargeNumber());
+            StringBuilder result = new StringBuilder();
+            foreach (int n in nums)
+            {
+                result.Append(n);
+            }
+            return result.ToString();
+        }
+        #endregion
+        #region Leetcode 190  Reverse Bits
+        public uint reverseBits(uint n)
+        {
+            uint ans = 0;
+            for (int i = 0; i < 32; i++)
+            {
+                ans = (ans << 1) | (n & 1);
+                n >>= 1;
+            }
+            return ans;
+        }
+        #endregion
+        #region Leetcode 191  Number of 1 Bits
+        public int HammingWeight(uint n)
+        {
+            int count = 0;
+            for (int i = 0; i < 32; i++)
+            {
+                count += (int)(n & 1);
+                n >>= 1;
+            }
+            return count;
+        }
+        #endregion
+        #region Leetcode 198  House Robber
+        public int Rob(int[] nums)
+        {
+            int n = nums.Length;
+            if (n == 0) { return 0; }
+            else if (n == 1) { return nums[0]; }
+            else if (n == 2) { return Math.Max(nums[0], nums[1]); }
+
+            int dp2 = nums[0];
+            int dp1 = Math.Max(nums[0], nums[1]);
+            for (int i = 2; i < n; i++)
+            {
+                int dp = Math.Max(dp1,dp2 + nums[i]);
+
+                dp2 = dp1;
+                dp1 = dp;
+            }
+            return dp1;
+        }
+        #endregion
+        #region Leetcode 199  Binary Tree Right Side View
+        public IList<int> RightSideView(TreeNode root)
+        {
+            if (root == null)
+            {
+                return new List<int>();
+            }
+            IList<int> ans = new List<int>();
+            Queue<TreeNode> q = new Queue<TreeNode>();
+            q.Enqueue(root);
+            while (q.Count != 0)
+            {
+                TreeNode cur = null;
+                int count = q.Count;
+
+                for (int i = 0; i < count; i++)
+                {
+                    cur = q.Dequeue();
+
+                    if (cur.left != null)
+                    {
+                        q.Enqueue(cur.left);
+                    }
+                    if (cur.right != null)
+                    {
+                        q.Enqueue(cur.right);
+                    }
+                }
+                ans.Add(cur.val);
+            }
+            return ans;
+        }
+        #endregion
+        #region Leetcode 200  Number of Islands
+        public int NumIslands(char[][] grid)
+        {
+            int m = grid.Length;
+            if (m == 0)
+            {
+                return 0;
+            }
+            int count = 0, n = grid[0].Length;
+
+            for (int i = 0; i < m; i++)
+            {
+                for (int j = 0; j < n; j++)
+                {
+                    if (grid[i][j] == '1')
+                    {
+                        count++;
+                        NIdfs(ref grid, j, i);
+                    }
+                }
+            }
+            return count;
+        }
+        private void NIdfs(ref char[][] grid, int x, int y)
+        {
+            if (x < 0 || y < 0 || x >= grid[0].Length || y >= grid.Length || grid[y][x] != '1')
+            {
+                return;
+            }
+
+            grid[y][x] = '0';
+
+            NIdfs(ref grid, x + 1, y);
+            NIdfs(ref grid, x - 1, y);
+            NIdfs(ref grid, x, y + 1);
+            NIdfs(ref grid, x, y - 1);
+        }
+        #endregion
+        #region Leetcode 202  Happy Number
+        public bool IsHappy(int n)
+        {
+            if (n == 1) { return true; }
+            int fast = SumDigitSquare(n);
+            int slow = n;
+            while (slow != fast)
+            {
+                if (fast == 1 || slow == 1) { return true; }
+                slow = SumDigitSquare(slow);
+                fast = SumDigitSquare(SumDigitSquare(fast));
+
+            }
+            return false;
+        }
+        public int SumDigitSquare(int n)
+        {
+            int sum = 0;
+            while (n != 0)
+            {
+                int cur = n % 10;
+                sum += cur * cur;
+                n /= 10;
+            }
+            return sum;
+        }
+        #endregion
+        #region Leetcode 203  Remove Linked List Element
+        public ListNode RemoveElements(ListNode head, int val)
+        {
+
+            while (head != null && head.val == val)
+            {
+                head = head.next;
+            }
+            ListNode pointer = head;
+            while (pointer != null && pointer.next != null)
+            {
+                if (pointer.next.val == val) { pointer.next = pointer.next.next; }
+                else { pointer = pointer.next; }
+            }
+            return head;
+        }
+        #endregion
         #region Leetcode 206  Reverse Linked List
         public ListNode ReverseList(ListNode head)
         {
@@ -1752,9 +2177,53 @@ namespace Leetcode
             return leaves;
         }
         #endregion
+        #region Leetcode 394  Decode String
+        public static string DecodeString(string s)
+        {
+            StringBuilder res = new StringBuilder();
+            Stack<int> countStack = new Stack<int>();
+            Stack<string> stringStack = new Stack<string>();
+
+            int i = 0, n = s.Length;
+            while (i < n)
+            {
+                if (Char.IsNumber(s[i]))                {
+                    int curCount = 0;
+                    while (i < n && Char.IsNumber(s[i]))
+                    {
+                        curCount = curCount * 10 + (int)Char.GetNumericValue(s[i++]);
+                    }
+                    countStack.Push(curCount);
+                }
+                else if (s[i] == '[')
+                {
+                    stringStack.Push(res.ToString());
+                    res = new StringBuilder();
+                    i++;
+                }
+                else if (s[i] == ']')
+                {
+                    StringBuilder temp = new StringBuilder(stringStack.Pop());
+                    int repeatCount = countStack.Pop();
+
+                    for (int x = 0; x < repeatCount; x++)
+                    {
+                        temp.Append(res.ToString());
+                    }
+
+                    res = temp;
+                    i++;
+                }
+                else
+                {
+                    res.Append(s[i++]);
+                }
+            }
+            return res.ToString();
+        }
+        #endregion
         #region Leetcode 445  Add Two Numbers II
-        // Original function name: AddTwoNumbers, changed to avoid clash with Leetcode 2
-        public ListNode AddTwoNumbersII(ListNode l1, ListNode l2, int qIndex = 2)
+        public ListNode AddTwoNumbers(ListNode l1, ListNode l2, int qIndex = 2)
         {
             Stack<int> s1 = new Stack<int>();
             Stack<int> s2 = new Stack<int>();
@@ -1786,6 +2255,31 @@ namespace Leetcode
             }
             return dummy;
 
+        }
+        #endregion
+        #region Leetcode 563  Binary Tree Tilt
+        public int FindTilt(TreeNode root)
+        {
+            TiltSumdfs(root);
+            return totalTilt;
+        }
+        int totalTilt = 0;
+        /// <summary>
+        /// Modifies the value of totalTilt
+        /// </summary>
+        /// <param name="cur">Tge current TreeNode</param>
+        /// <returns>The sum of the subtree whose root is cur</returns>
+        private int TiltSumdfs(TreeNode cur)
+        {
+            if (cur == null)
+            {
+                return 0;
+            }
+            int leftSum = TiltSumdfs(cur.left);
+            int rightSum = TiltSumdfs(cur.right);
+            totalTilt += Math.Abs(leftSum - rightSum);
+
+            return cur.val + leftSum + rightSum;
         }
         #endregion
         #region Leetcode 593  Valid Square
@@ -1908,4 +2402,48 @@ namespace Leetcode
         }
         #endregion
     }
+    #region Leetcode 155  Min Stack
+    public class MinStack
+    {
+        Stack<int> data = new Stack<int>();
+        Stack<int> min = new Stack<int>();
+        // Use another stack to record the min value at every moment
+        public void Push(int x)
+        {
+            data.Push(x);
+            if (min.Count != 0 && min.Peek() < x)
+            {
+                x = min.Peek();
+            }
+            min.Push(x);
+        }
+
+        public void Pop()
+        {
+            min.Pop();
+            data.Pop();
+        }
+        public int Top()
+        {
+            return data.Peek();
+        }
+        public int GetMin()
+        {
+            return min.Peek();
+        }
+    }
+    #endregion
+    #region Sorting Class of Leetcode 179 
+    public class SortToMakeLargeNumber : IComparer<int>
+    {
+        public int Compare(int x, int y)
+        {
+            string s1 = x.ToString() + y.ToString();
+            string s2 = y.ToString() + x.ToString();
+
+            return Convert.ToInt32(s2).CompareTo(Convert.ToInt32(s1));
+            // Make sure that the larger value is in front
+        }
+    }
+    #endregion
 }
