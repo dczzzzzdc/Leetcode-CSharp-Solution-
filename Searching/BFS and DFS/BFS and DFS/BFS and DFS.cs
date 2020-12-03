@@ -167,6 +167,7 @@ namespace BFS_and_DFS
     {
         static void Main(string[] args)
         {
+            Console.WriteLine(JudgePoint24(new int[4] { 3, 8, 2, 9 }));
         }
         public bool IsLeave(TreeNode node)
         {
@@ -2093,7 +2094,7 @@ namespace BFS_and_DFS
         }
         #endregion
         #region Leetcode 679  24 Game
-        public bool JudgePoint24(int[] n)
+        public static bool JudgePoint24(int[] n)
         {
             double[] nums = new double[4];
             for (int i = 0; i < n.Length; i++)
@@ -2107,7 +2108,7 @@ namespace BFS_and_DFS
         /// </summary>
         /// <param name="nums"></param>
         /// <returns></returns>
-        public bool helper24(double[] nums)
+        public static bool helper24(double[] nums)
         {
             int n = nums.Length;
             if (n == 1)

@@ -11,6 +11,13 @@ using System.Text.Json.Serialization;
 
 namespace Leetcode
 {
+    
+    public enum States
+    {
+        visiting,
+        visited,
+        unvisited
+    }
     class Node
     {
         public int val;
@@ -160,7 +167,6 @@ namespace Leetcode
         #endregion
         static void Main(string[] args)
         {
-            DecodeString("3[a]2[bc]");
         }
         #region Leetcode 1  Two Sum
         public int[] TwoSum(int[] nums, int target)
@@ -2111,247 +2117,509 @@ namespace Leetcode
             return nHead;
         }
         #endregion
-        #region Leetcode 310  Minimum Height Tree
-        // Distance between two nodes is the amount of edges that connect the two nodes
-        // Height of a tree can be defined as the maximum distance between its root and one of its leaves
-
-        // This question can be converted to finding centroids. Centroids are nodes that are closest to leaf nodes
-        // Not only that, there are atmost two centroids in a tree
-
-        public IList<int> FindMinHeightTrees(int n, int[][] edges)
+        #region Leetcode 207  Course Schedule
+        public bool CanFinish(int numCourses, int[][] prerequisites)
         {
-            IList<int> ans = new List<int>(); 
-            if(n <= 2)
+            List<int>[] map = new List<int>[numCourses];
+            // map[i]: the prerequisite courses that have to be taken before taking course i
+            for (int i = 0; i < numCourses; i++)
             {
-                for (int i = 0; i < n; i++)
-                {
-                    ans.Add(i);
-                }
-                return ans;
+                map[i] = new List<int>();
             }
-            List<int>[] graph = new List<int>[n];
-            for (int i = 0; i < n; i++)
+            foreach (int[] p in prerequisites)
+            {
+                map[p[0]].Add(p[1]);
+            }
+            States[] states = new States[numCourses];
+            for (int i = 0; i < numCourses; i++)
+            {
+                states[i] = States.unvisited;
+            }
+            for (int i = 0; i < numCourses; i++)
+            {
+                if (!CFdfs(i, map, ref states))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        private bool CFdfs(int i, List<int>[] map, ref States[] states)
+        {
+            if (states[i] == States.visiting)
+            {
+                return false;
+            }
+            else if (states[i] == States.visited)
+            {
+                return true;
+            }
+
+            states[i] = States.visiting;
+
+            foreach (int next in map[i])
+            {
+                if (!CFdfs(next, map, ref states))
+                {
+                    return false;
+                }
+            }
+
+            states[i] = States.visited;
+            return true;
+        }
+        #endregion
+        #region Leetcode 210  Course Schedule II
+        public int[] FindOrder(int numCourses, int[][] prerequisites)
+        {
+            List<int>[] graph = new List<int>[numCourses];
+            for (int i = 0; i < numCourses; ++i)
             {
                 graph[i] = new List<int>();
             }
-            foreach(int[] e in edges)
+            foreach (int[] course in prerequisites)
             {
-                int u = e[0], v = e[1];
-
-                graph[u].Add(v);
-                graph[v].Add(u);
+                graph[course[0]].Add(course[1]);
             }
-
-
-            List<int> leaves = new List<int>();
-            for (int i = 0; i < n; i++) // Initiallize the first layer of leaves
+            States[] states = new States[numCourses];
+            for (int i = 0; i < numCourses; i++)
             {
-                if(graph[i].Count == 1)
+                states[i] = States.unvisited;
+            }
+            List<int> ans = new List<int>();
+            for (int i = 0; i < numCourses; ++i)
+            {
+                if (!CFdfs(i, graph, ref states, ref ans))
                 {
-                    leaves.Add(i);
+                    return new int[] { };
                 }
             }
-
-            int remaining = n;
-            while (remaining > 2)
-            {
-                remaining -= leaves.Count;
-                List<int> newLeaves = new List<int>();
-                
-                // Find the inner layer of leaves
-
-
-                foreach(int leaf in leaves)
-                {
-                    foreach(int next in graph[leaf])
-                    {
-                        graph[next].Remove(leaf);
-                        if(graph[next].Count == 1)
-                        {
-                            newLeaves.Add(next);
-                        }
-                    }
-                }
-                leaves = newLeaves;
-            }
-            return leaves;
+            return ans.ToArray();
         }
-        #endregion
-        #region Leetcode 394  Decode String
-        public static string DecodeString(string s)
+        private bool CFdfs(int i, List<int>[] map, ref States[] states, ref List<int> ans)
         {
-            StringBuilder res = new StringBuilder();
-            Stack<int> countStack = new Stack<int>();
-            Stack<string> stringStack = new Stack<string>();
-
-            int i = 0, n = s.Length;
-            while (i < n)
+            if (states[i] == States.visiting)
             {
-                if (Char.IsNumber(s[i]))                {
-                    int curCount = 0;
-                    while (i < n && Char.IsNumber(s[i]))
-                    {
-                        curCount = curCount * 10 + (int)Char.GetNumericValue(s[i++]);
-                    }
-                    countStack.Push(curCount);
-                }
-                else if (s[i] == '[')
-                {
-                    stringStack.Push(res.ToString());
-                    res = new StringBuilder();
-                    i++;
-                }
-                else if (s[i] == ']')
-                {
-                    StringBuilder temp = new StringBuilder(stringStack.Pop());
-                    int repeatCount = countStack.Pop();
-
-                    for (int x = 0; x < repeatCount; x++)
-                    {
-                        temp.Append(res.ToString());
-                    }
-
-                    res = temp;
-                    i++;
-                }
-                else
-                {
-                    res.Append(s[i++]);
-                }
-            }
-            return res.ToString();
-        }
-        #endregion
-        #region Leetcode 445  Add Two Numbers II
-        public ListNode AddTwoNumbers(ListNode l1, ListNode l2, int qIndex = 2)
-        {
-            Stack<int> s1 = new Stack<int>();
-            Stack<int> s2 = new Stack<int>();
-
-            while (l1 != null)
-            {
-                s1.Push(l1.val);
-                l1 = l1.next;
-            }
-            while (l2 != null)
-            {
-                s2.Push(l2.val);
-                l2 = l2.next;
-            }
-            ListNode dummy = null;
-            int carry = 0;
-            while (s1.Count != 0 || s2.Count != 0 || carry != 0)
-            {
-                int sum = carry;
-                if (s1.Count != 0) { sum += s1.Pop(); }
-                if (s2.Count != 0) { sum += s2.Pop(); }
-
-
-                ListNode newNode = new ListNode(sum % 10);
-                newNode.next = dummy;
-                dummy = newNode;
-
-                carry = sum / 10;
-            }
-            return dummy;
-
-        }
-        #endregion
-        #region Leetcode 563  Binary Tree Tilt
-        public int FindTilt(TreeNode root)
-        {
-            TiltSumdfs(root);
-            return totalTilt;
-        }
-        int totalTilt = 0;
-        /// <summary>
-        /// Modifies the value of totalTilt
-        /// </summary>
-        /// <param name="cur">Tge current TreeNode</param>
-        /// <returns>The sum of the subtree whose root is cur</returns>
-        private int TiltSumdfs(TreeNode cur)
-        {
-            if (cur == null)
-            {
-                return 0;
-            }
-            int leftSum = TiltSumdfs(cur.left);
-            int rightSum = TiltSumdfs(cur.right);
-            totalTilt += Math.Abs(leftSum - rightSum);
-
-            return cur.val + leftSum + rightSum;
-        }
-        #endregion
-        #region Leetcode 593  Valid Square
-        public bool ValidSquare(int[] p1, int[] p2, int[] p3, int[] p4)
-        {
-            IDictionary<int, int> distMap = new Dictionary<int, int>();
-            int[][] points = new int[4][];
-            points[0] = p1;
-            points[1] = p2;
-            points[2] = p3;
-            points[3] = p4;
-
-            for (int i = 0; i < 4; ++i)
-            {
-                for (int j = i + 1; j < 4; ++j)
-                {
-                    int[] p = points[i];
-                    int[] q = points[j];
-                    int dist = CalculateDistSquare(p, q);
-                    if (distMap.ContainsKey(dist))
-                    {
-                        distMap.Add(dist, 0);
-                    }
-                    distMap[dist]++;
-                }
-            }
-
-            if (distMap.Count != 2)
                 return false;
-
-            foreach (var kvp in distMap)
+            }
+            else if (states[i] == States.visited)
             {
-                if (kvp.Value!= 2 && kvp.Value!= 4)
-                    return false;
+                return true;
             }
 
+            states[i] = States.visiting;
+
+            foreach (int next in map[i])
+            {
+                if (!CFdfs(next, map, ref states, ref ans))
+                {
+                    return false;
+                }
+            }
+
+            states[i] = States.visited;
+            ans.Add(i);
             return true;
         }
-
-        private int CalculateDistSquare(int[] p1, int[] p2)
+        #endregion
+        #region Leetcode 213  House Robber II
+        public int Rob(int[] money, int qIndex = 2)
         {
-            return (p1[0] - p2[0]) * (p1[0] - p2[0]) + (p1[1] - p2[1]) * (p1[1] - p2[1]);
+            int n = money.Length;
+            if(n == 0) { return 0; }
+            else if (n <= 2)
+            {
+                return Math.Max(money[0], n == 2 ? money[1] : int.MinValue);
+            }
+            return Math.Max(RobHelper(money, 0, n - 1), RobHelper(money,1, n));
+        }
+        private int RobHelper(int[] money, int start, int end)
+        {
+            int dp2 = money[start];
+            int dp1 = Math.Max(dp2, money[start + 1]);
+
+            for (int i = start + 2; i <= end; i++)
+            {
+                int dp = Math.Max(dp1, dp2 + money[i]);
+                dp2 = dp1;
+                dp1 = dp;
+            }
+
+            return dp1;
         }
         #endregion
-        #region Leetcode 938  Range Sum of BST
-        public int RangeSumBST(TreeNode root, int low, int high)
+        #region Leetcode 215  Kth Largest Element in an Array
+        public int FindKthLargest(int[] nums, int k)
+        {
+            // Keep a sorted set size of k
+            SortedSet<(int, int)> heap = new SortedSet<(int, int)>();
+            for (int i = 0; i < nums.Length; i++)
+            {
+                heap.Add((nums[i], i));
+                if (heap.Count > k)
+                {
+                    heap.Remove(heap.Min);
+                }
+            }
+            return heap.Min.Item1;
+        }
+        #endregion
+        #region Leetcode 226  Invert Binary Tree
+        public TreeNode InvertTree(TreeNode root)
         {
             if (root == null)
             {
-                return 0;
+                return null;
             }
-            int ans = 0;
-            Queue<TreeNode> q = new Queue<TreeNode>();
-            q.Enqueue(root);
-            while (q.Count != 0)
+
+            TreeNode temp = root.left;
+            root.left = root.right;
+            root.right = temp;
+
+            InvertTree(root.left);
+            InvertTree(root.right);
+
+            return root;
+        }
+        #endregion
+        #region Leetcode 229  Majority Element II
+        public IList<int> MajorityElement(int[] nums, int qIndex = 2)
+        {
+            int len = nums.Length;
+            if (len == 0)
             {
-                TreeNode cur = q.Dequeue();
-                if (cur.val <= high && cur.val >= low)
+                return new List<int>();
+            }
+            int target = len / 3;
+
+            int count1 = 0, count2 = 0;
+            int candidate1 = 0, candidate2 = 1; // There are at most two candidates
+
+            foreach (int n in nums)
+            {
+                if (n == candidate1)
                 {
-                    ans += cur.val;
+                    count1++;
+                }
+                else if (n == candidate2)
+                {
+                    count2++;
+                }
+                else if (count1 == 0)
+                {
+                    candidate1 = n;
+                    count1 = 1;
+                }
+                else if (count2 == 0)
+                {
+                    candidate2 = n;
+                    count2 = 1;
+                }
+                else
+                {
+                    count1--;
+                    count2--;
+                }
+            }
+
+            List<int> ans = new List<int>();
+            int real1 = 0, real2 = 0;
+            foreach (int n in nums)
+            {
+                if (n == candidate1)
+                {
+                    real1++;
+                }
+                else if (n == candidate2)
+                {
+                    real2++;
+                }
+            }
+            if (real1 > target)
+            {
+                ans.Add(candidate1);
+            }
+            if (real2 > target)
+            {
+                ans.Add(candidate2);
+            }
+            return ans;
+        }
+        #endregion
+        #region Leetcode 240  Search a 2D Matrix II
+        public bool SearchMatrix(int[,] matrix, int target)
+        {
+            // Starting Searching from top right corner
+            int i = 0;
+            int j = matrix.GetLength(1) - 1;
+
+            while (i < matrix.GetLength(0) && j >= 0)
+            {
+                if (target > matrix[i, j])
+                // Move down by one row
+                {
+                    i++;
+                }
+                // Keep moving left by one tile
+                else if (target < matrix[i, j])
+                {
+                    j--;
+                }
+                else
+                {
+                    return true;
                 }
 
-                if (cur.left != null)
+            }
+
+            return false;
+        }
+        #endregion
+        #region Leetcode 257  Binary Tree Paths
+        public IList<string> BinaryTreePaths(TreeNode root)
+        {
+            if (root == null)
+            {
+                return BPans;
+            }
+            BPdfs(root, new StringBuilder());
+            return BPans;
+        }
+        IList<string> BPans = new List<string>();
+        private void BPdfs(TreeNode cur, StringBuilder path)
+        {
+            path.Append(cur.val);
+            if (cur.left == null && cur.right == null)
+            {
+                BPans.Add(path.ToString());
+                return;
+            }
+            path.Append("->");
+            if (cur.left != null)
+            {
+                BPdfs(cur.left, new StringBuilder(path.ToString()));
+            }
+            if (cur.right != null)
+            {
+                BPdfs(cur.right, new StringBuilder(path.ToString()));
+            }
+        }
+        #endregion
+        #region Leetcode 258  Add Digits
+        public int AddDigits(int num)
+        {
+            while (num / 10 != 0) // Still a single figure 
+            {
+                num = SumDigits(num);
+            }
+            return num;
+        }
+        public int SumDigits(int n)
+        {
+            int sum = 0;
+            while (n != 0)
+            {
+                sum += n % 10;
+                n /= 10;
+            }
+            return sum;
+        }
+        #endregion
+        #region Leetcode 260  Single Number III
+        public int[] SingleNumber(int[] nums, string qIndex = "Single Number Three")
+        {
+            Dictionary<int, int> cache = new Dictionary<int, int>();
+            int[] ans = new int[2];
+            
+            foreach (int item in nums)
+            {
+                if (!cache.ContainsKey(item))
                 {
-                    q.Enqueue(cur.left);
+                    cache.Add(item, 1);
                 }
-                if (cur.right != null)
+                else
                 {
-                    q.Enqueue(cur.right);
+                    cache[item] = 2;
+                }
+            }
+
+            int i = 0;
+            foreach (KeyValuePair<int,int> item in cache)
+            {
+                if (item.Value == 1)
+                {
+                    ans[i] = item.Key;
+                    ++i;
                 }
             }
             return ans;
+        }
+        #endregion
+        #region Leetcode 263  Ugly Number
+        public bool IsUgly(int num)
+        {
+            if (num <= 0)
+            {
+                return false;
+            }
+            for (int i = 2; i <= 5 && num > 0; i++)
+            {
+                while (num % i == 0)
+                {
+                    num /= i;
+                }
+            }
+            return num == 1;
+        }
+        #endregion
+        #region Leetcode 264  Ugly Number II
+        public int NthUglyNumber(int n)
+        {
+            int i2 = 0, i3 = 0, i5 = 0;
+            int[] ugly = new int[n];
+            ugly[0] = 1;
+            for (int i = 1; i < n; i++)
+            {
+                // We can only get ugly number by mulitpling the previous ones with 2,3 and 5
+                int cur = Math.Min(Math.Min(2 * ugly[i2], 3 * ugly[i3]), 5 * ugly[i5]);
+                if (ugly[i2] * 2 == cur) { ++i2; }
+                if (ugly[i3] * 3 == cur) { ++i3; }
+                if (ugly[i5] * 5 == cur) { ++i5; }
+                ugly[i] = cur;
+            }
+            return ugly[n - 1];
+        }
+        #endregion
+        #region Leetcode 295  Find Median From Data Stream
+        public class MedianFinder
+        {
+            private class MinComparer : IComparer<int>
+            {
+                public int Compare(int x, int y) => x.CompareTo(y);
+            }
+
+            private class MaxComparer : IComparer<int>
+            {
+                public int Compare(int x, int y) => y.CompareTo(x);
+            }
+
+            private readonly Heap<int> _maxLeft;
+            private readonly Heap<int> _minRight;
+
+            public MedianFinder()
+            {
+                _maxLeft = new Heap<int>(new List<int>(), new MaxComparer());
+                _minRight = new Heap<int>(new List<int>(), new MinComparer());
+            }
+
+            public void AddNum(int num)
+            {
+                if (_maxLeft.Count == 0 && _minRight.Count == 0)
+                {
+                    _maxLeft.Add(num);
+                    Balance();
+                    return;
+                }
+
+                if (_maxLeft.Count > 0 && num >= _maxLeft.Top)
+                {
+                    _minRight.Add(num);
+                    Balance();
+                    return;
+                }
+
+                if (_minRight.Count > 0 && num <= _minRight.Top)
+                {
+                    _maxLeft.Add(num);
+                    Balance();
+                    return;
+                }
+
+                if (_maxLeft.Count == 0)
+                {
+                    _minRight.Add(num);
+                    Balance();
+                    return;
+                }
+
+
+                _maxLeft.Add(num);
+                Balance();
+
+            }
+
+            private void Balance()
+            {
+                var minSized = _maxLeft;
+                var maxSized = _minRight;
+
+                if (minSized.Count > maxSized.Count)
+                {
+                    var tmp = minSized;
+                    minSized = maxSized;
+                    maxSized = tmp;
+                }
+
+                int allCount = minSized.Count + maxSized.Count;
+
+                while (true)
+                {
+                    if (allCount % 2 == 0 && minSized.Count == maxSized.Count)
+                    {
+                        break;
+                    }
+
+                    if (allCount % 2 == 1 && maxSized.Count - minSized.Count == 1)
+                    {
+                        break;
+                    }
+
+                    minSized.Add(maxSized.ExtractTop());
+                }
+            }
+
+            public double FindMedian()
+            {
+                if (_maxLeft.Count == _minRight.Count)
+                {
+                    return (_maxLeft.Top + _minRight.Top) * 0.5;
+                }
+
+                if (_maxLeft.Count > _minRight.Count)
+                {
+                    return _maxLeft.Top;
+                }
+
+                return _minRight.Top;
+            }
+        }
+        #endregion
+        #region Leetcode 299  Bulls and Cows
+        public string GetHint(string secret, string guess)
+        {
+            int[] count = new int[10];
+            // Records the occurence of a character
+            // Increase for secret and decrease for guess
+            int bull = 0, cow = 0;
+            for (int i = 0; i < secret.Length; ++i)
+            {
+                int s = secret[i] - '0';
+                int g = guess[i] - '0';
+
+                if (s == g)
+                {
+                    ++bull;
+                }
+                else
+                {
+                    if (count[s] < 0) { ++cow; }
+                    if (count[g] > 0) { ++cow; }
+                    // These two means that this char has already occured in another string
+
+                    count[s]++; count[g]--;
+                }
+            }
+            return bull + "A" + cow + "B";
         }
         #endregion
         #region Leetcode 1026  Maximum Difference Between Node and Ancestor
@@ -2402,6 +2670,86 @@ namespace Leetcode
         }
         #endregion
     }
+    #region Heap
+    // A Heap is a special Tree-based data structure in which the tree is a complete binary tree
+    // It could be of two types: Max Heap and Min Heap where the root is the largest/smallest value
+    public class Heap<T>
+    {
+        private readonly IList<T> _data;
+        private readonly IComparer<T> _comparer;
+
+        public int Count => _data.Count;
+        public T Top => _data[0];
+
+        public Heap(IList<T> inputs, IComparer<T> comparer = null)
+        {
+            _comparer = comparer ?? Comparer<T>.Default;
+            _data = inputs;
+            for (int i = Count / 2; i >= 0; i--)
+            {
+                SiftDown(i);
+            }
+        }
+
+        public Heap(IEnumerable<T> inputs, IComparer<T> comparer = null) : this(inputs.ToList(), comparer)
+        {
+        }
+
+        private void Swap(int i, int j)
+        {
+            var tmp = _data[i];
+            _data[i] = _data[j];
+            _data[j] = tmp;
+        }
+
+        private void SiftDown(int i)
+        {
+            while (2 * i + 1 < _data.Count)
+            {
+                int left = 2 * i + 1;
+                int right = 2 * i + 2;
+                int j = left;
+
+                if (right < _data.Count && _comparer.Compare(_data[right], _data[left]) < 0)
+                {
+                    j = right;
+                }
+
+                if (_comparer.Compare(_data[i], _data[j]) <= 0)
+                {
+                    break;
+                }
+
+                Swap(i, j);
+                i = j;
+            }
+        }
+
+        private void SiftUp(int i)
+        {
+            while (_comparer.Compare(_data[i], _data[(i - 1) / 2]) < 0)
+            {
+                Swap(i, (i - 1) / 2);
+                i = (i - 1) / 2;
+            }
+        }
+
+        public T ExtractTop()
+        {
+            T top = Top;
+            _data[0] = _data.Last();
+            _data.RemoveAt(Count - 1);
+            SiftDown(0);
+            return top;
+        }
+
+        public void Add(T value)
+        {
+            _data.Add(value);
+            SiftUp(Count - 1);
+        }
+    }
+    #endregion
     #region Leetcode 155  Min Stack
     public class MinStack
     {
@@ -2443,6 +2791,169 @@ namespace Leetcode
 
             return Convert.ToInt32(s2).CompareTo(Convert.ToInt32(s1));
             // Make sure that the larger value is in front
+        }
+    }
+    #endregion
+    #region Leetcode 211  Design Add and Search Words Data Structure
+    public class WordDictionary
+    {
+        private class TrieNode
+        {
+            public TrieNode[] children;
+            public bool isWord;
+            public string word;
+
+            public TrieNode()
+            {
+                children = new TrieNode[26];
+                word = "";
+                isWord = false;
+            }
+        }
+
+        private TrieNode root;
+        public WordDictionary()
+        {
+            root = new TrieNode();
+        }
+
+        public void AddWord(string word)
+        {
+            TrieNode node = root;
+            for (int i = 0; i < word.Length; i++)
+            {
+                int index = word[i] - 'a';
+                if (node.children[index] == null)
+                {
+                    node.children[index] = new TrieNode();
+                }
+                node = node.children[index];
+            }
+            node.isWord = true;
+            node.word = word;
+        }
+
+        /** Returns if the word is in the data structure. A word could contain the dot character '.' to represent any one letter. */
+        public bool Search(string word)
+        {
+            return dfs(root, 0, word);
+        }
+        private bool dfs(TrieNode cur, int index, string word)
+        {
+
+            if (cur == null)
+            {
+                return false;
+            }
+            else if (index == word.Length)
+            // Searched through the entire word
+            {
+                return cur.isWord;
+            }
+            if (word[index] == '.') // Try every combination
+            {
+                foreach (TrieNode child in cur.children)
+                {
+                    if (dfs(child, index + 1, word))
+                    {
+                        return true;
+                    }
+                }
+            }
+            else // It is an character
+            {
+                int cur_index = word[index] - 'a';
+                TrieNode next = cur.children[cur_index];
+                return dfs(next, index + 1, word);
+            }
+            return false;
+        }
+    }
+    #endregion
+    #region Leetcode 232  Implement Queue using Stacks
+    public class MyQueue
+    {
+        readonly Stack<int> data;
+        public MyQueue()
+        {
+            data = new Stack<int>();
+        }
+
+        public void Push(int x)
+        {
+            Stack<int> temp = new Stack<int>();
+
+            while(data.Count != 0)
+            {
+                temp.Push(data.Pop());
+            }
+            temp.Push(x);
+
+            while(temp.Count != 0)
+            {
+                data.Push(temp.Pop());
+            }
+        }
+
+        public int Pop()
+        {
+            return data.Pop();
+        }
+
+        public int Peek()
+        {
+            return data.Peek();
+        }
+
+        public bool Empty()
+        {
+            return data.Count == 0;
+        }
+
+    }
+    #endregion
+    #region Leetcode 225  Implement Stack using Queues
+    public class MyStack
+    {
+        readonly Queue<int> data;
+
+        /** Initialize your data structure here. */
+        public MyStack()
+        {
+            data = new Queue<int>();
+        }
+
+        /** Push element x onto stack. */
+        public void Push(int x)
+        {
+            Queue<int> temp = new Queue<int>();
+            temp.Enqueue(x);
+            while (data.Count != 0)
+            {
+                temp.Enqueue(data.Dequeue());
+            }
+            while (temp.Count != 0)
+            {
+                data.Enqueue(temp.Dequeue());
+            }
+        }
+
+        /** Removes the element on top of the stack and returns that element. */
+        public int Pop()
+        {
+            return data.Dequeue();
+        }
+
+        /** Get the top element. */
+        public int Top()
+        {
+            return data.Peek();
+        }
+
+        /** Returns whether the stack is empty. */
+        public bool Empty()
+        {
+            return data.Count == 0;
         }
     }
     #endregion
